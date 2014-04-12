@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>CA1AE4BB-61FA-42B0-84FE-950E248AD105</string>
+	<key>IDESourceControlProjectName</key>
+	<string>NumNao</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>94694500-5098-4172-A7FB-5711C30A32DE</key>
+		<string>https://github.com/parinya2/NumNao.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>NumNao.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>94694500-5098-4172-A7FB-5711C30A32DE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/parinya2/NumNao.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>94694500-5098-4172-A7FB-5711C30A32DE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>94694500-5098-4172-A7FB-5711C30A32DE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>NumNao</string>
+		</dict>
+	</array>
+</dict>
+</plist>
