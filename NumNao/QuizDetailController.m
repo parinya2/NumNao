@@ -157,12 +157,4 @@
   [self.nextButton setHidden:!flag];
   [self.confirmButton setHidden:flag];
 }
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  
-  QuizResultController *quizResultController = [segue destinationViewController];
-  quizResultController.quizScore = self.quizScore;
-  quizResultController.quizManager = self.quizManager;
-}
-
 @end
