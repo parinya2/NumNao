@@ -8,6 +8,7 @@
 
 #import "QuizManager.h"
 #import "QuizObject.h"
+#import "TBXML.h"
 
 @implementation QuizManager
 
@@ -20,47 +21,92 @@
 
 - (NSArray *)quizList {
   NSMutableArray *result = [[NSMutableArray alloc] init];
+  NSLog(@"startExtract");
+  result = [self extractQuizFromXML];
+  NSLog(@"finishExtract");
+  return result;
+}
 
-  QuizObject *quizObj1 = [[QuizObject alloc] initWithQuizText:@"ถ้าแกยังไม่หยุดปากดี ฉันจะเอาแกงส้มราดหัวแกเดี๋ยวนี้แหละ"
-                                                   ansChoice1:@"สามีตีตรา"
-                                                   ansChoice2:@"อีสารวีโชติช่วง"
-                                                   ansChoice3:@"เจ้าสาวสลาตัน"
-                                                   ansChoice4:@"ลูกทาส"
-                                                  answerIndex:1];
+- (NSMutableArray *)extractQuizFromXML {
+  
+  NSMutableArray *result = [[NSMutableArray alloc] init];
+  
+  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=2";
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  
+  NSData *urlData;
+  NSURLResponse *urlResponse;
+  NSError *error;
+  NSLog(@"Start Connecting");
+  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
+  NSLog(@"End Connecting");
+  NSString *xmlString = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+  
+  TBXML *tbxml = [TBXML newTBXMLWithXMLString:xmlString error:&error];
 
-  QuizObject *quizObj2 = [[QuizObject alloc] initWithQuizText:@"อีแดง แกไปยกสำรับมาให้ท่านเจ้าคุณซะทีสิ อย่ามัวพิรี้พิไร"
-                                                   ansChoice1:@"อย่าลืมฉัน"
-                                                   ansChoice2:@"ลูกทาส"
-                                                   ansChoice3:@"ล่ารักสุดขอบฟ้า"
-                                                   ansChoice4:@"คมพยาบาท"
-                                                  answerIndex:1];
+  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+  TBXMLElement *childXMLElement = [TBXML childElementNamed:@"quiz" parentElement:rootXMLElement];
+  while (childXMLElement) {
+    
+    QuizObject *quizObject = [[QuizObject alloc] init];
+   
+    quizObject.quizText = [TBXML valueOfAttributeNamed:@"quiz_text" forElement:childXMLElement];
+    
+    TBXMLElement *choicesListElement = [TBXML childElementNamed:@"choices" parentElement:childXMLElement];
+    
+    TBXMLElement *choiceElement = [TBXML childElementNamed:@"choice" parentElement:choicesListElement];
 
-  QuizObject *quizObj3 = [[QuizObject alloc] initWithQuizText:@"ตอนนี้ผัวแกกำลังนอนอยู่บนเตียงของชั้น มาดูให้เต็มตาสิ"
-                                                   ansChoice1:@"พายุเทวดา"
-                                                   ansChoice2:@"อีสารวีโชติช่วง"
-                                                   ansChoice3:@"เจ้าสาวสลาตัน"
-                                                   ansChoice4:@"คิวบิก"
-                                                  answerIndex:1];
-  
-  QuizObject *quizObj4 = [[QuizObject alloc] initWithQuizText:@"ถ้าแกยอมกราบเท้าของชั้นตอนนี้ล่ะก็ ชั้นสัญญาว่าจะไม่เอาเรื่องบัดสีที่แกทำไปบอกคุณย่า"
-                                                   ansChoice1:@"สามีตีตรา"
-                                                   ansChoice2:@"คุ้มนางครวญ"
-                                                   ansChoice3:@"กุหลาบร้ายของนายตะวัน"
-                                                   ansChoice4:@"ลูกทาส"
-                                                  answerIndex:1];
-  
-  QuizObject *quizObj5 = [[QuizObject alloc] initWithQuizText:@"นังแพศยานี่มันกำแหงจริงๆ คุณหญิงตบสั่งสอนมันเลยค่ะ"
-                                                   ansChoice1:@"เนตรนาคราช"
-                                                   ansChoice2:@"อีสารวีโชติช่วง"
-                                                   ansChoice3:@"เจ้าสาวสลาตัน"
-                                                   ansChoice4:@"ลูกทาส"
-                                                  answerIndex:1];
-  
-  [result addObject:quizObj1];
-  [result addObject:quizObj2];
-  [result addObject:quizObj3];
-  [result addObject:quizObj4];
-  [result addObject:quizObj5];
+    while (choiceElement) {
+      
+      TBXMLAttribute *attribute = choiceElement->firstAttribute;
+      NSString *choiceNo;
+      NSString *choiceText;
+      BOOL isCorrectChoice = NO;
+      while (attribute) {
+        NSString *attName = [TBXML attributeName:attribute];
+        NSString *attValue = [TBXML attributeValue:attribute];
+        
+        if ([attName isEqualToString:@"choice_no"]) {
+          choiceNo = attValue;
+        } else if ([attName isEqualToString:@"choice_text"]) {
+          choiceText = attValue;
+        } else if ([attName isEqualToString:@"correct"]) {
+          isCorrectChoice = [attValue isEqualToString:@"1"] ? YES : NO;
+        }
+      
+        attribute = attribute->next;
+      }
+    
+      if ([choiceNo isEqualToString:@"1"]) {
+        quizObject.ansChoice1 = choiceText;
+        if (isCorrectChoice) {
+          quizObject.answerIndex = 1;
+        }
+      } else if ([choiceNo isEqualToString:@"2"]) {
+        quizObject.ansChoice2 = choiceText;
+        if (isCorrectChoice) {
+          quizObject.answerIndex = 2;
+        }
+      } else if ([choiceNo isEqualToString:@"3"]) {
+        quizObject.ansChoice3 = choiceText;
+        if (isCorrectChoice) {
+          quizObject.answerIndex = 3;
+        }
+      } else if ([choiceNo isEqualToString:@"4"]) {
+        quizObject.ansChoice4 = choiceText;
+        if (isCorrectChoice) {
+          quizObject.answerIndex = 4;
+        }
+      }
+      
+      choiceElement = choiceElement->nextSibling;
+    }
+    
+    [result addObject:quizObject];
+    childXMLElement = childXMLElement->nextSibling;
+  }
+
   
   return result;
 }

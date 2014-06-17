@@ -47,4 +47,8 @@
   [self performSegueWithIdentifier:@"MainMenuSegue" sender:self];
 }
 
+- (IBAction)shareOnFacebook:(id)sender {
+
+}
+
 @end

@@ -15,12 +15,15 @@
 
 @property NSInteger quizCounter;
 @property NSInteger quizScore;
-@property NSInteger selectedAnswer;
+@property NSInteger selectedAnswerIndex;
+@property NSInteger correctAnswerIndex;
 @property BOOL isAnswerConfirmed;
 @property (strong) NSArray *quizList;
 @property (strong) UIColor *neutralButtonColor;
 @property (strong) UIColor *selectedButtonColor;
 @property (strong) QuizManager *quizManager;
+@property (strong) NSTimer *timer;
+@property NSInteger remainingTime;
 
 - (IBAction)chooseAnswer:(id)sender;
 - (IBAction)confirmAnswer:(id)sender;
@@ -49,8 +52,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
+  self.remainingTime = 10;
   self.quizCounter = 0;
   self.quizScore = 0;
+  self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
+  self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   self.quizList = [self.quizManager quizList];
   
   self.neutralButtonColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
@@ -60,6 +66,21 @@
   [self renderPageWithQuizObject:firstQuiz quizNo:self.quizCounter+1];
   
   [self enableNextButton:NO];
+  
+  if (!self.timer) {
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                  target:self
+                                                selector:@selector(decreaseRemainingTime)
+                                                userInfo:nil
+                                                 repeats:YES];
+  }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
+
+  [self.timer invalidate];
+  self.timer = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,10 +89,28 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)decreaseRemainingTime {
+  self.remainingTime--;
+  self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
+  if (self.remainingTime <= 0) {
+    [self goToSummaryPage];
+  }
+}
+
+- (NSString *)stringForRemainingTimeLabel:(NSInteger) remainingTime {
+  return [NSString stringWithFormat:@"คุณเหลือ %ld วินาที",remainingTime];
+}
+
+- (NSString *)stringForScoreLabel:(NSInteger) score {
+  return [NSString stringWithFormat:@"คุณได้ %ld คะแนน",score];
+}
+
 - (void)renderPageWithQuizObject:(QuizObject *) quizObject quizNo:(NSInteger) quizNo{
   self.quizCounterLabel.text = [NSString stringWithFormat:@"ข้อที่ %ld",quizNo];
   self.quizLabel.text = quizObject.quizText;
-
+  self.correctAnswerIndex = quizObject.answerIndex;
+  self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
+  
   [self.ans1Button setTitle:quizObject.ansChoice1 forState:UIControlStateNormal];
   [self.ans2Button setTitle:quizObject.ansChoice2 forState:UIControlStateNormal];
   [self.ans3Button setTitle:quizObject.ansChoice3 forState:UIControlStateNormal];
@@ -81,21 +120,21 @@
   self.ans2Button.backgroundColor = self.neutralButtonColor;
   self.ans3Button.backgroundColor = self.neutralButtonColor;
   self.ans4Button.backgroundColor = self.neutralButtonColor;
-  
+
   self.correctionImageView.image = nil;
 }
 
 - (IBAction)chooseAnswer:(id)sender {
   
   if ([self.confirmButton isEnabled]) {
-    self.selectedAnswer = ((UIButton *)sender).tag;
+    self.selectedAnswerIndex = ((UIButton *)sender).tag;
     
     self.ans1Button.backgroundColor = self.neutralButtonColor;
     self.ans2Button.backgroundColor = self.neutralButtonColor;
     self.ans3Button.backgroundColor = self.neutralButtonColor;
     self.ans4Button.backgroundColor = self.neutralButtonColor;
     
-    switch (self.selectedAnswer) {
+    switch (self.selectedAnswerIndex) {
       case 1:
         self.ans1Button.backgroundColor = self.selectedButtonColor;
         break;
@@ -116,10 +155,13 @@
 
 - (IBAction)confirmAnswer:(id)sender {
   // Check whether users selected the correct answer
-  if (self.selectedAnswer != 0) {
-    if (self.selectedAnswer == 1) {
+  if (self.selectedAnswerIndex != 0) {
+    if (self.selectedAnswerIndex == self.correctAnswerIndex) {
       self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
       self.quizScore++;
+      self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
+      self.remainingTime = self.remainingTime + 3;
+      self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
     } else {
       self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];
     }
@@ -136,18 +178,22 @@
   
   if (self.quizCounter < self.quizList.count) {
     QuizObject *nextQuiz = [self.quizList objectAtIndex:self.quizCounter];
-    self.selectedAnswer = 0;
+    self.selectedAnswerIndex = 0;
     [self renderPageWithQuizObject:nextQuiz quizNo:self.quizCounter+1];
     
   } else {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
-    quizResultController.quizScore = self.quizScore;
-    quizResultController.quizManager = self.quizManager;
-    [self.navigationController pushViewController:quizResultController animated:YES];
+    [self goToSummaryPage];
   }
   
   [self enableNextButton:NO];
+}
+
+- (void)goToSummaryPage {
+  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+  QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
+  quizResultController.quizScore = self.quizScore;
+  quizResultController.quizManager = self.quizManager;
+  [self.navigationController pushViewController:quizResultController animated:YES];
 }
 
 - (void)enableNextButton:(BOOL)flag {

@@ -12,6 +12,8 @@
 
 @property (strong) IBOutlet UILabel *quizLabel;
 @property (strong) IBOutlet UILabel *quizCounterLabel;
+@property (strong) IBOutlet UILabel *scoreLabel;
+@property (strong) IBOutlet UILabel *remainingTimeLabel;
 @property (strong) IBOutlet UIButton *ans1Button;
 @property (strong) IBOutlet UIButton *ans2Button;
 @property (strong) IBOutlet UIButton *ans3Button;

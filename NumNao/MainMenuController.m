@@ -7,8 +7,12 @@
 //
 
 #import "MainMenuController.h"
+#import "TBXML.h"
 
 @interface MainMenuController ()
+
+- (IBAction)testHTTP:(id)sender;
+- (IBAction)testCon:(id)sender;
 
 @end
 
@@ -35,15 +39,61 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+- (IBAction)testHTTP:(id)sender {
+  
+  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?category=namnao&method=getQuiz&quiz_no=0&quiz_of_the_week=true";
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  
+  NSData *urlData;
+  NSURLResponse *urlResponse;
+  NSError *error;
+  
+  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
+  
+  NSString *result = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+  NSLog(@"xx=%@",result);
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+  TBXML *tbxml = [TBXML newTBXMLWithXMLString:result error:&error];
+  
+  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+  TBXMLElement *childXMLElement = [TBXML childElementNamed:@"quiz" parentElement:rootXMLElement];
+  while (childXMLElement) {
+
+    NSString *x = [TBXML valueOfAttributeNamed:@"quiz_text" forElement:childXMLElement];
+    NSLog(@"quizText=%@",x);
+    
+    TBXMLElement *choicesListElement = [TBXML childElementNamed:@"choices" parentElement:childXMLElement];
+    
+    TBXMLElement *choiceElement = [TBXML childElementNamed:@"choice" parentElement:choicesListElement];
+    while (choiceElement) {
+      
+      TBXMLAttribute *attribute = choiceElement->firstAttribute;
+      while (attribute) {
+        NSLog(@"attName=%@ attVal=%@",[TBXML attributeName:attribute], [TBXML attributeValue:attribute]);
+        
+        attribute = attribute->next;
+      }
+      choiceElement = choiceElement->nextSibling;
+    }
+    
+    childXMLElement = childXMLElement->nextSibling;
+  }
 }
-*/
+
+- (IBAction)testCon:(id)sender {
+  NSString *urlString = @"http://quiz.thechappters.com/webservice.php";
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  
+  NSData *urlData;
+  NSURLResponse *urlResponse;
+  NSError *error;
+  
+  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
+  
+  NSString *result = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
+  NSLog(@"xx=%@",result);
+}
 
 @end

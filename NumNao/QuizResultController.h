@@ -16,5 +16,6 @@
 @property (strong) QuizManager *quizManager;
 
 - (IBAction)goToMainMenu:(id)sender;
+- (IBAction)shareOnFacebook:(id)sender;
 
 @end
