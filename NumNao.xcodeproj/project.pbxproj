@@ -11,7 +11,6 @@
 		0A2E15CA18F94104002670A1 /* QuizManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2E15C918F94104002670A1 /* QuizManager.m */; };
 		0A2E15CD18F94302002670A1 /* QuizObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2E15CC18F94302002670A1 /* QuizObject.m */; };
 		0A5426FF18F923BC0041EE60 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5426FE18F923BC0041EE60 /* Foundation.framework */; };
-		0A54270118F923BC0041EE60 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A54270018F923BC0041EE60 /* CoreGraphics.framework */; };
 		0A54270318F923BC0041EE60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A54270218F923BC0041EE60 /* UIKit.framework */; };
 		0A54270918F923BC0041EE60 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A54270718F923BC0041EE60 /* InfoPlist.strings */; };
 		0A54270B18F923BC0041EE60 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A54270A18F923BC0041EE60 /* main.m */; };
@@ -29,6 +28,8 @@
 		0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6EA88018F97D6500003A3C /* QuizResultController.m */; };
 		0A707192191F297E00287C4E /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707191191F297E00287C4E /* TBXML.m */; };
 		0A707195191F2A2000287C4E /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707194191F2A2000287C4E /* TBXML+HTTP.m */; };
+		0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B95461950336C00B41B24 /* FBLoginController.m */; };
+		0A9B954919503D5C00B41B24 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B954819503D5C00B41B24 /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,13 @@
 		0A707191191F297E00287C4E /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		0A707193191F2A2000287C4E /* TBXML+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+HTTP.h"; sourceTree = "<group>"; };
 		0A707194191F2A2000287C4E /* TBXML+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+HTTP.m"; sourceTree = "<group>"; };
+		0A77D14F1956C6C600F24C7B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		0A77D1511956C6DD00F24C7B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0A77D1531956C6E600F24C7B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		0A77D1551956C76C00F24C7B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		0A9B95451950336C00B41B24 /* FBLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBLoginController.h; sourceTree = "<group>"; };
+		0A9B95461950336C00B41B24 /* FBLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBLoginController.m; sourceTree = "<group>"; };
+		0A9B954819503D5C00B41B24 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A54270118F923BC0041EE60 /* CoreGraphics.framework in Frameworks */,
+				0A9B954919503D5C00B41B24 /* FacebookSDK.framework in Frameworks */,
 				0A54270318F923BC0041EE60 /* UIKit.framework in Frameworks */,
 				0A5426FF18F923BC0041EE60 /* Foundation.framework in Frameworks */,
 			);
@@ -136,6 +144,11 @@
 		0A5426FD18F923BC0041EE60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A77D1551956C76C00F24C7B /* libz.dylib */,
+				0A77D1531956C6E600F24C7B /* MobileCoreServices.framework */,
+				0A77D1511956C6DD00F24C7B /* SystemConfiguration.framework */,
+				0A77D14F1956C6C600F24C7B /* CFNetwork.framework */,
+				0A9B954819503D5C00B41B24 /* FacebookSDK.framework */,
 				0A5426FE18F923BC0041EE60 /* Foundation.framework */,
 				0A54270018F923BC0041EE60 /* CoreGraphics.framework */,
 				0A54270218F923BC0041EE60 /* UIKit.framework */,
@@ -147,6 +160,7 @@
 		0A54270418F923BC0041EE60 /* NumNao */ = {
 			isa = PBXGroup;
 			children = (
+				0ACCE3DF196006A6003C101E /* iPad */,
 				0A54273A18F92FE30041EE60 /* Storyboard */,
 				0A2E15C718F9408E002670A1 /* Model */,
 				0A54273318F9259B0041EE60 /* Controller */,
@@ -201,6 +215,8 @@
 				0A6EA88018F97D6500003A3C /* QuizResultController.m */,
 				0A54271318F923BC0041EE60 /* NumNaoViewController.h */,
 				0A54271418F923BC0041EE60 /* NumNaoViewController.m */,
+				0A9B95451950336C00B41B24 /* FBLoginController.h */,
+				0A9B95461950336C00B41B24 /* FBLoginController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -222,6 +238,13 @@
 				0A707194191F2A2000287C4E /* TBXML+HTTP.m */,
 			);
 			name = TBXML;
+			sourceTree = "<group>";
+		};
+		0ACCE3DF196006A6003C101E /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,6 +295,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = PRINYA;
 				TargetAttributes = {
+					0A5426FA18F923BB0041EE60 = {
+						DevelopmentTeam = NY4979CTDY;
+					};
 					0A54271B18F923BC0041EE60 = {
 						TestTargetID = 0A5426FA18F923BB0041EE60;
 					};
@@ -329,6 +355,7 @@
 				0A707192191F297E00287C4E /* TBXML.m in Sources */,
 				0A2E15CA18F94104002670A1 /* QuizManager.m in Sources */,
 				0A2E15C618F931F8002670A1 /* QuizDetailController.m in Sources */,
+				0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */,
 				0A54270F18F923BC0041EE60 /* NumNaoAppDelegate.m in Sources */,
 				0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */,
 				0A54270B18F923BC0041EE60 /* main.m in Sources */,
@@ -457,10 +484,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/prinya/Personal,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumNao/NumNao-Prefix.pch";
 				INFOPLIST_FILE = "NumNao/NumNao-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "66C692EC-E970-4EC5-A572-1834A2A55344";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -470,10 +506,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/prinya/Personal,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumNao/NumNao-Prefix.pch";
 				INFOPLIST_FILE = "NumNao/NumNao-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "B5B1E8E1-0858-43F4-B586-5A84C21021B2";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

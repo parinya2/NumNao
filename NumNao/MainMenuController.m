@@ -40,7 +40,7 @@
 }
 
 - (IBAction)testHTTP:(id)sender {
-  
+  return;
   NSString *urlString = @"http://quiz.thechappters.com/webservice.php?category=namnao&method=getQuiz&quiz_no=0&quiz_of_the_week=true";
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];

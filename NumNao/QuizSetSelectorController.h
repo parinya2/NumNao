@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QuizSetSelectorController : UITableViewController
+@interface QuizSetSelectorController : UIViewController
+
+- (IBAction)goToQuiz:(id)sender;
 
 @end

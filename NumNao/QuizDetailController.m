@@ -52,7 +52,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  self.remainingTime = 10;
+  self.remainingTime = 20;
   self.quizCounter = 0;
   self.quizScore = 0;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
