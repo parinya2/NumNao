@@ -46,6 +46,11 @@
   TBXML *tbxml = [TBXML newTBXMLWithXMLString:xmlString error:&error];
 
   TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+  
+  if (!rootXMLElement) {
+    return nil;
+  }
+  
   TBXMLElement *childXMLElement = [TBXML childElementNamed:@"quiz" parentElement:rootXMLElement];
   while (childXMLElement) {
     

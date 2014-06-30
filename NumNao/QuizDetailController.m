@@ -59,6 +59,16 @@
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   self.quizList = [self.quizManager quizList];
   
+  if (!self.quizList) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
+                                                    message:@"ตัวเองต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"ตกลงจ้ะ"
+                                          otherButtonTitles:nil];
+    [alert show];
+    return;
+  }
+  
   self.neutralButtonColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
   self.selectedButtonColor = [UIColor colorWithRed:80.0/255.0 green:255.0/255.0 blue:80.0/255.0 alpha:1.0];
   

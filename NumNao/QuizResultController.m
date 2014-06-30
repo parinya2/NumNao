@@ -175,16 +175,10 @@
     // FALLBACK: publish just a link using the Feed dialog
     
     // Put together the dialog parameters
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   @"Sharing Tutorial", @"name",
-                                   @"Build great social apps and get more installs.", @"caption",
-                                   @"Allow your users to share stories on Facebook from your app using the iOS SDK.", @"description",
-                                   @"https://developers.facebook.com/docs/ios/share/", @"link",
-                                   @"http://i.imgur.com/g3Qc1HN.png", @"picture",
-                                   nil];
     
     NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setObject:@"คุณได้ 15 คะแนน" forKey:@"name"];
+    NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
+    [optionDict setObject:scoreStr forKey:@"name"];
     [optionDict setObject:@" " forKey:@"caption"];
     [optionDict setObject:@"ท่าทางคุณจะติดละครงอมแงมเลยทีเดียว เอาเวลาไปอ่านหนังสือสอบบ้างนะจ๊ะ" forKey:@"description"];
     [optionDict setObject:@"https://developersx.facebook.com/docs/ios/share/" forKey:@"link"];
