@@ -7,16 +7,17 @@
 //
 
 #import "MainMenuController.h"
-#import "TBXML.h"
+#import "GADBannerView.h"
+#import "GADRequest.h"
+#import "appID.h"
 
 @interface MainMenuController ()
 
-- (IBAction)testHTTP:(id)sender;
-- (IBAction)testCon:(id)sender;
 
 @end
 
 @implementation MainMenuController
+@synthesize bannerView = bannerView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -29,8 +30,31 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
+
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  self.bannerView.adUnitID = MyAdUnitID;
+  self.bannerView.delegate = self;
+  [self.bannerView setRootViewController:self];
+  [self.view addSubview:self.bannerView];
+  [self.bannerView loadRequest:[self createRequest]];
+}
+
+- (GADRequest *)createRequest {
+  GADRequest *request = [GADRequest request];
+  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, @"01876e51609421175c69a80136549249c6e580e8", nil];
+  return request;
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  NSLog(@"Ad Received");
+  [UIView animateWithDuration:1.0 animations:^{
+    adView.frame = CGRectMake(0.0, 80.0, adView.frame.size.width, adView.frame.size.height);
+  }];
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+  NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,61 +63,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)testHTTP:(id)sender {
-  return;
-  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?category=namnao&method=getQuiz&quiz_no=0&quiz_of_the_week=true";
-  NSURL *url = [NSURL URLWithString:urlString];
-  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-  
-  NSData *urlData;
-  NSURLResponse *urlResponse;
-  NSError *error;
-  
-  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
-  
-  NSString *result = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-  NSLog(@"xx=%@",result);
-
-  TBXML *tbxml = [TBXML newTBXMLWithXMLString:result error:&error];
-  
-  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
-  TBXMLElement *childXMLElement = [TBXML childElementNamed:@"quiz" parentElement:rootXMLElement];
-  while (childXMLElement) {
-
-    NSString *x = [TBXML valueOfAttributeNamed:@"quiz_text" forElement:childXMLElement];
-    NSLog(@"quizText=%@",x);
-    
-    TBXMLElement *choicesListElement = [TBXML childElementNamed:@"choices" parentElement:childXMLElement];
-    
-    TBXMLElement *choiceElement = [TBXML childElementNamed:@"choice" parentElement:choicesListElement];
-    while (choiceElement) {
-      
-      TBXMLAttribute *attribute = choiceElement->firstAttribute;
-      while (attribute) {
-        NSLog(@"attName=%@ attVal=%@",[TBXML attributeName:attribute], [TBXML attributeValue:attribute]);
-        
-        attribute = attribute->next;
-      }
-      choiceElement = choiceElement->nextSibling;
-    }
-    
-    childXMLElement = childXMLElement->nextSibling;
-  }
-}
-
-- (IBAction)testCon:(id)sender {
-  NSString *urlString = @"http://quiz.thechappters.com/webservice.php";
-  NSURL *url = [NSURL URLWithString:urlString];
-  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-  
-  NSData *urlData;
-  NSURLResponse *urlResponse;
-  NSError *error;
-  
-  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
-  
-  NSString *result = [[NSString alloc] initWithData:urlData encoding:NSUTF8StringEncoding];
-  NSLog(@"xx=%@",result);
-}
 
 @end

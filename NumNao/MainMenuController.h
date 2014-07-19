@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GADBannerView.h"
 
-@interface MainMenuController : UIViewController
+@class GADBannerView, GADRequest;
+
+@interface MainMenuController : UIViewController <GADBannerViewDelegate> {
+  GADBannerView *bannerView_;
+}
+
+@property (nonatomic, strong) GADBannerView *bannerView;
+- (GADRequest *)createRequest;
 
 @end

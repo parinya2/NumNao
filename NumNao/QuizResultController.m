@@ -155,7 +155,7 @@
   params.link = [NSURL URLWithString:@"https://developers.facebook.com/docs/ios/share/"];
   
   // If the Facebook app is installed and we can present the share dialog
-  if ([FBDialogs canPresentShareDialogWithParams:params]) {
+ /* if ([FBDialogs canPresentShareDialogWithParams:params]) {
     
     // Present share dialog
     [FBDialogs presentShareDialogWithLink:params.link
@@ -170,14 +170,10 @@
                                     }
                                   }];
     
-    // If the Facebook app is NOT installed and we can't present the share dialog
-  } else {
-    // FALLBACK: publish just a link using the Feed dialog
-    
-    // Put together the dialog parameters
-    
+  }*/
+  
     NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
+    NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %ld คะแนน", self.quizScore];
     [optionDict setObject:scoreStr forKey:@"name"];
     [optionDict setObject:@" " forKey:@"caption"];
     [optionDict setObject:@"ท่าทางคุณจะติดละครงอมแงมเลยทีเดียว เอาเวลาไปอ่านหนังสือสอบบ้างนะจ๊ะ" forKey:@"description"];
@@ -212,7 +208,7 @@
                                                   }
                                                 }
                                               }];
-  }
+  
 }
 
 - (IBAction)StatusUpdateWithAPICalls {
