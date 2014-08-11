@@ -15,6 +15,7 @@
   GADBannerView *bannerView_;
 }
 
+@property (nonatomic, strong) IBOutlet UIButton *startButton;
 @property (nonatomic, strong) GADBannerView *bannerView;
 - (GADRequest *)createRequest;
 

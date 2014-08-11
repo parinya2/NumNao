@@ -10,6 +10,7 @@
 #import "QuizManager.h"
 #import "QuizObject.h"
 #import "QuizResultController.h"
+#import "NumNaoLoadingView.h"
 
 @interface QuizDetailController ()
 
@@ -24,6 +25,9 @@
 @property (strong) QuizManager *quizManager;
 @property (strong) NSTimer *timer;
 @property NSInteger remainingTime;
+
+@property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
+@property (strong, nonatomic) NumNaoLoadingView *loadingView;
 
 - (IBAction)chooseAnswer:(id)sender;
 - (IBAction)confirmAnswer:(id)sender;
@@ -46,8 +50,12 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  // Do any additional setup after loading the view.
+
   self.quizManager = [[QuizManager alloc] init];
+  [self.confirmButton setHidden:YES];
+
+  self.loadingView = [[NumNaoLoadingView alloc] init];
+  [self.view addSubview:self.loadingView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -58,6 +66,8 @@
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   self.quizList = [self.quizManager quizList];
+
+  [self.loadingView removeFromSuperview];
   
   if (!self.quizList) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
@@ -136,7 +146,7 @@
 
 - (IBAction)chooseAnswer:(id)sender {
   
-  if ([self.confirmButton isEnabled]) {
+  if (![self.nextButton isEnabled]) {
     self.selectedAnswerIndex = ((UIButton *)sender).tag;
     
     self.ans1Button.backgroundColor = self.neutralButtonColor;
@@ -160,25 +170,32 @@
       default:
         break;
     }
+    
+    [self checkAnswer];
   }
 }
 
-- (IBAction)confirmAnswer:(id)sender {
+- (void)checkAnswer {
   // Check whether users selected the correct answer
   if (self.selectedAnswerIndex != 0) {
     if (self.selectedAnswerIndex == self.correctAnswerIndex) {
       self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
       self.quizScore++;
       self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
-      self.remainingTime = self.remainingTime + 3;
+      
       self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
     } else {
       self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];
+      self.remainingTime = (self.remainingTime - 3) < 0 ? 0 : (self.remainingTime - 3);
     }
     
     [self enableNextButton:YES];
   }
+}
 
+- (IBAction)confirmAnswer:(id)sender {
+  // Check whether users selected the correct answer
+  [self checkAnswer];
 }
 
 - (IBAction)goToNextQuiz:(id)sender {
@@ -211,6 +228,6 @@
   [self.confirmButton setEnabled:!flag];
   
   [self.nextButton setHidden:!flag];
-  [self.confirmButton setHidden:flag];
+  [self.confirmButton setHidden:YES];
 }
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "NumNaoAppDelegate.h"
+#import "NumNaoIAPHelper.h"
 
 @implementation NumNaoAppDelegate
 
@@ -16,7 +17,8 @@
   // Load the FBLoginView class (needed for login)
   sleep(1);
   [FBLoginView class];
-    return YES;
+  [NumNaoIAPHelper sharedInstance];
+  return YES;
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

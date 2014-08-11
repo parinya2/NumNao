@@ -28,8 +28,11 @@
 		0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6EA88018F97D6500003A3C /* QuizResultController.m */; };
 		0A707192191F297E00287C4E /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707191191F297E00287C4E /* TBXML.m */; };
 		0A707195191F2A2000287C4E /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707194191F2A2000287C4E /* TBXML+HTTP.m */; };
+		0A8DEF92199858C00083A4AF /* NumNaoLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8DEF91199858C00083A4AF /* NumNaoLoadingView.m */; };
 		0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B95461950336C00B41B24 /* FBLoginController.m */; };
 		0A9B954919503D5C00B41B24 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B954819503D5C00B41B24 /* FacebookSDK.framework */; };
+		0AA1F9461993135C003336D2 /* NumNaoIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA1F9451993135C003336D2 /* NumNaoIAPHelper.m */; };
+		0AAD5A0B1991D01600880E93 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAD5A0A1991D01600880E93 /* IAPHelper.m */; };
 		0AC7158F197A01EE00ED4ACC /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC7158D197A01EE00ED4ACC /* libGoogleAdMobAds.a */; };
 		0AC71590197A01EE00ED4ACC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0AC7158E197A01EE00ED4ACC /* README.txt */; };
 		0AC71592197A023300ED4ACC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC71591197A023300ED4ACC /* AdSupport.framework */; };
@@ -90,9 +93,15 @@
 		0A77D1511956C6DD00F24C7B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0A77D1531956C6E600F24C7B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		0A77D1551956C76C00F24C7B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		0A8DEF90199858C00083A4AF /* NumNaoLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumNaoLoadingView.h; sourceTree = "<group>"; };
+		0A8DEF91199858C00083A4AF /* NumNaoLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumNaoLoadingView.m; sourceTree = "<group>"; };
 		0A9B95451950336C00B41B24 /* FBLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBLoginController.h; sourceTree = "<group>"; };
 		0A9B95461950336C00B41B24 /* FBLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBLoginController.m; sourceTree = "<group>"; };
 		0A9B954819503D5C00B41B24 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK.framework; sourceTree = "<group>"; };
+		0AA1F9441993135C003336D2 /* NumNaoIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumNaoIAPHelper.h; sourceTree = "<group>"; };
+		0AA1F9451993135C003336D2 /* NumNaoIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumNaoIAPHelper.m; sourceTree = "<group>"; };
+		0AAD5A091991D01600880E93 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
+		0AAD5A0A1991D01600880E93 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
 		0AC71581197A01EE00ED4ACC /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdMobExtras.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdMobExtras.h"; sourceTree = "<group>"; };
 		0AC71582197A01EE00ED4ACC /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdNetworkExtras.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdNetworkExtras.h"; sourceTree = "<group>"; };
 		0AC71583197A01EE00ED4ACC /* GADAdSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdSize.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdSize.h"; sourceTree = "<group>"; };
@@ -153,6 +162,10 @@
 				0A2E15C918F94104002670A1 /* QuizManager.m */,
 				0A2E15CB18F94302002670A1 /* QuizObject.h */,
 				0A2E15CC18F94302002670A1 /* QuizObject.m */,
+				0AAD5A091991D01600880E93 /* IAPHelper.h */,
+				0AAD5A0A1991D01600880E93 /* IAPHelper.m */,
+				0AA1F9441993135C003336D2 /* NumNaoIAPHelper.h */,
+				0AA1F9451993135C003336D2 /* NumNaoIAPHelper.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -201,6 +214,7 @@
 		0A54270418F923BC0041EE60 /* NumNao */ = {
 			isa = PBXGroup;
 			children = (
+				0A8DEF8F1998587C0083A4AF /* View */,
 				0ACCE3DF196006A6003C101E /* iPad */,
 				0A54273A18F92FE30041EE60 /* Storyboard */,
 				0A2E15C718F9408E002670A1 /* Model */,
@@ -280,6 +294,15 @@
 				0A707194191F2A2000287C4E /* TBXML+HTTP.m */,
 			);
 			name = TBXML;
+			sourceTree = "<group>";
+		};
+		0A8DEF8F1998587C0083A4AF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0A8DEF90199858C00083A4AF /* NumNaoLoadingView.h */,
+				0A8DEF91199858C00083A4AF /* NumNaoLoadingView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		0AC71580197A01C300ED4ACC /* AdMob */ = {
@@ -413,6 +436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A707195191F2A2000287C4E /* TBXML+HTTP.m in Sources */,
+				0AAD5A0B1991D01600880E93 /* IAPHelper.m in Sources */,
 				0A54271518F923BC0041EE60 /* NumNaoViewController.m in Sources */,
 				0A54273918F92FDC0041EE60 /* QuizSetSelectorController.m in Sources */,
 				0A54273618F925C00041EE60 /* MainMenuController.m in Sources */,
@@ -421,7 +445,9 @@
 				0A2E15C618F931F8002670A1 /* QuizDetailController.m in Sources */,
 				0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */,
 				0A54270F18F923BC0041EE60 /* NumNaoAppDelegate.m in Sources */,
+				0AA1F9461993135C003336D2 /* NumNaoIAPHelper.m in Sources */,
 				0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */,
+				0A8DEF92199858C00083A4AF /* NumNaoLoadingView.m in Sources */,
 				0A54270B18F923BC0041EE60 /* main.m in Sources */,
 				0A2E15CD18F94302002670A1 /* QuizObject.m in Sources */,
 			);
@@ -566,7 +592,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "66C692EC-E970-4EC5-A572-1834A2A55344";
+				PROVISIONING_PROFILE = "CDFCBB5B-8798-4796-86A7-15C7E3491528";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
