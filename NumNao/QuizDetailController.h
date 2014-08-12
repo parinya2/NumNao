@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GADBannerView.h"
 
-@interface QuizDetailController : UIViewController
+@interface QuizDetailController : UIViewController <GADBannerViewDelegate> {
+  GADBannerView *bannerView_;
+}
 
 @property (strong) IBOutlet UILabel *quizLabel;
 @property (strong) IBOutlet UILabel *quizCounterLabel;
@@ -21,5 +24,8 @@
 @property (strong) IBOutlet UIButton *confirmButton;
 @property (strong) IBOutlet UIButton *nextButton;
 @property (strong) IBOutlet UIImageView *correctionImageView;
+@property (nonatomic, strong) GADBannerView *bannerView;
+@property (assign, nonatomic) NSInteger quizMode;
 
+- (GADRequest *)createRequest;
 @end

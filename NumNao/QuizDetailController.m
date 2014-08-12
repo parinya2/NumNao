@@ -11,6 +11,9 @@
 #import "QuizObject.h"
 #import "QuizResultController.h"
 #import "NumNaoLoadingView.h"
+#import "GADBannerView.h"
+#import "GADRequest.h"
+#import "appID.h"
 
 @interface QuizDetailController ()
 
@@ -37,6 +40,7 @@
 @end
 
 @implementation QuizDetailController
+@synthesize bannerView = bannerView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,6 +55,15 @@
 {
   [super viewDidLoad];
 
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400.0, 350.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  self.bannerView.adUnitID = MyAdUnitID;
+  self.bannerView.delegate = self;
+  [self.bannerView setRootViewController:self];
+  [self.view addSubview:self.bannerView];
+  [self.bannerView loadRequest:[self createRequest]];
+  
+  [self decorateAllButtonsAndLabel];
+  
   self.quizManager = [[QuizManager alloc] init];
   [self.confirmButton setHidden:YES];
 
@@ -71,7 +84,7 @@
   
   if (!self.quizList) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
-                                                    message:@"ตัวเองต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                    message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
                                                    delegate:nil
                                           cancelButtonTitle:@"ตกลงจ้ะ"
                                           otherButtonTitles:nil];
@@ -101,6 +114,22 @@
 
   [self.timer invalidate];
   self.timer = nil;
+}
+
+- (GADRequest *)createRequest {
+  GADRequest *request = [GADRequest request];
+  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, nil];
+  return request;
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  [UIView animateWithDuration:1.0 animations:^{
+    adView.frame = CGRectMake(0.0, 350.0, adView.frame.size.width, adView.frame.size.height);
+  }];
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+  NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -219,6 +248,7 @@
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
   QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
   quizResultController.quizScore = self.quizScore;
+  quizResultController.quizMode = self.quizMode;
   quizResultController.quizManager = self.quizManager;
   [self.navigationController pushViewController:quizResultController animated:YES];
 }
@@ -229,5 +259,44 @@
   
   [self.nextButton setHidden:!flag];
   [self.confirmButton setHidden:YES];
+}
+
+- (void)decorateAllButtonsAndLabel {
+  
+  // Draw a custom gradient for quizLabel
+  CAGradientLayer *quizLabelGradient = [CAGradientLayer layer];
+  quizLabelGradient.frame = self.quizLabel.bounds;
+  quizLabelGradient.colors = [NSArray arrayWithObjects:
+                        (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:0.3f] CGColor],
+                        (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:0.3f] CGColor],
+                        nil];
+  [self.quizLabel.layer insertSublayer:quizLabelGradient atIndex:0];
+  [[self.quizLabel layer] setCornerRadius:5.0];
+  
+  NSArray *buttons = [NSArray arrayWithObjects: self.ans1Button, self.ans2Button, self.ans3Button, self.ans4Button, self.nextButton, nil];
+  
+  for(UIButton *btn in buttons) {
+    
+    // Draw a custom gradient for button
+    CAGradientLayer *btnGradient = [CAGradientLayer layer];
+    btnGradient.frame = btn.bounds;
+    
+    if ([btn isEqual:self.nextButton]) {
+      btnGradient.colors = [NSArray arrayWithObjects:
+                            (id)[[UIColor colorWithRed:240.0f / 255.0f green:200.0f / 255.0f blue:120.0f / 255.0f alpha:0.3f] CGColor],
+                            (id)[[UIColor colorWithRed:200.0f / 255.0f green:150.0f / 255.0f blue:70.0f / 255.0f alpha:0.3f] CGColor],
+                            nil];
+    } else {
+      btnGradient.colors = [NSArray arrayWithObjects:
+                            (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:0.3f] CGColor],
+                            (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:0.3f] CGColor],
+                            nil];
+    }
+
+    [btn.layer insertSublayer:btnGradient atIndex:0];
+    
+    [[btn layer] setMasksToBounds:YES];
+    [[btn layer] setCornerRadius:5.0];
+  }
 }
 @end

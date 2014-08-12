@@ -10,6 +10,11 @@
 
 @interface NumNaoIAPHelper : IAPHelper
 
+@property (strong, nonatomic) NSArray *productIdentifiers;
+@property (assign, nonatomic, getter = isRetroCh3Purchased) BOOL retroCh3Purchased;
+@property (assign, nonatomic, getter = isRetroCh5Purchased) BOOL retroCh5Purchased;
+@property (assign, nonatomic, getter = isRetroCh7Purchased) BOOL retroCh7Purchased;
+
 + (NumNaoIAPHelper *)sharedInstance;
 
 @end

@@ -9,6 +9,10 @@
 #import "QuizResultController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "NumNaoAppDelegate.h"
+#import "NumNaoIAPHelper.h"
+#import "GADBannerView.h"
+#import "GADRequest.h"
+#import "appID.h"
 
 @interface QuizResultController ()
 
@@ -19,20 +23,30 @@
 @end
 
 @implementation QuizResultController
+@synthesize bannerView = bannerView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
+
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  self.bannerView.adUnitID = MyAdUnitID;
+  self.bannerView.delegate = self;
+  [self.bannerView setRootViewController:self];
+  [self.view addSubview:self.bannerView];
+  [self.bannerView loadRequest:[self createRequest]];
+  
+  [self decorateAllButtonsAndLabel];
+  [self checkQuizResult];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -52,6 +66,112 @@
   NSString *quizResultString = [self.quizManager quizResultString:self.quizScore];
   [self.quizResultLabel setText:quizResultString];
 
+}
+
+- (GADRequest *)createRequest {
+  GADRequest *request = [GADRequest request];
+  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, nil];
+  return request;
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  [UIView animateWithDuration:1.0 animations:^{
+    adView.frame = CGRectMake(0.0, 340.0, adView.frame.size.width, adView.frame.size.height);
+  }];
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+  NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
+}
+
+- (void)checkQuizResult {
+  NSInteger quizScoreToUnlock = 3;
+  NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
+  
+  if (self.quizScore >= quizScoreToUnlock) {
+    switch (self.quizMode) {
+      case 0: {
+        // Mode: On air
+        if (!IAPInstance.retroCh3Purchased) {
+          IAPInstance.retroCh3Purchased = YES;
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ยินดีด้วย !!"
+                                                          message:@"เธอปลดล๊อดโหมดละครเก่าช่อง 3 ได้สำเร็จแล้ว !!"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"ตกลงจ้ะ"
+                                                otherButtonTitles:nil];
+          [alert show];
+        }
+      } break;
+      
+      case 1: {
+        // Mode: Retro CH 3
+        if (!IAPInstance.retroCh5Purchased) {
+          IAPInstance.retroCh5Purchased = YES;
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ยินดีด้วย !!"
+                                                          message:@"เธอปลดล๊อดโหมดละครเก่าช่อง 5 ได้สำเร็จแล้ว !!"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"ตกลงจ้ะ"
+                                                otherButtonTitles:nil];
+          [alert show];
+        }
+      } break;
+        
+      case 2: {
+        // Mode: Retro CH 5
+        if (!IAPInstance.retroCh7Purchased) {
+          IAPInstance.retroCh7Purchased = YES;
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ยินดีด้วย !!"
+                                                          message:@"เธอปลดล๊อดโหมดละครเก่าช่อง 7 ได้สำเร็จแล้ว !!"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"ตกลงจ้ะ"
+                                                otherButtonTitles:nil];
+          [alert show];
+        }
+      } break;
+        
+      default:
+        break;
+    }
+  }
+
+}
+
+- (void)decorateAllButtonsAndLabel {
+  
+  // Set the button Text Color
+  [self.backToMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+  [self.backToMenuButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+  
+  // Draw a custom gradient
+  CAGradientLayer *backToMenuBtnGradient = [CAGradientLayer layer];
+  backToMenuBtnGradient.frame = self.backToMenuButton.bounds;
+  backToMenuBtnGradient.colors = [NSArray arrayWithObjects:
+                                  (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:1.0f] CGColor],
+                                  (id)[[UIColor colorWithRed:251.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:1.0f] CGColor],
+                                  nil];
+  [self.backToMenuButton.layer insertSublayer:backToMenuBtnGradient atIndex:0];
+  
+  // Round button corners
+  CALayer *backToMenuBtnLayer = [self.backToMenuButton layer];
+  [backToMenuBtnLayer setMasksToBounds:YES];
+  [backToMenuBtnLayer setCornerRadius:5.0f];
+  
+  // Apply a 1 pixel, black border around Buy Button
+  [backToMenuBtnLayer setBorderWidth:1.0f];
+  [backToMenuBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
+  
+  
+  // Draw a custom gradient for quizLabel
+  CAGradientLayer *quizResultGradient = [CAGradientLayer layer];
+  quizResultGradient.frame = self.quizResultLabel.bounds;
+  quizResultGradient.colors = [NSArray arrayWithObjects:
+                               (id)[[UIColor colorWithRed:150.0f / 255.0f green:150.0f / 255.0f blue:150.0f / 255.0f alpha:0.3f] CGColor],
+                               (id)[[UIColor colorWithRed:1.0f / 255.0f green:1.0f / 255.0f blue:1.0f / 255.0f alpha:0.3f] CGColor],
+                               nil];
+  [self.quizResultLabel.layer insertSublayer:quizResultGradient atIndex:0];
+  [[self.quizResultLabel layer] setCornerRadius:5.0];
+  [[self.shareFacebookButton layer] setCornerRadius:5.0];
+  
 }
 
 - (void)didReceiveMemoryWarning

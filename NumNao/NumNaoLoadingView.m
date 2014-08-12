@@ -30,7 +30,7 @@
       self.layer.cornerRadius = 10.0;
       
       UIActivityIndicatorView *spinnerView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-      spinnerView.frame = CGRectMake(65, 10, spinnerView.bounds.size.width, spinnerView.bounds.size.height);
+      spinnerView.frame = CGRectMake(70, 10, spinnerView.bounds.size.width, spinnerView.bounds.size.height);
       //spinnerView.center = self.center;
       spinnerView.hidesWhenStopped = YES;
       [self addSubview:spinnerView];

@@ -618,7 +618,7 @@
 					"/Users/prinya/Desktop/GoogleMobileAdsSdkiOS-6.10.0",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A1FDEC8A-F982-4496-B002-FFA6120B6314";
+				PROVISIONING_PROFILE = "bfe97bc8-9b48-4ca7-88f9-ef4c33c17751";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

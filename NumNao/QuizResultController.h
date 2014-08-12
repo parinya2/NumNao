@@ -8,13 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "QuizManager.h"
+#import "GADBannerView.h"
 
-@interface QuizResultController : UIViewController
+@interface QuizResultController : UIViewController <GADBannerViewDelegate> {
+  GADBannerView *bannerView_;
+}
 
-@property NSInteger quizScore;
+
+@property (assign, nonatomic) NSInteger quizScore;
+@property (assign, nonatomic) NSInteger quizMode;
 @property (strong) IBOutlet UILabel *quizResultLabel;
+@property (strong) IBOutlet UIButton *shareFacebookButton;
+@property (strong) IBOutlet UIButton *backToMenuButton;
 @property (strong) QuizManager *quizManager;
+@property (nonatomic, strong) GADBannerView *bannerView;
 
+- (GADRequest *)createRequest;
 - (IBAction)goToMainMenu:(id)sender;
 - (IBAction)shareOnFacebook:(id)sender;
 

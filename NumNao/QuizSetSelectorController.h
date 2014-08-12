@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GADBannerView.h"
 
-@interface QuizSetSelectorController : UIViewController
+@interface QuizSetSelectorController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
+  GADBannerView *bannerView_;
+}
+
 
 @property (strong, nonatomic) IBOutlet UIButton *onAirButton;
 @property (strong, nonatomic) IBOutlet UIButton *retroCh3Button;
@@ -18,7 +22,9 @@
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh3LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh5LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh7LockImageView;
+@property (nonatomic, strong) GADBannerView *bannerView;
 
+- (GADRequest *)createRequest;
 - (IBAction)goToQuiz:(id)sender;
 
 @end

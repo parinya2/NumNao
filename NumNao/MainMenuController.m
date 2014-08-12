@@ -44,7 +44,7 @@
 
 - (GADRequest *)createRequest {
   GADRequest *request = [GADRequest request];
-  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, @"01876e51609421175c69a80136549249c6e580e8", nil];
+  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, nil];
   return request;
 }
 

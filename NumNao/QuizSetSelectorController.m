@@ -11,6 +11,9 @@
 #import <StoreKit/StoreKit.h>
 #import "NumNaoIAPHelper.h"
 #import "NumNaoLoadingView.h"
+#import "GADBannerView.h"
+#import "GADRequest.h"
+#import "appID.h"
 
 @interface QuizSetSelectorController () {
   NSArray *_products;
@@ -18,10 +21,12 @@
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
+@property (nonatomic, strong) id productDidPurchasedObserver;
 
 @end
 
 @implementation QuizSetSelectorController
+@synthesize bannerView = bannerView_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,6 +40,23 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  
+  __typeof(self) __weak weakSelf = self;
+  
+  self.productDidPurchasedObserver = [[NSNotificationCenter defaultCenter]
+                                addObserverForName:IAPHelperProductPurchasedNotification
+                                object:nil
+                                queue:[NSOperationQueue mainQueue]
+                                usingBlock:^(NSNotification *note) {
+                                  [weakSelf renderLockIcon];
+                                }];
+  
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  self.bannerView.adUnitID = MyAdUnitID;
+  self.bannerView.delegate = self;
+  [self.bannerView setRootViewController:self];
+  [self.view addSubview:self.bannerView];
+  [self.bannerView loadRequest:[self createRequest]];
   
   [self decorateAllButtons];
   _products = nil;
@@ -55,9 +77,36 @@
       [self.retroCh7Button setHidden:NO];
       
       [self renderLockIcon];
-      [self.loadingView removeFromSuperview];
+    } else {
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
+                                                      message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์ของ iTune มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                     delegate:nil
+                                            cancelButtonTitle:@"ตกลงจ้ะ"
+                                            otherButtonTitles:nil];
+      [alert show];
     }
+    [self.loadingView removeFromSuperview];
   }];
+}
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedObserver];
+}
+
+- (GADRequest *)createRequest {
+  GADRequest *request = [GADRequest request];
+  request.testDevices = [NSArray arrayWithObjects:GAD_SIMULATOR_ID, nil];
+  return request;
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  [UIView animateWithDuration:1.0 animations:^{
+    adView.frame = CGRectMake(0.0, 180.0, adView.frame.size.width, adView.frame.size.height);
+  }];
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+  NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,24 +114,62 @@
   [super didReceiveMemoryWarning];
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+  
+  switch (alertView.tag) {
+    case 100: {
+      [self goToQuizDetail:0];
+    } break;
+
+    case 101: {
+      [self goToQuizDetail:1];
+    } break;
+
+    case 102: {
+      [self goToQuizDetail:2];
+    } break;
+      
+    default:
+      break;
+  }
+}
+
 #pragma mark - Table view data source
 
 - (IBAction)goToQuiz:(id)sender {
   NSInteger tag = ((UIButton *)sender).tag;
-  
+  NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
   if (tag == 0) {
     
     // Mode: ON AIR
-    [self goToQuizDetail:0];
-    
+    if (IAPInstance.retroCh3Purchased) {
+      [self goToQuizDetail:0];
+    } else {
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                      message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 3 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครออนแอร์ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
+                                                     delegate:self
+                                            cancelButtonTitle:@"ตกลงจ้ะ"
+                                            otherButtonTitles:nil];
+      alert.tag = 100;
+      [alert show];
+    }
+
   } else if (tag == 1){
     
     // Mode: Retro CH 3
     SKProduct *product = _products[0];
-    NSLog(@"Button Buying %@", product.productIdentifier);
-    BOOL isPurchased =[[NumNaoIAPHelper sharedInstance] productPurchased:product.productIdentifier];
-    if (isPurchased) {
-      [self goToQuizDetail:1];
+    if (IAPInstance.retroCh3Purchased) {
+      if (IAPInstance.retroCh5Purchased) {
+        [self goToQuizDetail:1];
+      } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                        message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 5 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครเก่าช่อง 3 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
+                                                       delegate:self
+                                              cancelButtonTitle:@"ตกลงจ้ะ"
+                                              otherButtonTitles:nil];
+        alert.tag = 101;
+        [alert show];
+      }
     } else {
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
     }
@@ -92,10 +179,18 @@
     // Mode: Retro CH 5
     
     SKProduct *product = _products[1];
-    NSLog(@"Button Buying %@", product.productIdentifier);
-    BOOL isPurchased =[[NumNaoIAPHelper sharedInstance] productPurchased:product.productIdentifier];
-    if (isPurchased) {
-      [self goToQuizDetail:2];
+    if (IAPInstance.retroCh5Purchased) {
+      if (IAPInstance.retroCh7Purchased) {
+        [self goToQuizDetail:2];
+      } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                        message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 7 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครเก่าช่อง 5 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
+                                                       delegate:self
+                                              cancelButtonTitle:@"ตกลงจ้ะ"
+                                              otherButtonTitles:nil];
+        alert.tag = 102;
+        [alert show];
+      }
     } else {
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
     }
@@ -103,10 +198,8 @@
     
     // Mode: Retro CH 7
     
-    SKProduct *product = _products[2];
-    NSLog(@"Button Buying %@", product.productIdentifier);
-    BOOL isPurchased =[[NumNaoIAPHelper sharedInstance] productPurchased:product.productIdentifier];
-    if (isPurchased) {
+    SKProduct *product = _products[2];;
+    if (IAPInstance.retroCh7Purchased) {
       [self goToQuizDetail:3];
     } else {
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
@@ -117,17 +210,16 @@
 - (void)goToQuizDetail:(NSInteger) mode {
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
   QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
+  quizDetailController.quizMode = mode;
   [self.navigationController pushViewController:quizDetailController animated:YES];
 }
 
 - (void)renderLockIcon {
   NumNaoIAPHelper *IAPinstance = [NumNaoIAPHelper sharedInstance];
-  BOOL isRetroCH3Purchased = [IAPinstance productPurchased:
-                              ((SKProduct *)_products[0]).productIdentifier];
-  BOOL isRetroCH5Purchased = [IAPinstance productPurchased:
-                              ((SKProduct *)_products[1]).productIdentifier];
-  BOOL isRetroCH7Purchased = [IAPinstance productPurchased:
-                              ((SKProduct *)_products[2]).productIdentifier];
+
+  BOOL isRetroCH3Purchased = IAPinstance.retroCh3Purchased;
+  BOOL isRetroCH5Purchased = IAPinstance.retroCh5Purchased;
+  BOOL isRetroCH7Purchased = IAPinstance.retroCh7Purchased;
   
   if (isRetroCH3Purchased) {
     self.retroCh3LockImageView.image = nil;
