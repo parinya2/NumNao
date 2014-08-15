@@ -27,6 +27,48 @@
   return result;
 }
 
+- (NSArray *)mockQuizList {
+  NSMutableArray *result = [[NSMutableArray alloc] init];
+
+  for (int i = 0; i < 30; i++) {
+    NSString *quizText = [NSString stringWithFormat:@"Level 1 Question %d", (i+1)];
+    QuizObject *obj = [[QuizObject alloc] initWithQuizText:quizText
+                                                ansChoice1:@"choice1"
+                                                ansChoice2:@"choice2"
+                                                ansChoice3:@"choice3"
+                                                ansChoice4:@"choice4"
+                                               answerIndex:1
+                                                 quizLevel:1];
+    [result addObject:obj];
+  }
+
+  for (int i = 30; i < 60; i++) {
+    NSString *quizText = [NSString stringWithFormat:@"Level 2 Question %d", (i+1)];
+    QuizObject *obj = [[QuizObject alloc] initWithQuizText:quizText
+                                                ansChoice1:@"choice1"
+                                                ansChoice2:@"choice2"
+                                                ansChoice3:@"choice3"
+                                                ansChoice4:@"choice4"
+                                               answerIndex:1
+                                                 quizLevel:2];
+    [result addObject:obj];
+  }
+  
+  for (int i = 60; i < 100; i++) {
+    NSString *quizText = [NSString stringWithFormat:@"Level 3 Question %d", (i+1)];
+    QuizObject *obj = [[QuizObject alloc] initWithQuizText:quizText
+                                                ansChoice1:@"choice1"
+                                                ansChoice2:@"choice2"
+                                                ansChoice3:@"choice3"
+                                                ansChoice4:@"choice4"
+                                               answerIndex:1
+                                                 quizLevel:3];
+    [result addObject:obj];
+  }
+  
+  return result;
+}
+
 - (NSMutableArray *)extractQuizFromXML {
   
   NSMutableArray *result = [[NSMutableArray alloc] init];
@@ -57,6 +99,9 @@
     QuizObject *quizObject = [[QuizObject alloc] init];
    
     quizObject.quizText = [TBXML valueOfAttributeNamed:@"quiz_text" forElement:childXMLElement];
+    
+    NSString *quizLevelStr = [TBXML valueOfAttributeNamed:@"quiz_level" forElement:childXMLElement];
+    quizObject.quizLevel = [quizLevelStr integerValue];
     
     TBXMLElement *choicesListElement = [TBXML childElementNamed:@"choices" parentElement:childXMLElement];
     

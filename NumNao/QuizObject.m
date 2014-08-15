@@ -15,7 +15,8 @@
                       ansChoice2:(NSString *)choice2
                       ansChoice3:(NSString *)choice3
                       ansChoice4:(NSString *)choice4
-                     answerIndex:(NSInteger)index {
+                     answerIndex:(NSInteger)index
+                       quizLevel:(NSInteger)quizLevel {
   self = [super init];
   if (self) {
     self.quizText = quizText;
@@ -24,8 +25,19 @@
     self.ansChoice3 = choice3;
     self.ansChoice4 = choice4;
     self.answerIndex = index;
+    self.quizLevel = quizLevel;
   }
   return self;
 }
 
+- (QuizObject *)copyQuiz {
+  QuizObject *newQuiz = [[QuizObject alloc] initWithQuizText:self.quizText
+                                                  ansChoice1:self.ansChoice1
+                                                  ansChoice2:self.ansChoice2
+                                                  ansChoice3:self.ansChoice3
+                                                  ansChoice4:self.ansChoice4
+                                                 answerIndex:self.answerIndex
+                                                   quizLevel:self.quizLevel];
+  return newQuiz;
+}
 @end

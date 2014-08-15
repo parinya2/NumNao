@@ -7,6 +7,7 @@
 //
 
 #import "QuizResultController.h"
+#import "QuizSetSelectorController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "NumNaoAppDelegate.h"
 #import "NumNaoIAPHelper.h"
@@ -90,7 +91,7 @@
   
   if (self.quizScore >= quizScoreToUnlock) {
     switch (self.quizMode) {
-      case 0: {
+      case NumNaoQuizModeOnAir: {
         // Mode: On air
         if (!IAPInstance.retroCh3Purchased) {
           IAPInstance.retroCh3Purchased = YES;
@@ -103,7 +104,7 @@
         }
       } break;
       
-      case 1: {
+      case NumNaoQuizModeRetroCh3: {
         // Mode: Retro CH 3
         if (!IAPInstance.retroCh5Purchased) {
           IAPInstance.retroCh5Purchased = YES;
@@ -116,7 +117,7 @@
         }
       } break;
         
-      case 2: {
+      case NumNaoQuizModeRetroCh5: {
         // Mode: Retro CH 5
         if (!IAPInstance.retroCh7Purchased) {
           IAPInstance.retroCh7Purchased = YES;

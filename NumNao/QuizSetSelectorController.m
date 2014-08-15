@@ -138,15 +138,15 @@
   
   switch (alertView.tag) {
     case 100: {
-      [self goToQuizDetail:0];
+      [self goToQuizDetail:NumNaoQuizModeOnAir];
     } break;
 
     case 101: {
-      [self goToQuizDetail:1];
+      [self goToQuizDetail:NumNaoQuizModeRetroCh3];
     } break;
 
     case 102: {
-      [self goToQuizDetail:2];
+      [self goToQuizDetail:NumNaoQuizModeRetroCh5];
     } break;
       
     default:
@@ -163,7 +163,7 @@
     
     // Mode: ON AIR
     if (IAPInstance.retroCh3Purchased) {
-      [self goToQuizDetail:0];
+      [self goToQuizDetail:NumNaoQuizModeOnAir];
     } else {
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
                                                       message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 3 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครออนแอร์ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
@@ -180,7 +180,7 @@
     SKProduct *product = _products[0];
     if (IAPInstance.retroCh3Purchased) {
       if (IAPInstance.retroCh5Purchased) {
-        [self goToQuizDetail:1];
+        [self goToQuizDetail:NumNaoQuizModeRetroCh3];
       } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
                                                         message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 5 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครเก่าช่อง 3 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
@@ -203,7 +203,7 @@
     SKProduct *product = _products[1];
     if (IAPInstance.retroCh5Purchased) {
       if (IAPInstance.retroCh7Purchased) {
-        [self goToQuizDetail:2];
+        [self goToQuizDetail:NumNaoQuizModeRetroCh5];
       } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
                                                         message:@"เธอสามารถปลดล๊อดโหมดละครเก่าช่อง 7 ได้อย่างง่ายๆ เพียงแค่เล่นโหมดละครเก่าช่อง 5 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ !!"
@@ -224,7 +224,7 @@
     
     SKProduct *product = _products[2];;
     if (IAPInstance.retroCh7Purchased) {
-      [self goToQuizDetail:3];
+      [self goToQuizDetail:NumNaoQuizModeRetroCh7];
     } else {
       [self lockAllButtons:YES];
       [self.view addSubview:self.loadingView];

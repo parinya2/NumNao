@@ -13,6 +13,7 @@
 @property (strong) NSArray *quizResult;
 
 - (NSArray *)quizList;
+- (NSArray *)mockQuizList;
 - (NSString *)quizResultString:(NSInteger)quizScore;
 
 @end

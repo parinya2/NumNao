@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "GADBannerView.h"
 
+typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
+  NumNaoQuizModeOnAir = 0,
+  NumNaoQuizModeRetroCh3 = 1,
+  NumNaoQuizModeRetroCh5 = 2,
+  NumNaoQuizModeRetroCh7 = 3,
+};
+
 @interface QuizSetSelectorController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
   GADBannerView *bannerView_;
 }

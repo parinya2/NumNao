@@ -16,11 +16,14 @@
 @property (strong) NSString *ansChoice3;
 @property (strong) NSString *ansChoice4;
 @property NSInteger answerIndex;
+@property NSInteger quizLevel;
 
 - (QuizObject *)initWithQuizText:(NSString *)quizText
                       ansChoice1:(NSString *)choice1
                       ansChoice2:(NSString *)choice2
                       ansChoice3:(NSString *)choice3
                       ansChoice4:(NSString *)choice4
-                     answerIndex:(NSInteger) index;
+                     answerIndex:(NSInteger) index
+                       quizLevel:(NSInteger) quizLevel;
+- (QuizObject *)copyQuiz;
 @end

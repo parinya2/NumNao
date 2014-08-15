@@ -7,6 +7,7 @@
 //
 
 #import "QuizDetailController.h"
+#import "QuizSetSelectorController.h"
 #import "QuizManager.h"
 #import "QuizObject.h"
 #import "QuizResultController.h"
@@ -14,6 +15,9 @@
 #import "GADBannerView.h"
 #import "GADRequest.h"
 #import "appID.h"
+
+const NSInteger QuizScoreToPassLevel1 = 8;
+const NSInteger QuizScoreToPassLevel2 = 16;
 
 @interface QuizDetailController ()
 
@@ -23,6 +27,9 @@
 @property NSInteger correctAnswerIndex;
 @property BOOL isAnswerConfirmed;
 @property (strong) NSArray *quizList;
+@property (strong) NSMutableArray *quizListLevel1;
+@property (strong) NSMutableArray *quizListLevel2;
+@property (strong) NSMutableArray *quizListLevel3;
 @property (strong) UIColor *neutralButtonColor;
 @property (strong) UIColor *selectedButtonColor;
 @property (strong) QuizManager *quizManager;
@@ -73,11 +80,12 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  self.remainingTime = 20;
+  self.remainingTime = 30;
   self.quizCounter = 0;
   self.quizScore = 0;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
+  
   self.quizList = [self.quizManager quizList];
 
   [self.loadingView removeFromSuperview];
@@ -91,12 +99,13 @@
     [alert show];
     return;
   }
-  
+
   self.neutralButtonColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
   self.selectedButtonColor = [UIColor colorWithRed:80.0/255.0 green:255.0/255.0 blue:80.0/255.0 alpha:1.0];
   
-  QuizObject *firstQuiz = [self.quizList objectAtIndex:self.quizCounter];
-  [self renderPageWithQuizObject:firstQuiz quizNo:self.quizCounter+1];
+  [self extractQuizByLevel];
+  QuizObject *quizObject = [self randomQuiz];
+  [self renderPageWithQuizObject:quizObject quizNo:self.quizCounter+1];
   
   [self enableNextButton:NO];
   
@@ -114,6 +123,62 @@
 
   [self.timer invalidate];
   self.timer = nil;
+}
+
+- (void)extractQuizByLevel {
+  NSIndexSet *quizLevel1Indexes = [self.quizList indexesOfObjectsPassingTest:^BOOL(QuizObject *quizObj, NSUInteger idx, BOOL *stop) {
+    return quizObj.quizLevel == 1;
+  }];
+  
+  NSIndexSet *quizLevel2Indexes = [self.quizList indexesOfObjectsPassingTest:^BOOL(QuizObject *quizObj, NSUInteger idx, BOOL *stop) {
+    return quizObj.quizLevel == 2;
+  }];
+  
+  NSIndexSet *quizLevel3Indexes = [self.quizList indexesOfObjectsPassingTest:^BOOL(QuizObject *quizObj, NSUInteger idx, BOOL *stop) {
+    return quizObj.quizLevel == 3;
+  }];
+  self.quizListLevel1 = [[self.quizList objectsAtIndexes:quizLevel1Indexes] mutableCopy];
+  self.quizListLevel2 = [[self.quizList objectsAtIndexes:quizLevel2Indexes] mutableCopy];
+  self.quizListLevel3 = [[self.quizList objectsAtIndexes:quizLevel3Indexes] mutableCopy];
+}
+
+- (QuizObject *)randomQuiz {
+  QuizObject *quizObject = nil;
+  if (self.quizMode == NumNaoQuizModeOnAir) {
+    
+    if (self.quizScore < QuizScoreToPassLevel1) {
+      if ([self.quizListLevel1 count] == 0) {
+        [self extractQuizByLevel];
+      }
+      NSUInteger randomIndex = arc4random() % [self.quizListLevel1 count];
+      quizObject = [self.quizListLevel1 objectAtIndex:randomIndex];
+      [self.quizListLevel1 removeObjectAtIndex:randomIndex];
+      
+    } else if (self.quizScore < QuizScoreToPassLevel2) {
+      if ([self.quizListLevel2 count] == 0) {
+        [self extractQuizByLevel];
+      }
+      NSUInteger randomIndex = arc4random() % [self.quizListLevel2 count];
+      quizObject = [self.quizListLevel2 objectAtIndex:randomIndex];
+      [self.quizListLevel2 removeObjectAtIndex:randomIndex];
+      
+    } else {
+      if ([self.quizListLevel3 count] == 0) {
+        [self extractQuizByLevel];
+      }
+      NSUInteger randomIndex = arc4random() % [self.quizListLevel3 count];
+      quizObject = [self.quizListLevel3 objectAtIndex:randomIndex];
+      [self.quizListLevel3 removeObjectAtIndex:randomIndex];
+    }
+  } else {
+    if ([self.quizListLevel1 count] == 0) {
+      [self extractQuizByLevel];
+    }
+    NSUInteger randomIndex = arc4random() % [self.quizListLevel1 count];
+    quizObject = [self.quizListLevel1 objectAtIndex:randomIndex];
+    [self.quizListLevel1 removeObjectAtIndex:randomIndex];
+  }
+  return quizObject;
 }
 
 - (GADRequest *)createRequest {
@@ -232,14 +297,9 @@
   // Users already confirm the answer, so we go to the next quiz
   self.quizCounter++;
   
-  if (self.quizCounter < self.quizList.count) {
-    QuizObject *nextQuiz = [self.quizList objectAtIndex:self.quizCounter];
-    self.selectedAnswerIndex = 0;
-    [self renderPageWithQuizObject:nextQuiz quizNo:self.quizCounter+1];
-    
-  } else {
-    [self goToSummaryPage];
-  }
+  QuizObject *nextQuiz = [self randomQuiz];
+  self.selectedAnswerIndex = 0;
+  [self renderPageWithQuizObject:nextQuiz quizNo:self.quizCounter+1];
   
   [self enableNextButton:NO];
 }
