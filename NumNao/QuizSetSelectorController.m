@@ -22,6 +22,7 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
 @property (nonatomic, strong) id productDidPurchasedObserver;
+@property (nonatomic, strong) id productDidPurchasedFailedObserver;
 
 @end
 
@@ -48,8 +49,26 @@
                                 object:nil
                                 queue:[NSOperationQueue mainQueue]
                                 usingBlock:^(NSNotification *note) {
+                                  [weakSelf lockAllButtons:NO];
                                   [weakSelf renderLockIcon];
+                                  [weakSelf.loadingView removeFromSuperview];
                                 }];
+ 
+  self.productDidPurchasedFailedObserver = [[NSNotificationCenter defaultCenter]
+                                            addObserverForName:IAPHelperProductPurchasedFailedNotification
+                                            object:nil
+                                            queue:[NSOperationQueue mainQueue]
+                                            usingBlock:^(NSNotification *note) {
+                                              [weakSelf lockAllButtons:NO];
+                                              [weakSelf renderLockIcon];
+                                              [weakSelf.loadingView removeFromSuperview];
+                                              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                  message:@"การซื้อขายถูกยกเลิกนะจ๊ะ"
+                                                  delegate:nil
+                                                  cancelButtonTitle:@"ตกลงจ้ะ"
+                                                  otherButtonTitles: nil];
+                                              [alert show];
+                                            }];
   
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
@@ -91,6 +110,7 @@
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedObserver];
+  [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedFailedObserver];
 }
 
 - (GADRequest *)createRequest {
@@ -171,6 +191,8 @@
         [alert show];
       }
     } else {
+      [self lockAllButtons:YES];
+      [self.view addSubview:self.loadingView];
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
     }
     
@@ -192,6 +214,8 @@
         [alert show];
       }
     } else {
+      [self lockAllButtons:YES];
+      [self.view addSubview:self.loadingView];
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
     }
   } else if (tag == 3){
@@ -202,6 +226,8 @@
     if (IAPInstance.retroCh7Purchased) {
       [self goToQuizDetail:3];
     } else {
+      [self lockAllButtons:YES];
+      [self.view addSubview:self.loadingView];
       [[NumNaoIAPHelper sharedInstance] buyProduct:product];
     }
   }
@@ -238,6 +264,13 @@
   } else {
     self.retroCh7LockImageView.image = [UIImage imageNamed:@"lock_icon"];
   }
+}
+
+- (void)lockAllButtons:(BOOL)flag {
+  self.onAirButton.enabled = !flag;
+  self.retroCh3Button.enabled = !flag;
+  self.retroCh5Button.enabled = !flag;
+  self.retroCh7Button.enabled = !flag;
 }
 
 - (void)decorateAllButtons {

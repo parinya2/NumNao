@@ -16,8 +16,8 @@
 
 - (id)init
 {
-  CGRect frame = CGRectMake(75, 200, 170, 90);
-  self = [self initWithFrame:frame];
+  UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+  self = [self initWithFrame:window.bounds];
   return self;
 }
 
@@ -25,15 +25,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-      self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-      self.clipsToBounds = YES;
-      self.layer.cornerRadius = 10.0;
+      self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
       
       UIActivityIndicatorView *spinnerView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
       spinnerView.frame = CGRectMake(70, 10, spinnerView.bounds.size.width, spinnerView.bounds.size.height);
-      //spinnerView.center = self.center;
       spinnerView.hidesWhenStopped = YES;
-      [self addSubview:spinnerView];
       [spinnerView startAnimating];
       
       UILabel *loadingCaption = [[UILabel alloc] initWithFrame:CGRectMake(20, 45, 130, 22)];
@@ -43,7 +39,15 @@
       loadingCaption.textAlignment = NSTextAlignmentCenter;
       loadingCaption.text = @"รอแป๊บนึงนะจ๊ะ...";
       
-      [self addSubview:loadingCaption];
+      UIView *centerSquare = [[UIView alloc] initWithFrame:CGRectMake(75, 200, 170, 90)];
+      centerSquare.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+      centerSquare.layer.cornerRadius = 10.0;
+      centerSquare.clipsToBounds = YES;
+      
+      [centerSquare addSubview:spinnerView];
+      [centerSquare addSubview:loadingCaption];
+      
+      [self addSubview:centerSquare];
     }
     return self;
 }
