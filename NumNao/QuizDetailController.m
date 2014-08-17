@@ -62,7 +62,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 {
   [super viewDidLoad];
 
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400.0, 350.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height - 5;
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
@@ -188,8 +189,9 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  __block float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height + 5;
   [UIView animateWithDuration:1.0 animations:^{
-    adView.frame = CGRectMake(0.0, 350.0, adView.frame.size.width, adView.frame.size.height);
+    adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
 

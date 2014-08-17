@@ -71,6 +71,7 @@
                                             }];
   
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
@@ -79,7 +80,14 @@
   
   [self decorateAllButtons];
   _products = nil;
-  
+
+  [self.retroCh3Button setHidden:NO];
+  [self.retroCh5Button setHidden:NO];
+  [self.retroCh7Button setHidden:NO];
+  self.retroCh3LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+  self.retroCh5LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+  self.retroCh7LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+  return;
   [self.retroCh3Button setHidden:YES];
   [self.retroCh5Button setHidden:YES];
   [self.retroCh7Button setHidden:YES];
@@ -120,8 +128,9 @@
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  __block float yPos = self.onAirButton.frame.origin.y + self.onAirButton.frame.size.height + 10;
   [UIView animateWithDuration:1.0 animations:^{
-    adView.frame = CGRectMake(0.0, 180.0, adView.frame.size.width, adView.frame.size.height);
+    adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
 

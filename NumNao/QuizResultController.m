@@ -76,8 +76,9 @@
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
+  __block float yPos = self.quizResultLabel.frame.origin.y + self.quizResultLabel.frame.size.height + 10;
   [UIView animateWithDuration:1.0 animations:^{
-    adView.frame = CGRectMake(0.0, 340.0, adView.frame.size.width, adView.frame.size.height);
+    adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
 
