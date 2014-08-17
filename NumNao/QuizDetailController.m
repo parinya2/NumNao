@@ -70,8 +70,6 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
   
-  [self decorateAllButtonsAndLabel];
-  
   self.quizManager = [[QuizManager alloc] init];
   [self.confirmButton setHidden:YES];
 
@@ -81,6 +79,9 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
+  
+  [self decorateAllButtonsAndLabel];
+  
   self.remainingTime = 30;
   self.quizCounter = 0;
   self.quizScore = 0;

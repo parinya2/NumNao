@@ -81,13 +81,6 @@
   [self decorateAllButtons];
   _products = nil;
 
-  [self.retroCh3Button setHidden:NO];
-  [self.retroCh5Button setHidden:NO];
-  [self.retroCh7Button setHidden:NO];
-  self.retroCh3LockImageView.image = [UIImage imageNamed:@"lock_icon"];
-  self.retroCh5LockImageView.image = [UIImage imageNamed:@"lock_icon"];
-  self.retroCh7LockImageView.image = [UIImage imageNamed:@"lock_icon"];
-  return;
   [self.retroCh3Button setHidden:YES];
   [self.retroCh5Button setHidden:YES];
   [self.retroCh7Button setHidden:YES];
@@ -288,15 +281,15 @@
   for(UIButton *btn in buttons)
   {
     // Set the button Text Color
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     
     // Draw a custom gradient
     CAGradientLayer *btnGradient = [CAGradientLayer layer];
     btnGradient.frame = btn.bounds;
     btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:251.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
                           nil];
     [btn.layer insertSublayer:btnGradient atIndex:0];
     

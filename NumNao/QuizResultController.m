@@ -141,15 +141,15 @@
 - (void)decorateAllButtonsAndLabel {
   
   // Set the button Text Color
-  [self.backToMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+  [self.backToMenuButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
   [self.backToMenuButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
   
   // Draw a custom gradient
   CAGradientLayer *backToMenuBtnGradient = [CAGradientLayer layer];
   backToMenuBtnGradient.frame = self.backToMenuButton.bounds;
   backToMenuBtnGradient.colors = [NSArray arrayWithObjects:
-                                  (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:1.0f] CGColor],
-                                  (id)[[UIColor colorWithRed:251.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:1.0f] CGColor],
+                                  (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
+                                  (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
                                   nil];
   [self.backToMenuButton.layer insertSublayer:backToMenuBtnGradient atIndex:0];
   
