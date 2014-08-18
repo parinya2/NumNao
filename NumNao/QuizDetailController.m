@@ -93,11 +93,13 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self.loadingView removeFromSuperview];
   
   if (!self.quizList) {
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
                                                     message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
-                                                   delegate:nil
+                                                   delegate:self
                                           cancelButtonTitle:@"ตกลงจ้ะ"
                                           otherButtonTitles:nil];
+    alert.tag = 100;
     [alert show];
     return;
   }
@@ -200,10 +202,18 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+  switch (alertView.tag) {
+    case 100: {
+      [self performSegueWithIdentifier:@"QuizDetailMainMenuSegue" sender:self];
+    } break;
+    default: break;
+  }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)decreaseRemainingTime {

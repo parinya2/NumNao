@@ -183,7 +183,7 @@
 }
 
 - (IBAction)goToMainMenu:(id)sender {
-  [self performSegueWithIdentifier:@"MainMenuSegue" sender:self];
+  [self performSegueWithIdentifier:@"QuizResultMainMenuSegue" sender:self];
 }
 
 - (IBAction)shareOnFacebook:(id)sender {

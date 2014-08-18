@@ -51,7 +51,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-f2-iBG">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-f2-iBG">
                                 <rect key="frame" x="95" y="244" width="130" height="65"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.2131696428571429" green="0.2131696428571429" blue="0.2131696428571429" alpha="1" colorSpace="calibratedRGB"/>
@@ -91,27 +91,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IZV-BM-Zna">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IZV-BM-Zna">
                                 <rect key="frame" x="58" y="115" width="205" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="205" id="4oE-Yg-ehd"/>
+                                    <constraint firstAttribute="width" secondItem="IZV-BM-Zna" secondAttribute="height" multiplier="205:56" id="fVR-21-sqA"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" title="ละคร On Air">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <state key="normal" title="ละคร On Air"/>
                                 <connections>
                                     <action selector="goToQuiz:" destination="vCd-qs-oWe" eventType="touchUpInside" id="pXw-ix-dp8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWB-IF-G0y">
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWB-IF-G0y">
                                 <rect key="frame" x="58" y="247" width="205" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="MWB-IF-G0y" secondAttribute="height" multiplier="205:56" id="LGI-8P-PBr"/>
                                     <constraint firstAttribute="width" constant="205" id="ehl-Uj-gAg"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -123,12 +122,13 @@
                                     <action selector="goToQuiz:" destination="vCd-qs-oWe" eventType="touchUpInside" id="kcc-oG-UEa"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WN-xd-FAD">
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WN-xd-FAD">
                                 <rect key="frame" x="58" y="321" width="205" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="205" id="98W-Oo-7Ox"/>
+                                    <constraint firstAttribute="width" secondItem="7WN-xd-FAD" secondAttribute="height" multiplier="205:56" id="QqX-Q6-Nh7"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="ละครเก่าช่อง 5">
@@ -139,12 +139,13 @@
                                     <action selector="goToQuiz:" destination="vCd-qs-oWe" eventType="touchUpInside" id="QvO-fz-1dU"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KoS-f9-oVa">
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KoS-f9-oVa">
                                 <rect key="frame" x="58" y="396" width="205" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="205" id="9JT-Fd-AtX"/>
+                                    <constraint firstAttribute="width" secondItem="KoS-f9-oVa" secondAttribute="height" multiplier="205:56" id="rhE-Ih-swP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="ละครเก่าช่อง 7">
@@ -222,10 +223,14 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWJ-Vf-a3B">
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWJ-Vf-a3B">
                                 <rect key="frame" x="35" y="266" width="250" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="D1z-6a-SjA"/>
+                                    <constraint firstAttribute="width" secondItem="cWJ-Vf-a3B" secondAttribute="height" multiplier="25:3" id="ZPt-7R-Bzp"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -234,10 +239,14 @@
                                     <action selector="chooseAnswer:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="Zbd-T7-APg"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q2S-zW-0Ed">
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q2S-zW-0Ed">
                                 <rect key="frame" x="35" y="314" width="250" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="q2S-zW-0Ed" secondAttribute="height" multiplier="25:3" id="naQ-cw-BMA"/>
+                                    <constraint firstAttribute="width" constant="250" id="ohj-4L-R6s"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -247,10 +256,14 @@
                                     <action selector="chooseAnswer:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="1b4-FT-7cf"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga7-2R-9AK">
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ga7-2R-9AK">
                                 <rect key="frame" x="35" y="408" width="250" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="BJ5-0p-VS2"/>
+                                    <constraint firstAttribute="width" secondItem="Ga7-2R-9AK" secondAttribute="height" multiplier="25:3" id="R9m-3X-WKR"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -260,10 +273,14 @@
                                     <action selector="chooseAnswer:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="FHe-Va-zsE"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="4" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LVz-QL-16J">
+                            <button opaque="NO" tag="4" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LVz-QL-16J">
                                 <rect key="frame" x="35" y="456" width="250" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="LVz-QL-16J" secondAttribute="height" multiplier="25:3" id="9la-gE-gXq"/>
+                                    <constraint firstAttribute="width" constant="250" id="m7D-lf-dlN"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal">
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -273,12 +290,16 @@
                                     <action selector="chooseAnswer:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="w23-fM-luc"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9f-ey-abI">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9f-ey-abI">
                                 <rect key="frame" x="176" y="510" width="120" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.81221799280703211" blue="0.4947586056440274" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="Ucd-f1-qsv"/>
+                                    <constraint firstAttribute="width" secondItem="U9f-ey-abI" secondAttribute="height" multiplier="60:19" id="s6e-sb-kw6"/>
+                                </constraints>
                                 <state key="normal" title="ถัดไป">
+                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -338,6 +359,7 @@
                             <constraint firstItem="84k-th-pEy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="uxH-Zj-nXe" secondAttribute="bottom" constant="4" id="Z0J-Mo-IKO"/>
                             <constraint firstItem="H6F-H4-Z9Z" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LKJ-or-Iw8" secondAttribute="bottom" constant="5" id="i3g-Pq-QBV"/>
                             <constraint firstItem="cWJ-Vf-a3B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="84k-th-pEy" secondAttribute="bottom" constant="10" id="jfQ-7r-c2P"/>
+                            <constraint firstItem="84k-th-pEy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H6F-H4-Z9Z" secondAttribute="bottom" constant="5" id="nih-vW-c4b"/>
                             <constraint firstItem="GVU-OU-Dg3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="U9f-ey-abI" secondAttribute="bottom" constant="5" id="v3V-1f-aza"/>
                         </constraints>
                     </view>
@@ -355,6 +377,7 @@
                         <outlet property="remainingTimeLabel" destination="RRe-CX-wWY" id="fbc-MX-UJp"/>
                         <outlet property="scoreLabel" destination="fs7-ID-7ji" id="yGs-cf-gIN"/>
                         <segue destination="EpC-bT-pCw" kind="push" identifier="QuizResultSegue" id="u9j-eB-Gwm"/>
+                        <segue destination="8Ph-O0-WId" kind="modal" identifier="QuizDetailMainMenuSegue" id="AgJ-bi-nPb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nnJ-l8-GcD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -373,9 +396,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GII-Em-6gx">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GII-Em-6gx">
                                 <rect key="frame" x="47" y="359" width="227" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="227" id="KyM-pc-6hE"/>
+                                    <constraint firstAttribute="width" secondItem="GII-Em-6gx" secondAttribute="height" multiplier="227:35" id="wgn-iM-jRd"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="กลับสู่หน้าหลัก">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -395,10 +422,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sd8-OX-nJd">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sd8-OX-nJd">
                                 <rect key="frame" x="47" y="414" width="227" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="227" id="6Nf-Ai-a45"/>
+                                    <constraint firstAttribute="width" secondItem="Sd8-OX-nJd" secondAttribute="height" multiplier="227:38" id="POc-1v-n7i"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="19"/>
                                 <state key="normal" title="Share บน Facebook">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -411,7 +442,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="GnA-9k-FBy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Sd8-OX-nJd" secondAttribute="bottom" constant="10" id="hfR-pf-DSb"/>
+                            <constraint firstItem="GnA-9k-FBy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Sd8-OX-nJd" secondAttribute="bottom" constant="20" id="hfR-pf-DSb"/>
                             <constraint firstItem="Sd8-OX-nJd" firstAttribute="top" secondItem="GII-Em-6gx" secondAttribute="bottom" constant="20" id="qbV-Nl-o7p"/>
                             <constraint firstItem="GII-Em-6gx" firstAttribute="top" secondItem="ZUz-FG-B4W" secondAttribute="bottom" constant="69" id="y9I-5f-tkg"/>
                         </constraints>
@@ -421,7 +452,7 @@
                         <outlet property="backToMenuButton" destination="GII-Em-6gx" id="VlP-an-xnt"/>
                         <outlet property="quizResultLabel" destination="ZUz-FG-B4W" id="5RV-cd-8t9"/>
                         <outlet property="shareFacebookButton" destination="Sd8-OX-nJd" id="3OI-6N-OX5"/>
-                        <segue destination="8Ph-O0-WId" kind="modal" identifier="MainMenuSegue" id="JuH-5n-XtF"/>
+                        <segue destination="8Ph-O0-WId" kind="modal" identifier="QuizResultMainMenuSegue" id="JuH-5n-XtF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x2J-km-BA6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -453,4 +484,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="JuH-5n-XtF"/>
+    </inferredMetricsTieBreakers>
 </document>

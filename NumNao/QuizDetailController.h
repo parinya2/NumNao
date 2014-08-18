@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GADBannerView.h"
 
-@interface QuizDetailController : UIViewController <GADBannerViewDelegate> {
+@interface QuizDetailController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
   GADBannerView *bannerView_;
 }
 
