@@ -19,11 +19,11 @@
   return resultString;
 }
 
-- (NSArray *)quizList {
+- (NSArray *)quizList:(NSInteger)quizMode {
   NSMutableArray *result = [[NSMutableArray alloc] init];
   NSLog(@"startExtract");
-  result = [self extractQuizFromXML];
-  NSLog(@"finishExtract");
+  result = [self extractQuizFromXML:quizMode];
+  NSLog(@"finishExtract result count =%d",result.count);
   return result;
 }
 
@@ -69,11 +69,36 @@
   return result;
 }
 
-- (NSMutableArray *)extractQuizFromXML {
+- (NSMutableArray *)extractQuizFromXML:(NSInteger)quizMode {
   
   NSMutableArray *result = [[NSMutableArray alloc] init];
   
-  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=2";
+  NSString *urlString = nil;
+  
+  switch (quizMode) {
+    case NumNaoQuizModeOnAir: {
+      // ZZZ: To be continued
+      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=2";
+    } break;
+
+    case NumNaoQuizModeRetroCh3: {
+      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=2";
+    } break;
+
+    case NumNaoQuizModeRetroCh5: {
+      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=3";
+    } break;
+      
+    case NumNaoQuizModeRetroCh7: {
+      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=4";
+    } break;
+      
+    default: {
+      NSLog(@"Unknown quizMode");
+      return nil;
+    } break;
+  }
+
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   

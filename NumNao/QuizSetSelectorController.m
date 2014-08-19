@@ -14,6 +14,7 @@
 #import "GADBannerView.h"
 #import "GADRequest.h"
 #import "appID.h"
+#import "QuizManager.h"
 
 @interface QuizSetSelectorController () {
   NSArray *_products;

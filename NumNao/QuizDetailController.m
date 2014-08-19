@@ -88,7 +88,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   
-  self.quizList = [self.quizManager quizList];
+  self.quizList = [self.quizManager quizList:self.quizMode];
 
   [self.loadingView removeFromSuperview];
   
@@ -317,13 +317,24 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self enableNextButton:NO];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+  if ([[segue identifier] isEqualToString:@"QuizDetailToQuizResultSegue"]) {
+    QuizResultController *quizResultController = [segue destinationViewController];
+    quizResultController.quizScore = self.quizScore;
+    quizResultController.quizMode = self.quizMode;
+    quizResultController.quizManager = self.quizManager;
+  }
+}
+
 - (void)goToSummaryPage {
-  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-  QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
-  quizResultController.quizScore = self.quizScore;
-  quizResultController.quizMode = self.quizMode;
-  quizResultController.quizManager = self.quizManager;
-  [self.navigationController pushViewController:quizResultController animated:YES];
+  [self performSegueWithIdentifier:@"QuizDetailToQuizResultSegue" sender:self];
+  
+//  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//  QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
+//  quizResultController.quizScore = self.quizScore;
+//  quizResultController.quizMode = self.quizMode;
+//  quizResultController.quizManager = self.quizManager;
+//  [self.navigationController pushViewController:quizResultController animated:YES];
 }
 
 - (void)enableNextButton:(BOOL)flag {

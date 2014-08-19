@@ -376,7 +376,7 @@
                         <outlet property="quizLabel" destination="84k-th-pEy" id="gFy-Gj-hBw"/>
                         <outlet property="remainingTimeLabel" destination="RRe-CX-wWY" id="fbc-MX-UJp"/>
                         <outlet property="scoreLabel" destination="fs7-ID-7ji" id="yGs-cf-gIN"/>
-                        <segue destination="EpC-bT-pCw" kind="push" identifier="QuizResultSegue" id="u9j-eB-Gwm"/>
+                        <segue destination="EpC-bT-pCw" kind="modal" identifier="QuizDetailToQuizResultSegue" id="u9j-eB-Gwm"/>
                         <segue destination="8Ph-O0-WId" kind="modal" identifier="QuizDetailMainMenuSegue" id="AgJ-bi-nPb"/>
                     </connections>
                 </viewController>
@@ -452,7 +452,7 @@
                         <outlet property="backToMenuButton" destination="GII-Em-6gx" id="VlP-an-xnt"/>
                         <outlet property="quizResultLabel" destination="ZUz-FG-B4W" id="5RV-cd-8t9"/>
                         <outlet property="shareFacebookButton" destination="Sd8-OX-nJd" id="3OI-6N-OX5"/>
-                        <segue destination="8Ph-O0-WId" kind="modal" identifier="QuizResultMainMenuSegue" id="JuH-5n-XtF"/>
+                        <segue destination="8Ph-O0-WId" kind="modal" identifier="QuizResultToMainMenuSegue" id="JuH-5n-XtF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x2J-km-BA6" userLabel="First Responder" sceneMemberID="firstResponder"/>

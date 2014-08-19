@@ -8,11 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
+  NumNaoQuizModeOnAir = 0,
+  NumNaoQuizModeRetroCh3 = 1,
+  NumNaoQuizModeRetroCh5 = 2,
+  NumNaoQuizModeRetroCh7 = 3,
+};
+
 @interface QuizManager : NSObject
 
 @property (strong) NSArray *quizResult;
 
-- (NSArray *)quizList;
+- (NSArray *)quizList:(NSInteger)quizMode;
 - (NSArray *)mockQuizList;
 - (NSString *)quizResultString:(NSInteger)quizScore;
 
