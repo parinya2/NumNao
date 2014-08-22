@@ -28,6 +28,7 @@
 		0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6EA88018F97D6500003A3C /* QuizResultController.m */; };
 		0A707192191F297E00287C4E /* TBXML.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707191191F297E00287C4E /* TBXML.m */; };
 		0A707195191F2A2000287C4E /* TBXML+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A707194191F2A2000287C4E /* TBXML+HTTP.m */; };
+		0A76539B19A6E282005D9742 /* a_day_in_the_sun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A76539A19A6E282005D9742 /* a_day_in_the_sun.mp3 */; };
 		0A8DEF92199858C00083A4AF /* NumNaoLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8DEF91199858C00083A4AF /* NumNaoLoadingView.m */; };
 		0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A9B95461950336C00B41B24 /* FBLoginController.m */; };
 		0A9B954919503D5C00B41B24 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B954819503D5C00B41B24 /* FacebookSDK.framework */; };
@@ -41,6 +42,10 @@
 		0AC71597197A026D00ED4ACC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A77D1511956C6DD00F24C7B /* SystemConfiguration.framework */; };
 		0AC71599197A028000ED4ACC /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC71598197A028000ED4ACC /* MessageUI.framework */; };
 		0AC7159B197A028D00ED4ACC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC7159A197A028D00ED4ACC /* AudioToolbox.framework */; };
+		0AD8046819A43D4F007C1857 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD8046719A43D4F007C1857 /* AVFoundation.framework */; };
+		0AD8046B19A43F09007C1857 /* alert_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8046A19A43F09007C1857 /* alert_tone.mp3 */; };
+		0AD8047119A4460D007C1857 /* ominous_sounds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */; };
+		0AD8047319A44A34007C1857 /* bold_valor.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047219A44A34007C1857 /* bold_valor.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +94,7 @@
 		0A707191191F297E00287C4E /* TBXML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBXML.m; sourceTree = "<group>"; };
 		0A707193191F2A2000287C4E /* TBXML+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+HTTP.h"; sourceTree = "<group>"; };
 		0A707194191F2A2000287C4E /* TBXML+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TBXML+HTTP.m"; sourceTree = "<group>"; };
+		0A76539A19A6E282005D9742 /* a_day_in_the_sun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = a_day_in_the_sun.mp3; sourceTree = "<group>"; };
 		0A77D14F1956C6C600F24C7B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		0A77D1511956C6DD00F24C7B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0A77D1531956C6E600F24C7B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -122,6 +128,10 @@
 		0AC71598197A028000ED4ACC /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0AC7159A197A028D00ED4ACC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0AC7159C197A05BD00ED4ACC /* appID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = appID.h; sourceTree = "<group>"; };
+		0AD8046719A43D4F007C1857 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		0AD8046A19A43F09007C1857 /* alert_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alert_tone.mp3; sourceTree = "<group>"; };
+		0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ominous_sounds.mp3; sourceTree = "<group>"; };
+		0AD8047219A44A34007C1857 /* bold_valor.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bold_valor.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD8046819A43D4F007C1857 /* AVFoundation.framework in Frameworks */,
 				0AC7159B197A028D00ED4ACC /* AudioToolbox.framework in Frameworks */,
 				0AC71599197A028000ED4ACC /* MessageUI.framework in Frameworks */,
 				0AC71597197A026D00ED4ACC /* SystemConfiguration.framework in Frameworks */,
@@ -193,6 +204,7 @@
 		0A5426FD18F923BC0041EE60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0AD8046719A43D4F007C1857 /* AVFoundation.framework */,
 				0AC7159A197A028D00ED4ACC /* AudioToolbox.framework */,
 				0AC71598197A028000ED4ACC /* MessageUI.framework */,
 				0AC71595197A025E00ED4ACC /* StoreKit.framework */,
@@ -227,6 +239,7 @@
 		0A54270518F923BC0041EE60 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0AD8046919A43EFA007C1857 /* Music */,
 				0A70718F191F294E00287C4E /* TBXML */,
 				0A54270D18F923BC0041EE60 /* NumNaoAppDelegate.h */,
 				0A54270E18F923BC0041EE60 /* NumNaoAppDelegate.m */,
@@ -333,6 +346,17 @@
 			name = iPad;
 			sourceTree = "<group>";
 		};
+		0AD8046919A43EFA007C1857 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				0A76539A19A6E282005D9742 /* a_day_in_the_sun.mp3 */,
+				0AD8047219A44A34007C1857 /* bold_valor.mp3 */,
+				0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */,
+				0AD8046A19A43F09007C1857 /* alert_tone.mp3 */,
+			);
+			name = Music;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -413,6 +437,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD8047319A44A34007C1857 /* bold_valor.mp3 in Resources */,
+				0AD8046B19A43F09007C1857 /* alert_tone.mp3 in Resources */,
+				0AD8047119A4460D007C1857 /* ominous_sounds.mp3 in Resources */,
+				0A76539B19A6E282005D9742 /* a_day_in_the_sun.mp3 in Resources */,
 				0A54271718F923BC0041EE60 /* Images.xcassets in Resources */,
 				0A54270918F923BC0041EE60 /* InfoPlist.strings in Resources */,
 				0AC71590197A01EE00ED4ACC /* README.txt in Resources */,

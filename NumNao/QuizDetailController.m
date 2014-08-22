@@ -15,6 +15,7 @@
 #import "GADBannerView.h"
 #import "GADRequest.h"
 #import "appID.h"
+#import "AVFoundation/AVAudioPlayer.h"
 
 const NSInteger QuizScoreToPassLevel1 = 8;
 const NSInteger QuizScoreToPassLevel2 = 16;
@@ -38,6 +39,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 - (IBAction)chooseAnswer:(id)sender;
 - (IBAction)confirmAnswer:(id)sender;
@@ -62,6 +64,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 {
   [super viewDidLoad];
 
+  [self setUpAudioPlayer];
+  
   float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height - 5;
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
@@ -82,7 +86,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   
   [self decorateAllButtonsAndLabel];
   
-  self.remainingTime = 30;
+  self.remainingTime = 45;
   self.quizCounter = 0;
   self.quizScore = 0;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
@@ -125,8 +129,17 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 - (void)viewWillDisappear:(BOOL)animated {
   [super viewWillDisappear:animated];
 
+  [self.audioPlayer stop];
   [self.timer invalidate];
   self.timer = nil;
+}
+
+- (void)setUpAudioPlayer {
+  NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"a_day_in_the_sun" ofType:@"mp3"]];
+  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  self.audioPlayer.volume = 1.0;
+  self.audioPlayer.numberOfLoops = -1;
+  [self.audioPlayer play];
 }
 
 - (void)extractQuizByLevel {
@@ -225,7 +238,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 }
 
 - (NSString *)stringForRemainingTimeLabel:(NSInteger) remainingTime {
-  return [NSString stringWithFormat:@"คุณเหลือ %ld วินาที",remainingTime];
+  NSInteger time = remainingTime < 0 ? 0 : remainingTime;
+  return [NSString stringWithFormat:@"คุณเหลือ %ld วินาที",time];
 }
 
 - (NSString *)stringForScoreLabel:(NSInteger) score {
@@ -289,7 +303,6 @@ const NSInteger QuizScoreToPassLevel2 = 16;
       self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
       self.quizScore++;
       self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
-      
       self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
     } else {
       self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];

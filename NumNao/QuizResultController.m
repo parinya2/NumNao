@@ -14,12 +14,14 @@
 #import "GADBannerView.h"
 #import "GADRequest.h"
 #import "appID.h"
+#import "AVFoundation/AVAudioPlayer.h"
 
 @interface QuizResultController ()
 
 @property (strong, nonatomic) NSDictionary *backLinkInfo;
 @property (weak, nonatomic) UIView *backLinkView;
 @property (weak, nonatomic) UILabel *backLinkLabel;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @end
 
@@ -39,6 +41,8 @@
 {
   [super viewDidLoad];
 
+  [self setUpAudioPlayer];
+  
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
@@ -66,7 +70,19 @@
   
   NSString *quizResultString = [self.quizManager quizResultString:self.quizScore];
   [self.quizResultLabel setText:quizResultString];
+}
 
+- (void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
+  [self.audioPlayer stop];
+}
+
+- (void)setUpAudioPlayer {
+  NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"bold_valor" ofType:@"mp3"]];
+  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  self.audioPlayer.volume = 1.0;
+  self.audioPlayer.numberOfLoops = -1;
+  [self.audioPlayer play];
 }
 
 - (GADRequest *)createRequest {
@@ -87,7 +103,7 @@
 }
 
 - (void)checkQuizResult {
-  NSInteger quizScoreToUnlock = 3;
+  NSInteger quizScoreToUnlock = 30;
   NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
   
   if (self.quizScore >= quizScoreToUnlock) {

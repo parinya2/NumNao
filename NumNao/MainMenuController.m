@@ -10,9 +10,12 @@
 #import "GADBannerView.h"
 #import "GADRequest.h"
 #import "appID.h"
+#import "AVFoundation/AVAudioPlayer.h"
+#import "QuizSetSelectorController.h"
 
 @interface MainMenuController ()
 
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @end
 
@@ -23,7 +26,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -32,6 +35,7 @@
 {
   [super viewDidLoad];
 
+  [self setUpAudioPlayer];
   [self decorateAllButtons];
   
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
@@ -40,6 +44,19 @@
   [self.bannerView setRootViewController:self];
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
+}
+
+- (void)setUpAudioPlayer {
+  NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"ominous_sounds" ofType:@"mp3"]];
+  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  self.audioPlayer.volume = 1.0;
+  self.audioPlayer.numberOfLoops = -1;
+  [self.audioPlayer play];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+  QuizSetSelectorController *quizSetSelectorController = [segue destinationViewController];
+  quizSetSelectorController.audioPlayer = self.audioPlayer;
 }
 
 - (GADRequest *)createRequest {

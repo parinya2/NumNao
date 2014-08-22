@@ -15,6 +15,7 @@
 #import "GADRequest.h"
 #import "appID.h"
 #import "QuizManager.h"
+#import "AVFoundation/AVAudioPlayer.h"
 
 @interface QuizSetSelectorController () {
   NSArray *_products;
@@ -42,7 +43,6 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-  
   __typeof(self) __weak weakSelf = self;
   
   self.productDidPurchasedObserver = [[NSNotificationCenter defaultCenter]
@@ -81,7 +81,6 @@
   
   [self decorateAllButtons];
   _products = nil;
-
   [self.retroCh3Button setHidden:YES];
   [self.retroCh5Button setHidden:YES];
   [self.retroCh7Button setHidden:YES];
@@ -108,6 +107,15 @@
     }
     [self.loadingView removeFromSuperview];
   }];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+  if (!self.audioPlayer.isPlaying) {
+    if (self.audioPlayer) {
+      [self.audioPlayer play];
+    }
+  }
 }
 
 - (void)dealloc {
@@ -237,6 +245,8 @@
 }
 
 - (void)goToQuizDetail:(NSInteger) mode {
+  [self.audioPlayer stop];
+  
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
   QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
   quizDetailController.quizMode = mode;

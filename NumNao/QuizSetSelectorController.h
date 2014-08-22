@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh5LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh7LockImageView;
 @property (nonatomic, strong) GADBannerView *bannerView;
+@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 - (GADRequest *)createRequest;
 - (IBAction)goToQuiz:(id)sender;
