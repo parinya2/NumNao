@@ -63,6 +63,7 @@ NSString *const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProduct
           skProduct.price.floatValue);
   }
   
+  self.products = skProducts;
   _completionHandler(YES, skProducts);
   _completionHandler = nil;
 }

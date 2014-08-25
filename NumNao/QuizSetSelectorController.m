@@ -17,14 +17,13 @@
 #import "QuizManager.h"
 #import "AVFoundation/AVAudioPlayer.h"
 
-@interface QuizSetSelectorController () {
-  NSArray *_products;
-}
+@interface QuizSetSelectorController ()
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
 @property (nonatomic, strong) id productDidPurchasedObserver;
 @property (nonatomic, strong) id productDidPurchasedFailedObserver;
+@property (assign, nonatomic) NSInteger quizMode;
 
 @end
 
@@ -80,33 +79,39 @@
   [self.bannerView loadRequest:[self createRequest]];
   
   [self decorateAllButtons];
-  _products = nil;
-  [self.retroCh3Button setHidden:YES];
-  [self.retroCh5Button setHidden:YES];
-  [self.retroCh7Button setHidden:YES];
+  [self renderLockIcon];
   
-  self.loadingView = [[NumNaoLoadingView alloc] init];
-  [self.view addSubview:self.loadingView];
+  NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
   
-  [[NumNaoIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
-    if (success) {
-      _products = products;
+  if (![IAPInstance isRetroCh3Purchased] ||
+      ![IAPInstance isRetroCh5Purchased] ||
+      ![IAPInstance isRetroCh7Purchased]) {
+    
+    if (!IAPInstance.products) {
+      self.loadingView = [[NumNaoLoadingView alloc] init];
+      [self.view addSubview:self.loadingView];
       
-      [self.retroCh3Button setHidden:NO];
-      [self.retroCh5Button setHidden:NO];
-      [self.retroCh7Button setHidden:NO];
-      
-      [self renderLockIcon];
-    } else {
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
-                                                      message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์ของ iTune มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
-                                                     delegate:nil
-                                            cancelButtonTitle:@"ตกลงจ้ะ"
-                                            otherButtonTitles:nil];
-      [alert show];
+      [IAPInstance requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        if (!success) {
+          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
+                                                          message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์ของ iTune มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"ตกลงจ้ะ"
+                                                otherButtonTitles:nil];
+          [alert show];
+        }
+        [self.loadingView removeFromSuperview];
+      }];
     }
-    [self.loadingView removeFromSuperview];
-  }];
+  }
+}
+
+- (void)setUpAudioPlayer {
+  NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"ominous_sounds" ofType:@"mp3"]];
+  self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+  self.audioPlayer.volume = 1.0;
+  self.audioPlayer.numberOfLoops = -1;
+  [self.audioPlayer play];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -114,6 +119,8 @@
   if (!self.audioPlayer.isPlaying) {
     if (self.audioPlayer) {
       [self.audioPlayer play];
+    } else {
+      [self setUpAudioPlayer];
     }
   }
 }
@@ -188,7 +195,7 @@
   } else if (tag == 1){
     
     // Mode: Retro CH 3
-    SKProduct *product = _products[0];
+    SKProduct *product = IAPInstance.products[0];
     if (IAPInstance.retroCh3Purchased) {
       if (IAPInstance.retroCh5Purchased) {
         [self goToQuizDetail:NumNaoQuizModeRetroCh3];
@@ -211,7 +218,7 @@
     
     // Mode: Retro CH 5
     
-    SKProduct *product = _products[1];
+    SKProduct *product = IAPInstance.products[1];
     if (IAPInstance.retroCh5Purchased) {
       if (IAPInstance.retroCh7Purchased) {
         [self goToQuizDetail:NumNaoQuizModeRetroCh5];
@@ -233,7 +240,7 @@
     
     // Mode: Retro CH 7
     
-    SKProduct *product = _products[2];;
+    SKProduct *product = IAPInstance.products[2];;
     if (IAPInstance.retroCh7Purchased) {
       [self goToQuizDetail:NumNaoQuizModeRetroCh7];
     } else {
@@ -244,13 +251,21 @@
   }
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+  if ([[segue identifier] isEqualToString:@"QuizSetToQuizDetailSegue"]) {
+    QuizDetailController *quizDetailController = [segue destinationViewController];
+    quizDetailController.quizMode = self.quizMode;
+  }
+}
+
 - (void)goToQuizDetail:(NSInteger) mode {
   [self.audioPlayer stop];
-  
-  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-  QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
-  quizDetailController.quizMode = mode;
-  [self.navigationController pushViewController:quizDetailController animated:YES];
+  self.quizMode = mode;
+  [self performSegueWithIdentifier:@"QuizSetToQuizDetailSegue" sender:self];
+//  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//  QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
+//  quizDetailController.quizMode = mode;
+//  [self.navigationController pushViewController:quizDetailController animated:YES];
 }
 
 - (void)renderLockIcon {
@@ -299,8 +314,8 @@
     CAGradientLayer *btnGradient = [CAGradientLayer layer];
     btnGradient.frame = btn.bounds;
     btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                           nil];
     [btn.layer insertSublayer:btnGradient atIndex:0];
     

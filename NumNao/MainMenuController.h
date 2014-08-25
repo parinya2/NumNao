@@ -16,6 +16,7 @@
 }
 
 @property (nonatomic, strong) IBOutlet UIButton *startButton;
+@property (nonatomic, strong) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, strong) GADBannerView *bannerView;
 - (GADRequest *)createRequest;
 

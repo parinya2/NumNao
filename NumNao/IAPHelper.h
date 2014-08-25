@@ -15,6 +15,8 @@ typedef void (^RequestProductWithCompletinoHandler)(BOOL success, NSArray *produ
 
 @interface IAPHelper : NSObject
 
+@property (strong, nonatomic) NSArray *products;
+
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void)requestProductsWithCompletionHandler:(RequestProductWithCompletinoHandler)completionHandler;
 - (void)buyProduct:(SKProduct *)product;

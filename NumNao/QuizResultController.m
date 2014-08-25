@@ -180,14 +180,14 @@
   
   
   // Draw a custom gradient for quizLabel
-  CAGradientLayer *quizResultGradient = [CAGradientLayer layer];
+  /*CAGradientLayer *quizResultGradient = [CAGradientLayer layer];
   quizResultGradient.frame = self.quizResultLabel.bounds;
   quizResultGradient.colors = [NSArray arrayWithObjects:
                                (id)[[UIColor colorWithRed:150.0f / 255.0f green:150.0f / 255.0f blue:150.0f / 255.0f alpha:0.3f] CGColor],
                                (id)[[UIColor colorWithRed:1.0f / 255.0f green:1.0f / 255.0f blue:1.0f / 255.0f alpha:0.3f] CGColor],
                                nil];
   [self.quizResultLabel.layer insertSublayer:quizResultGradient atIndex:0];
-  [[self.quizResultLabel layer] setCornerRadius:5.0];
+  [[self.quizResultLabel layer] setCornerRadius:5.0];*/
   [[self.shareFacebookButton layer] setCornerRadius:5.0];
   
 }
@@ -199,7 +199,7 @@
 }
 
 - (IBAction)goToMainMenu:(id)sender {
-  [self performSegueWithIdentifier:@"QuizResultToMainMenuSegue" sender:self];
+//  [self performSegueWithIdentifier:@"QuizResultToMainMenuSegue" sender:self];
 }
 
 - (IBAction)shareOnFacebook:(id)sender {

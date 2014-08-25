@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "RightRaw.png"
+      "filename" : "right_icon.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "RightRaw-1.png"
+      "filename" : "right_icon@2x.png"
     }
   ],
   "info" : {

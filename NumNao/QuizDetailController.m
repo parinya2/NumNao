@@ -55,7 +55,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -108,8 +108,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
     return;
   }
 
-  self.neutralButtonColor = [UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1.0];
-  self.selectedButtonColor = [UIColor colorWithRed:80.0/255.0 green:255.0/255.0 blue:80.0/255.0 alpha:1.0];
+  self.neutralButtonColor = [UIColor colorWithRed:227.0/255.0 green:214.0/255.0 blue:97.0/255.0 alpha:1.0];
+  self.selectedButtonColor = [UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
   
   [self extractQuizByLevel];
   QuizObject *quizObject = [self randomQuiz];
@@ -218,7 +218,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   switch (alertView.tag) {
     case 100: {
-      [self performSegueWithIdentifier:@"QuizDetailMainMenuSegue" sender:self];
+      [self performSegueWithIdentifier:@"QuizDetailToQuizSetSegue" sender:self];
     } break;
     default: break;
   }
@@ -361,14 +361,19 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 - (void)decorateAllButtonsAndLabel {
   
   // Draw a custom gradient for quizLabel
-  CAGradientLayer *quizLabelGradient = [CAGradientLayer layer];
+  /*CAGradientLayer *quizLabelGradient = [CAGradientLayer layer];
   quizLabelGradient.frame = self.quizLabel.bounds;
   quizLabelGradient.colors = [NSArray arrayWithObjects:
                         (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:0.3f] CGColor],
                         (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:0.3f] CGColor],
                         nil];
   [self.quizLabel.layer insertSublayer:quizLabelGradient atIndex:0];
-  [[self.quizLabel layer] setCornerRadius:5.0];
+  [[self.quizLabel layer] setCornerRadius:5.0];*/
+
+  self.correctionImageView.backgroundColor = [UIColor clearColor];
+  [[self.correctionImageView layer] setOpaque:NO];
+  [self.correctionImageView setOpaque:NO];
+
   
   NSArray *buttons = [NSArray arrayWithObjects: self.ans1Button, self.ans2Button, self.ans3Button, self.ans4Button, self.nextButton, nil];
   
@@ -380,13 +385,13 @@ const NSInteger QuizScoreToPassLevel2 = 16;
     
     if ([btn isEqual:self.nextButton]) {
       btnGradient.colors = [NSArray arrayWithObjects:
-                            (id)[[UIColor colorWithRed:240.0f / 255.0f green:200.0f / 255.0f blue:120.0f / 255.0f alpha:0.3f] CGColor],
-                            (id)[[UIColor colorWithRed:200.0f / 255.0f green:150.0f / 255.0f blue:70.0f / 255.0f alpha:0.3f] CGColor],
+                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
+                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                             nil];
     } else {
       btnGradient.colors = [NSArray arrayWithObjects:
-                            (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:0.3f] CGColor],
-                            (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:0.3f] CGColor],
+                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
+                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                             nil];
     }
 

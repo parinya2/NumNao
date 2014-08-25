@@ -37,13 +37,12 @@
 
   [self setUpAudioPlayer];
   [self decorateAllButtons];
-  
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+/*  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
   [self.view addSubview:self.bannerView];
-  [self.bannerView loadRequest:[self createRequest]];
+  [self.bannerView loadRequest:[self createRequest]];*/
 }
 
 - (void)setUpAudioPlayer {
@@ -79,7 +78,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)decorateAllButtons {
@@ -92,11 +90,12 @@
     [btn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     
     // Draw a custom gradient
+    // NOTE: 227 214 97 is yellow , 183 220 69 is green
     CAGradientLayer *btnGradient = [CAGradientLayer layer];
     btnGradient.frame = btn.bounds;
     btnGradient.colors = [NSArray arrayWithObjects:
-                          (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
-                          (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
+                          (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                           nil];
     [btn.layer insertSublayer:btnGradient atIndex:0];
     
