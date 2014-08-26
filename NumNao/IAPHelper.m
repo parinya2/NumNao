@@ -9,8 +9,8 @@
 #import "IAPHelper.h"
 #import <StoreKit/StoreKit.h>
 
-NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
-NSString *const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProductPurchasedFailedNotification";
+NSString * const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
+NSString * const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProductPurchasedFailedNotification";
 
 @interface IAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end

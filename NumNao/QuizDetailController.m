@@ -27,19 +27,22 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 @property NSInteger selectedAnswerIndex;
 @property NSInteger correctAnswerIndex;
 @property BOOL isAnswerConfirmed;
-@property (strong) NSArray *quizList;
-@property (strong) NSMutableArray *quizListLevel1;
-@property (strong) NSMutableArray *quizListLevel2;
-@property (strong) NSMutableArray *quizListLevel3;
-@property (strong) UIColor *neutralButtonColor;
-@property (strong) UIColor *selectedButtonColor;
-@property (strong) QuizManager *quizManager;
-@property (strong) NSTimer *timer;
+@property (strong, nonatomic) NSArray *quizList;
+@property (strong, nonatomic) NSMutableArray *quizListLevel1;
+@property (strong, nonatomic) NSMutableArray *quizListLevel2;
+@property (strong, nonatomic) NSMutableArray *quizListLevel3;
+@property (strong, nonatomic) UIColor *neutralButtonColor;
+@property (strong, nonatomic) UIColor *selectedButtonColor;
+@property (strong, nonatomic) QuizManager *quizManager;
+@property (strong, nonatomic) NSTimer *timer;
 @property NSInteger remainingTime;
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+
+@property (strong, nonatomic) id quizManagerDidLoadQuizSuccessObserver;
+@property (strong, nonatomic) id quizManagerDidLoadQuizFailObserver;
 
 - (IBAction)chooseAnswer:(id)sender;
 - (IBAction)confirmAnswer:(id)sender;
@@ -64,6 +67,68 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 {
   [super viewDidLoad];
 
+  __typeof(self) __weak weakSelf = self;
+  
+  self.quizManagerDidLoadQuizSuccessObserver =
+  [[NSNotificationCenter defaultCenter]
+   addObserverForName:QuizManagerDidLoadQuizSuccess
+   object:nil
+   queue:[NSOperationQueue mainQueue]
+   usingBlock:^(NSNotification *note) {
+     QuizManager *quizManager = [QuizManager sharedInstance];
+     switch (weakSelf.quizMode) {
+       case NumNaoQuizModeOnAir: {
+         weakSelf.quizList = quizManager.quizListOnAir;
+       } break;
+
+       case NumNaoQuizModeRetroCh3: {
+         weakSelf.quizList = quizManager.quizListRetroCh3;
+       } break;
+
+       case NumNaoQuizModeRetroCh5: {
+         weakSelf.quizList = quizManager.quizListRetroCh5;
+       } break;
+         
+       case NumNaoQuizModeRetroCh7: {
+         weakSelf.quizList = quizManager.quizListRetroCh7;
+       } break;
+         
+       default:
+         break;
+     }
+     [weakSelf.loadingView removeFromSuperview];
+     if (weakSelf.quizList) {
+       [weakSelf extractQuizByLevel];
+       QuizObject *quizObject = [weakSelf randomQuiz];
+       [weakSelf renderPageWithQuizObject:quizObject quizNo:weakSelf.quizCounter+1];
+       [weakSelf enableNextButton:NO];
+       
+       if (!weakSelf.timer) {
+         weakSelf.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                       target:self
+                                                     selector:@selector(decreaseRemainingTime)
+                                                     userInfo:nil
+                                                      repeats:YES];
+       }
+     }
+   }];
+  
+  self.quizManagerDidLoadQuizFailObserver =
+  [[NSNotificationCenter defaultCenter]
+   addObserverForName:QuizManagerDidLoadQuizFail
+   object:nil
+   queue:[NSOperationQueue mainQueue]
+   usingBlock:^(NSNotification *note) {
+     [weakSelf.loadingView removeFromSuperview];
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
+                                                     message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                    delegate:self
+                                           cancelButtonTitle:@"ตกลงจ้ะ"
+                                           otherButtonTitles:nil];
+     alert.tag = 100;
+     [alert show];
+   }];
+  
   [self setUpAudioPlayer];
   
   float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height - 5;
@@ -74,7 +139,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
   
-  self.quizManager = [[QuizManager alloc] init];
+  self.quizManager = [QuizManager sharedInstance];
   [self.confirmButton setHidden:YES];
 
   self.loadingView = [[NumNaoLoadingView alloc] init];
@@ -92,38 +157,10 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   
-  self.quizList = [self.quizManager quizList:self.quizMode];
-
-  [self.loadingView removeFromSuperview];
-  
-  if (!self.quizList) {
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
-                                                    message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
-                                                   delegate:self
-                                          cancelButtonTitle:@"ตกลงจ้ะ"
-                                          otherButtonTitles:nil];
-    alert.tag = 100;
-    [alert show];
-    return;
-  }
-
   self.neutralButtonColor = [UIColor colorWithRed:227.0/255.0 green:214.0/255.0 blue:97.0/255.0 alpha:1.0];
   self.selectedButtonColor = [UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
   
-  [self extractQuizByLevel];
-  QuizObject *quizObject = [self randomQuiz];
-  [self renderPageWithQuizObject:quizObject quizNo:self.quizCounter+1];
-  
-  [self enableNextButton:NO];
-  
-  if (!self.timer) {
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                  target:self
-                                                selector:@selector(decreaseRemainingTime)
-                                                userInfo:nil
-                                                 repeats:YES];
-  }
+  [[QuizManager sharedInstance] loadQuizListFromServer:self.quizMode];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -132,6 +169,11 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self.audioPlayer stop];
   [self.timer invalidate];
   self.timer = nil;
+}
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizSuccessObserver];
+  [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizFailObserver];
 }
 
 - (void)setUpAudioPlayer {
@@ -162,15 +204,14 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 - (QuizObject *)randomQuiz {
   QuizObject *quizObject = nil;
   if (self.quizMode == NumNaoQuizModeOnAir) {
-    
     if (self.quizScore < QuizScoreToPassLevel1) {
       if ([self.quizListLevel1 count] == 0) {
         [self extractQuizByLevel];
       }
-      NSUInteger randomIndex = arc4random() % [self.quizListLevel1 count];
+      NSUInteger randomIndex;
+      randomIndex = arc4random() % [self.quizListLevel1 count];
       quizObject = [self.quizListLevel1 objectAtIndex:randomIndex];
       [self.quizListLevel1 removeObjectAtIndex:randomIndex];
-      
     } else if (self.quizScore < QuizScoreToPassLevel2) {
       if ([self.quizListLevel2 count] == 0) {
         [self extractQuizByLevel];
@@ -218,7 +259,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   switch (alertView.tag) {
     case 100: {
-      [self performSegueWithIdentifier:@"QuizDetailToQuizSetSegue" sender:self];
+      [self.navigationController popViewControllerAnimated:YES];
     } break;
     default: break;
   }
@@ -330,24 +371,13 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self enableNextButton:NO];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  if ([[segue identifier] isEqualToString:@"QuizDetailToQuizResultSegue"]) {
-    QuizResultController *quizResultController = [segue destinationViewController];
-    quizResultController.quizScore = self.quizScore;
-    quizResultController.quizMode = self.quizMode;
-    quizResultController.quizManager = self.quizManager;
-  }
-}
-
 - (void)goToSummaryPage {
-  [self performSegueWithIdentifier:@"QuizDetailToQuizResultSegue" sender:self];
-  
-//  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//  QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
-//  quizResultController.quizScore = self.quizScore;
-//  quizResultController.quizMode = self.quizMode;
-//  quizResultController.quizManager = self.quizManager;
-//  [self.navigationController pushViewController:quizResultController animated:YES];
+  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+  QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
+  quizResultController.quizScore = self.quizScore;
+  quizResultController.quizMode = self.quizMode;
+  quizResultController.quizManager = self.quizManager;
+  [self.navigationController pushViewController:quizResultController animated:YES];
 }
 
 - (void)enableNextButton:(BOOL)flag {
@@ -359,16 +389,6 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 }
 
 - (void)decorateAllButtonsAndLabel {
-  
-  // Draw a custom gradient for quizLabel
-  /*CAGradientLayer *quizLabelGradient = [CAGradientLayer layer];
-  quizLabelGradient.frame = self.quizLabel.bounds;
-  quizLabelGradient.colors = [NSArray arrayWithObjects:
-                        (id)[[UIColor colorWithRed:102.0f / 255.0f green:102.0f / 255.0f blue:102.0f / 255.0f alpha:0.3f] CGColor],
-                        (id)[[UIColor colorWithRed:51.0f / 255.0f green:51.0f / 255.0f blue:51.0f / 255.0f alpha:0.3f] CGColor],
-                        nil];
-  [self.quizLabel.layer insertSublayer:quizLabelGradient atIndex:0];
-  [[self.quizLabel layer] setCornerRadius:5.0];*/
 
   self.correctionImageView.backgroundColor = [UIColor clearColor];
   [[self.correctionImageView layer] setOpaque:NO];
@@ -378,26 +398,6 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   NSArray *buttons = [NSArray arrayWithObjects: self.ans1Button, self.ans2Button, self.ans3Button, self.ans4Button, self.nextButton, nil];
   
   for(UIButton *btn in buttons) {
-    
-    // Draw a custom gradient for button
-    CAGradientLayer *btnGradient = [CAGradientLayer layer];
-    btnGradient.frame = btn.bounds;
-    
-    if ([btn isEqual:self.nextButton]) {
-      btnGradient.colors = [NSArray arrayWithObjects:
-                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
-                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
-                            nil];
-    } else {
-      btnGradient.colors = [NSArray arrayWithObjects:
-                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
-                            (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
-                            nil];
-    }
-
-    [btn.layer insertSublayer:btnGradient atIndex:0];
-    
-    [[btn layer] setMasksToBounds:YES];
     [[btn layer] setCornerRadius:5.0];
   }
 }

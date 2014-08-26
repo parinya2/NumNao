@@ -17,10 +17,13 @@
   // Load the FBLoginView class (needed for login)
   sleep(1);
   [FBLoginView class];
-  [NumNaoIAPHelper sharedInstance];
+  [QuizManager sharedInstance];
+  [[NumNaoIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+
+  }];
   return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
   // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

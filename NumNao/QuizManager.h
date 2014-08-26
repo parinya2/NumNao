@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const QuizManagerDidLoadQuizSuccess;
+extern NSString * const QuizManagerDidLoadQuizFail;
+
 typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
   NumNaoQuizModeOnAir = 0,
   NumNaoQuizModeRetroCh3 = 1,
@@ -17,10 +20,16 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 
 @interface QuizManager : NSObject
 
-@property (strong) NSArray *quizResult;
+@property (strong) NSArray *quizListOnAir;
+@property (strong) NSArray *quizListRetroCh3;
+@property (strong) NSArray *quizListRetroCh5;
+@property (strong) NSArray *quizListRetroCh7;
 
 - (NSArray *)quizList:(NSInteger)quizMode;
 - (NSArray *)mockQuizList;
 - (NSString *)quizResultString:(NSInteger)quizScore;
+- (void)loadQuizListFromServer:(NSInteger)quizMode;
+
++ (QuizManager *)sharedInstance;
 
 @end

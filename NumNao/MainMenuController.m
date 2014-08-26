@@ -37,12 +37,24 @@
 
   [self setUpAudioPlayer];
   [self decorateAllButtons];
+  self.navigationController.navigationBarHidden = YES;
 /*  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];*/
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+  [super viewDidAppear:animated];
+  if (!self.audioPlayer.isPlaying) {
+    if (self.audioPlayer) {
+      [self.audioPlayer play];
+    } else {
+      [self setUpAudioPlayer];
+    }
+  }
 }
 
 - (void)setUpAudioPlayer {

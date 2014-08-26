@@ -21,8 +21,8 @@
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
-@property (nonatomic, strong) id productDidPurchasedObserver;
-@property (nonatomic, strong) id productDidPurchasedFailedObserver;
+@property (strong, nonatomic) id productDidPurchasedObserver;
+@property (strong, nonatomic) id productDidPurchasedFailedObserver;
 @property (assign, nonatomic) NSInteger quizMode;
 
 @end
@@ -70,7 +70,8 @@
                                               [alert show];
                                             }];
   
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  __block float yPos = self.onAirButton.frame.origin.y + 10;
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
 
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
@@ -81,7 +82,7 @@
   [self decorateAllButtons];
   [self renderLockIcon];
   
-  NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
+  /*NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
   
   if (![IAPInstance isRetroCh3Purchased] ||
       ![IAPInstance isRetroCh5Purchased] ||
@@ -103,7 +104,7 @@
         [self.loadingView removeFromSuperview];
       }];
     }
-  }
+  }*/
 }
 
 - (void)setUpAudioPlayer {
@@ -191,11 +192,9 @@
       alert.tag = 100;
       [alert show];
     }
-
   } else if (tag == 1){
     
     // Mode: Retro CH 3
-    SKProduct *product = IAPInstance.products[0];
     if (IAPInstance.retroCh3Purchased) {
       if (IAPInstance.retroCh5Purchased) {
         [self goToQuizDetail:NumNaoQuizModeRetroCh3];
@@ -209,16 +208,20 @@
         [alert show];
       }
     } else {
-      [self lockAllButtons:YES];
-      [self.view addSubview:self.loadingView];
-      [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      if (IAPInstance.products) {
+        SKProduct *product = IAPInstance.products[0];
+        [self lockAllButtons:YES];
+        [self.view addSubview:self.loadingView];
+        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      } else {
+        [self alertSKProductNotReady];
+      }
+
     }
     
   } else if (tag == 2){
     
     // Mode: Retro CH 5
-    
-    SKProduct *product = IAPInstance.products[1];
     if (IAPInstance.retroCh5Purchased) {
       if (IAPInstance.retroCh7Purchased) {
         [self goToQuizDetail:NumNaoQuizModeRetroCh5];
@@ -232,40 +235,49 @@
         [alert show];
       }
     } else {
-      [self lockAllButtons:YES];
-      [self.view addSubview:self.loadingView];
-      [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      if (IAPInstance.products) {
+        SKProduct *product = IAPInstance.products[1];
+        [self lockAllButtons:YES];
+        [self.view addSubview:self.loadingView];
+        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      } else {
+        [self alertSKProductNotReady];
+      }
     }
   } else if (tag == 3){
     
     // Mode: Retro CH 7
-    
-    SKProduct *product = IAPInstance.products[2];;
     if (IAPInstance.retroCh7Purchased) {
       [self goToQuizDetail:NumNaoQuizModeRetroCh7];
     } else {
-      [self lockAllButtons:YES];
-      [self.view addSubview:self.loadingView];
-      [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      if (IAPInstance.products) {
+        SKProduct *product = IAPInstance.products[2];
+        [self lockAllButtons:YES];
+        [self.view addSubview:self.loadingView];
+        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+      } else {
+        [self alertSKProductNotReady];
+      }
     }
   }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  if ([[segue identifier] isEqualToString:@"QuizSetToQuizDetailSegue"]) {
-    QuizDetailController *quizDetailController = [segue destinationViewController];
-    quizDetailController.quizMode = self.quizMode;
-  }
+- (void)alertSKProductNotReady {
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ขออภัยนะจ๊ะ"
+                                                  message:@"ตอนนี้ระบบกำลังดำเนินการเชื่อมต่อกับ iTune อยู่ รอสัก 2-3 นาทีแล้วลองอีกทีนะจ๊ะ!!"
+                                                 delegate:self
+                                        cancelButtonTitle:@"ตกลงจ้ะ"
+                                        otherButtonTitles:nil];
+  alert.tag = 110;
+  [alert show];
 }
 
 - (void)goToQuizDetail:(NSInteger) mode {
   [self.audioPlayer stop];
-  self.quizMode = mode;
-  [self performSegueWithIdentifier:@"QuizSetToQuizDetailSegue" sender:self];
-//  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//  QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
-//  quizDetailController.quizMode = mode;
-//  [self.navigationController pushViewController:quizDetailController animated:YES];
+  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+  QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
+  quizDetailController.quizMode = mode;
+  [self.navigationController pushViewController:quizDetailController animated:YES];
 }
 
 - (void)renderLockIcon {
@@ -278,19 +290,19 @@
   if (isRetroCH3Purchased) {
     self.retroCh3LockImageView.image = nil;
   } else {
-    self.retroCh3LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+    self.retroCh3LockImageView.image = [UIImage imageNamed:@"blue_lock_icon"];
   }
   
   if (isRetroCH5Purchased) {
     self.retroCh5LockImageView.image = nil;
   } else {
-    self.retroCh5LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+    self.retroCh5LockImageView.image = [UIImage imageNamed:@"blue_lock_icon"];
   }
   
   if (isRetroCH7Purchased) {
     self.retroCh7LockImageView.image = nil;
   } else {
-    self.retroCh7LockImageView.image = [UIImage imageNamed:@"lock_icon"];
+    self.retroCh7LockImageView.image = [UIImage imageNamed:@"blue_lock_icon"];
   }
 }
 

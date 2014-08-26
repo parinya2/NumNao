@@ -92,7 +92,7 @@
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
-  __block float yPos = self.quizResultLabel.frame.origin.y + self.quizResultLabel.frame.size.height + 10;
+  __block float yPos = self.shareFacebookButton.frame.origin.y - adView.frame.size.height - 10;
   [UIView animateWithDuration:1.0 animations:^{
     adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
@@ -161,13 +161,13 @@
   [self.backToMenuButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
   
   // Draw a custom gradient
-  CAGradientLayer *backToMenuBtnGradient = [CAGradientLayer layer];
+  /*CAGradientLayer *backToMenuBtnGradient = [CAGradientLayer layer];
   backToMenuBtnGradient.frame = self.backToMenuButton.bounds;
   backToMenuBtnGradient.colors = [NSArray arrayWithObjects:
                                   (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
                                   (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
                                   nil];
-  [self.backToMenuButton.layer insertSublayer:backToMenuBtnGradient atIndex:0];
+  [self.backToMenuButton.layer insertSublayer:backToMenuBtnGradient atIndex:0];*/
   
   // Round button corners
   CALayer *backToMenuBtnLayer = [self.backToMenuButton layer];
@@ -199,7 +199,7 @@
 }
 
 - (IBAction)goToMainMenu:(id)sender {
-//  [self performSegueWithIdentifier:@"QuizResultToMainMenuSegue" sender:self];
+  [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)shareOnFacebook:(id)sender {
