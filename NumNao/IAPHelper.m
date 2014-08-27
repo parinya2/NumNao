@@ -11,6 +11,9 @@
 
 NSString * const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 NSString * const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProductPurchasedFailedNotification";
+NSString * const RetroCh3ProductPurchasedKey = @"QPRKJFJ";
+NSString * const RetroCh5ProductPurchasedKey = @"MDJVKEO";
+NSString * const RetroCh7ProductPurchasedKey = @"PPVIDUS";
 
 @interface IAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end
@@ -31,8 +34,18 @@ NSString * const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProduc
     
     _purchasedProductIdentifiers = [NSMutableSet set];
     for (NSString *productIdentifier in _productIdentifiers) {
-      BOOL productPurchased = [[NSUserDefaults standardUserDefaults]
-                               boolForKey:productIdentifier];
+      
+      NSString *productPurchasedKey = @"";
+      if ([productIdentifier rangeOfString:@"retroch3"].location != NSNotFound) {
+        productPurchasedKey = RetroCh3ProductPurchasedKey;
+      } else if ([productIdentifier rangeOfString:@"retroch5"].location != NSNotFound) {
+        productPurchasedKey = RetroCh5ProductPurchasedKey;
+      } else if ([productIdentifier rangeOfString:@"retroch7"].location != NSNotFound) {
+        productPurchasedKey = RetroCh7ProductPurchasedKey;
+      }
+      NSString *currentPurchasedKey = [[NSUserDefaults standardUserDefaults]
+                                       stringForKey:productIdentifier];
+      BOOL productPurchased = [currentPurchasedKey isEqualToString:productPurchasedKey];
       if (productPurchased) {
         [_purchasedProductIdentifiers addObject:productIdentifier];
       }
@@ -132,9 +145,17 @@ NSString * const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProduc
 }
 
 - (void)provideContentForProductIdentifier:(NSString *)productIdentifier {
-  
+
+  NSString *productPurchasedKey = @"";
+  if ([productIdentifier rangeOfString:@"retroch3"].location != NSNotFound) {
+    productPurchasedKey = RetroCh3ProductPurchasedKey;
+  } else if ([productIdentifier rangeOfString:@"retroch5"].location != NSNotFound) {
+    productPurchasedKey = RetroCh5ProductPurchasedKey;
+  } else if ([productIdentifier rangeOfString:@"retroch7"].location != NSNotFound) {
+    productPurchasedKey = RetroCh7ProductPurchasedKey;
+  }
   [_purchasedProductIdentifiers addObject:productIdentifier];
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
+  [[NSUserDefaults standardUserDefaults] setObject:productPurchasedKey forKey:productIdentifier];
   [[NSUserDefaults standardUserDefaults] synchronize];
   [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
   

@@ -19,6 +19,8 @@
 
 const NSInteger QuizScoreToPassLevel1 = 8;
 const NSInteger QuizScoreToPassLevel2 = 16;
+const NSInteger StartCountDounTime = 60;
+const float LoadNextQuizDelayTime = 0.25;
 
 @interface QuizDetailController ()
 
@@ -34,8 +36,10 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 @property (strong, nonatomic) UIColor *neutralButtonColor;
 @property (strong, nonatomic) UIColor *selectedButtonColor;
 @property (strong, nonatomic) QuizManager *quizManager;
-@property (strong, nonatomic) NSTimer *timer;
-@property NSInteger remainingTime;
+@property (strong, nonatomic) NSTimer *countDownTimer;
+@property (strong, nonatomic) NSTimer *changeQuizTimer;
+@property (assign, nonatomic) NSInteger remainingTime;
+@property (assign, nonatomic) BOOL canChooseAnswer;
 
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
@@ -67,6 +71,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 {
   [super viewDidLoad];
 
+  [self enableNextButton:NO];
+  
   __typeof(self) __weak weakSelf = self;
   
   self.quizManagerDidLoadQuizSuccessObserver =
@@ -103,8 +109,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
        [weakSelf renderPageWithQuizObject:quizObject quizNo:weakSelf.quizCounter+1];
        [weakSelf enableNextButton:NO];
        
-       if (!weakSelf.timer) {
-         weakSelf.timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+       if (!weakSelf.countDownTimer) {
+         weakSelf.countDownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                        target:self
                                                      selector:@selector(decreaseRemainingTime)
                                                      userInfo:nil
@@ -140,7 +146,6 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [self.bannerView loadRequest:[self createRequest]];
   
   self.quizManager = [QuizManager sharedInstance];
-  [self.confirmButton setHidden:YES];
 
   self.loadingView = [[NumNaoLoadingView alloc] init];
   [self.view addSubview:self.loadingView];
@@ -151,7 +156,8 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   
   [self decorateAllButtonsAndLabel];
   
-  self.remainingTime = 45;
+  self.canChooseAnswer = YES;
+  self.remainingTime = StartCountDounTime;
   self.quizCounter = 0;
   self.quizScore = 0;
   self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
@@ -167,8 +173,12 @@ const NSInteger QuizScoreToPassLevel2 = 16;
   [super viewWillDisappear:animated];
 
   [self.audioPlayer stop];
-  [self.timer invalidate];
-  self.timer = nil;
+
+  [self.countDownTimer invalidate];
+  self.countDownTimer = nil;
+  
+  [self.changeQuizTimer invalidate];
+  self.changeQuizTimer = nil;
 }
 
 - (void)dealloc {
@@ -203,7 +213,10 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 - (QuizObject *)randomQuiz {
   QuizObject *quizObject = nil;
-  if (self.quizMode == NumNaoQuizModeOnAir) {
+  if (self.quizMode == NumNaoQuizModeOnAir &&
+      self.quizListLevel1.count &&
+      self.quizListLevel2.count &&
+      self.quizListLevel3.count) {
     if (self.quizScore < QuizScoreToPassLevel1) {
       if ([self.quizListLevel1 count] == 0) {
         [self extractQuizByLevel];
@@ -308,7 +321,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 - (IBAction)chooseAnswer:(id)sender {
   
-  if (![self.nextButton isEnabled]) {
+  if (self.canChooseAnswer) {
     self.selectedAnswerIndex = ((UIButton *)sender).tag;
     
     self.ans1Button.backgroundColor = self.neutralButtonColor;
@@ -339,6 +352,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 - (void)checkAnswer {
   // Check whether users selected the correct answer
+  self.canChooseAnswer = NO;
   if (self.selectedAnswerIndex != 0) {
     if (self.selectedAnswerIndex == self.correctAnswerIndex) {
       self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
@@ -350,13 +364,25 @@ const NSInteger QuizScoreToPassLevel2 = 16;
       self.remainingTime = (self.remainingTime - 3) < 0 ? 0 : (self.remainingTime - 3);
     }
     
-    [self enableNextButton:YES];
+    if (self.changeQuizTimer && [self.changeQuizTimer isValid]) {
+      [self.changeQuizTimer invalidate];
+      self.changeQuizTimer = nil;
+    }
+    self.changeQuizTimer = [NSTimer scheduledTimerWithTimeInterval:LoadNextQuizDelayTime
+                                                               target:self
+                                                             selector:@selector(loadNextQuiz)
+                                                             userInfo:nil
+                                                              repeats:NO];
   }
 }
 
-- (IBAction)confirmAnswer:(id)sender {
-  // Check whether users selected the correct answer
-  [self checkAnswer];
+- (void)loadNextQuiz {
+  self.quizCounter++;
+  
+  QuizObject *nextQuiz = [self randomQuiz];
+  self.selectedAnswerIndex = 0;
+  [self renderPageWithQuizObject:nextQuiz quizNo:self.quizCounter+1];
+  self.canChooseAnswer = YES;
 }
 
 - (IBAction)goToNextQuiz:(id)sender {
@@ -382,10 +408,7 @@ const NSInteger QuizScoreToPassLevel2 = 16;
 
 - (void)enableNextButton:(BOOL)flag {
   [self.nextButton setEnabled:flag];
-  [self.confirmButton setEnabled:!flag];
-  
   [self.nextButton setHidden:!flag];
-  [self.confirmButton setHidden:YES];
 }
 
 - (void)decorateAllButtonsAndLabel {

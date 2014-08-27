@@ -322,18 +322,6 @@
                                     <action selector="goToNextQuiz:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="zG3-3s-cZB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F27-g4-yRX">
-                                <rect key="frame" x="32" y="510" width="120" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.94117647059999998" green="0.81221799279999995" blue="0.49475860560000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="ยืนยัน">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="confirmAnswer:" destination="JmQ-NW-qLw" eventType="touchUpInside" id="RMk-YB-ORK"/>
-                                </connections>
-                            </button>
                             <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uxH-Zj-nXe">
                                 <rect key="frame" x="235" y="66" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -391,7 +379,6 @@
                         <outlet property="ans2Button" destination="q2S-zW-0Ed" id="ii7-Az-4aC"/>
                         <outlet property="ans3Button" destination="Ga7-2R-9AK" id="Kol-CU-8NU"/>
                         <outlet property="ans4Button" destination="LVz-QL-16J" id="fpX-DU-2yU"/>
-                        <outlet property="confirmButton" destination="F27-g4-yRX" id="GmL-vL-9Ic"/>
                         <outlet property="correctionImageView" destination="uxH-Zj-nXe" id="D8J-YG-rAi"/>
                         <outlet property="nextButton" destination="U9f-ey-abI" id="OI9-2g-2aA"/>
                         <outlet property="quizCounterLabel" destination="H6F-H4-Z9Z" id="8lb-xO-Anl"/>
@@ -438,7 +425,7 @@
                                     <action selector="goToMainMenu:" destination="EpC-bT-pCw" eventType="touchUpInside" id="I1N-wL-ewN"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="191" translatesAutoresizingMaskIntoConstraints="NO" id="ZUz-FG-B4W">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="191" translatesAutoresizingMaskIntoConstraints="NO" id="ZUz-FG-B4W">
                                 <rect key="frame" x="65" y="137" width="191" height="146"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>

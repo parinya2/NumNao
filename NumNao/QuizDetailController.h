@@ -21,7 +21,6 @@
 @property (strong) IBOutlet UIButton *ans2Button;
 @property (strong) IBOutlet UIButton *ans3Button;
 @property (strong) IBOutlet UIButton *ans4Button;
-@property (strong) IBOutlet UIButton *confirmButton;
 @property (strong) IBOutlet UIButton *nextButton;
 @property (strong) IBOutlet UIImageView *correctionImageView;
 @property (nonatomic, strong) GADBannerView *bannerView;
