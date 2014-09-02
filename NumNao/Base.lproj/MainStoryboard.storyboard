@@ -235,7 +235,7 @@
                                     <constraint firstAttribute="width" secondItem="84k-th-pEy" secondAttribute="height" multiplier="276:85" id="bby-FJ-ou2"/>
                                     <constraint firstAttribute="width" constant="276" id="dKe-WV-Gq2"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -425,14 +425,14 @@
                                     <action selector="goToMainMenu:" destination="EpC-bT-pCw" eventType="touchUpInside" id="I1N-wL-ewN"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="191" translatesAutoresizingMaskIntoConstraints="NO" id="ZUz-FG-B4W">
-                                <rect key="frame" x="65" y="137" width="191" height="146"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="162" translatesAutoresizingMaskIntoConstraints="NO" id="ZUz-FG-B4W">
+                                <rect key="frame" x="79" y="154" width="162" height="126"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="191" id="eq3-bi-2ne"/>
-                                    <constraint firstAttribute="height" constant="146" id="j0C-cs-3Oh"/>
+                                    <constraint firstAttribute="width" constant="162" id="YhP-uo-LUu"/>
+                                    <constraint firstAttribute="height" constant="126" id="Z6g-lB-gmM"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sd8-OX-nJd">
@@ -452,15 +452,38 @@
                                     <action selector="shareOnFacebook:" destination="EpC-bT-pCw" eventType="touchUpInside" id="Tb5-sh-Vps"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DON-qT-IXl">
+                                <rect key="frame" x="132" y="105" width="57" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="57" id="N7K-le-t3O"/>
+                                    <constraint firstAttribute="height" constant="27" id="lSx-3v-F4z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="คะแนน" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhu-UZ-ynJ">
+                                <rect key="frame" x="132" y="132" width="57" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="P8Z-Av-cj3"/>
+                                    <constraint firstAttribute="width" constant="57" id="aDS-XI-NvT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="b7h-1P-M9e" firstAttribute="width" secondItem="GE0-lw-Lc7" secondAttribute="width" id="0k8-5a-fD6"/>
                             <constraint firstItem="GII-Em-6gx" firstAttribute="top" secondItem="Sd8-OX-nJd" secondAttribute="bottom" constant="20" id="A5G-al-9rw"/>
-                            <constraint firstItem="Sd8-OX-nJd" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ZUz-FG-B4W" secondAttribute="bottom" constant="70" id="L5s-xO-7Nn"/>
+                            <constraint firstItem="ZUz-FG-B4W" firstAttribute="top" secondItem="bhu-UZ-ynJ" secondAttribute="bottom" id="Fr9-He-jNW"/>
                             <constraint firstItem="GnA-9k-FBy" firstAttribute="top" relation="greaterThanOrEqual" secondItem="GII-Em-6gx" secondAttribute="bottom" constant="30" id="Onk-Ua-QRb"/>
-                            <constraint firstItem="ZUz-FG-B4W" firstAttribute="top" secondItem="gD6-9e-Tsm" secondAttribute="bottom" constant="73" id="Q0h-Lt-bxz"/>
                             <constraint firstItem="b7h-1P-M9e" firstAttribute="height" secondItem="GE0-lw-Lc7" secondAttribute="height" id="guL-Uc-4pm"/>
+                            <constraint firstItem="DON-qT-IXl" firstAttribute="top" secondItem="gD6-9e-Tsm" secondAttribute="bottom" constant="85" id="j82-n5-ZRm"/>
+                            <constraint firstItem="bhu-UZ-ynJ" firstAttribute="top" secondItem="DON-qT-IXl" secondAttribute="bottom" id="kD4-aJ-j50"/>
                             <constraint firstItem="GnA-9k-FBy" firstAttribute="top" relation="lessThanOrEqual" secondItem="GII-Em-6gx" secondAttribute="bottom" constant="100" id="slQ-jc-qdE"/>
                         </constraints>
                     </view>
@@ -468,6 +491,8 @@
                     <connections>
                         <outlet property="backToMenuButton" destination="GII-Em-6gx" id="VlP-an-xnt"/>
                         <outlet property="quizResultLabel" destination="ZUz-FG-B4W" id="5RV-cd-8t9"/>
+                        <outlet property="quizScoreLabel" destination="DON-qT-IXl" id="EW0-jo-kk4"/>
+                        <outlet property="quizScoreStaticLabel" destination="bhu-UZ-ynJ" id="CSq-ZZ-ffl"/>
                         <outlet property="shareFacebookButton" destination="Sd8-OX-nJd" id="3OI-6N-OX5"/>
                     </connections>
                 </viewController>

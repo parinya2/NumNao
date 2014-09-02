@@ -34,6 +34,7 @@
 		0A9B954919503D5C00B41B24 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9B954819503D5C00B41B24 /* FacebookSDK.framework */; };
 		0AA1F9461993135C003336D2 /* NumNaoIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA1F9451993135C003336D2 /* NumNaoIAPHelper.m */; };
 		0AAD5A0B1991D01600880E93 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAD5A0A1991D01600880E93 /* IAPHelper.m */; };
+		0AAFEE7F19B40EA7002E59C6 /* QuizResultObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AAFEE7E19B40EA7002E59C6 /* QuizResultObject.m */; };
 		0AC7158F197A01EE00ED4ACC /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC7158D197A01EE00ED4ACC /* libGoogleAdMobAds.a */; };
 		0AC71590197A01EE00ED4ACC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0AC7158E197A01EE00ED4ACC /* README.txt */; };
 		0AC71592197A023300ED4ACC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AC71591197A023300ED4ACC /* AdSupport.framework */; };
@@ -108,6 +109,8 @@
 		0AA1F9451993135C003336D2 /* NumNaoIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NumNaoIAPHelper.m; sourceTree = "<group>"; };
 		0AAD5A091991D01600880E93 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
 		0AAD5A0A1991D01600880E93 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
+		0AAFEE7D19B40EA7002E59C6 /* QuizResultObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizResultObject.h; sourceTree = "<group>"; };
+		0AAFEE7E19B40EA7002E59C6 /* QuizResultObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizResultObject.m; sourceTree = "<group>"; };
 		0AC71581197A01EE00ED4ACC /* GADAdMobExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdMobExtras.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdMobExtras.h"; sourceTree = "<group>"; };
 		0AC71582197A01EE00ED4ACC /* GADAdNetworkExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdNetworkExtras.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdNetworkExtras.h"; sourceTree = "<group>"; };
 		0AC71583197A01EE00ED4ACC /* GADAdSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GADAdSize.h; path = "../../Desktop/GoogleMobileAdsSdkiOS-6.10.0/GADAdSize.h"; sourceTree = "<group>"; };
@@ -173,6 +176,8 @@
 				0A2E15C918F94104002670A1 /* QuizManager.m */,
 				0A2E15CB18F94302002670A1 /* QuizObject.h */,
 				0A2E15CC18F94302002670A1 /* QuizObject.m */,
+				0AAFEE7D19B40EA7002E59C6 /* QuizResultObject.h */,
+				0AAFEE7E19B40EA7002E59C6 /* QuizResultObject.m */,
 				0AAD5A091991D01600880E93 /* IAPHelper.h */,
 				0AAD5A0A1991D01600880E93 /* IAPHelper.m */,
 				0AA1F9441993135C003336D2 /* NumNaoIAPHelper.h */,
@@ -475,6 +480,7 @@
 				0A54270F18F923BC0041EE60 /* NumNaoAppDelegate.m in Sources */,
 				0AA1F9461993135C003336D2 /* NumNaoIAPHelper.m in Sources */,
 				0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */,
+				0AAFEE7F19B40EA7002E59C6 /* QuizResultObject.m in Sources */,
 				0A8DEF92199858C00083A4AF /* NumNaoLoadingView.m in Sources */,
 				0A54270B18F923BC0041EE60 /* main.m in Sources */,
 				0A2E15CD18F94302002670A1 /* QuizObject.m in Sources */,
@@ -605,7 +611,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thutpong Thongnopkhun (6ES7L67S2Y)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Thutpong Thongnopkhun (6ES7L67S2Y)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/prinya/Personal,

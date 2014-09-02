@@ -20,6 +20,8 @@
 const NSInteger QuizScoreToPassLevel1 = 8;
 const NSInteger QuizScoreToPassLevel2 = 16;
 const NSInteger StartCountDounTime = 60;
+const NSInteger penaltyTime = 3;
+const NSInteger bonusTime = 1;
 const float LoadNextQuizDelayTime = 0.25;
 
 @interface QuizDetailController ()
@@ -103,6 +105,7 @@ const float LoadNextQuizDelayTime = 0.25;
          break;
      }
      [weakSelf.loadingView removeFromSuperview];
+     [weakSelf hideAllButtons:NO];
      if (weakSelf.quizList) {
        [weakSelf extractQuizByLevel];
        QuizObject *quizObject = [weakSelf randomQuiz];
@@ -126,6 +129,7 @@ const float LoadNextQuizDelayTime = 0.25;
    queue:[NSOperationQueue mainQueue]
    usingBlock:^(NSNotification *note) {
      [weakSelf.loadingView removeFromSuperview];
+     [weakSelf hideAllButtons:NO];
      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
                                                      message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
                                                     delegate:self
@@ -138,15 +142,14 @@ const float LoadNextQuizDelayTime = 0.25;
   [self setUpAudioPlayer];
   
   float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height - 5;
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
-  
-  self.quizManager = [QuizManager sharedInstance];
 
+  [self hideAllButtons:YES];
   self.loadingView = [[NumNaoLoadingView alloc] init];
   [self.view addSubview:self.loadingView];
 }
@@ -167,6 +170,7 @@ const float LoadNextQuizDelayTime = 0.25;
   self.selectedButtonColor = [UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
   
   [[QuizManager sharedInstance] loadQuizListFromServer:self.quizMode];
+  [[QuizManager sharedInstance] loadQuizResultListFromServer];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -260,7 +264,7 @@ const float LoadNextQuizDelayTime = 0.25;
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
   __block float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height + 5;
-  [UIView animateWithDuration:1.0 animations:^{
+  [UIView animateWithDuration:0 animations:^{
     adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
@@ -358,10 +362,10 @@ const float LoadNextQuizDelayTime = 0.25;
       self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
       self.quizScore++;
       self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
-      self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
+      self.remainingTime = self.remainingTime + bonusTime;
     } else {
       self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];
-      self.remainingTime = (self.remainingTime - 3) < 0 ? 0 : (self.remainingTime - 3);
+      self.remainingTime = (self.remainingTime - penaltyTime) < 0 ? 0 : (self.remainingTime - penaltyTime);
     }
     
     if (self.changeQuizTimer && [self.changeQuizTimer isValid]) {
@@ -402,7 +406,6 @@ const float LoadNextQuizDelayTime = 0.25;
   QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
   quizResultController.quizScore = self.quizScore;
   quizResultController.quizMode = self.quizMode;
-  quizResultController.quizManager = self.quizManager;
   [self.navigationController pushViewController:quizResultController animated:YES];
 }
 
@@ -423,5 +426,14 @@ const float LoadNextQuizDelayTime = 0.25;
   for(UIButton *btn in buttons) {
     [[btn layer] setCornerRadius:5.0];
   }
+}
+
+- (void)hideAllButtons:(BOOL)flag {
+  [self.ans1Button setHidden:flag];
+  [self.ans2Button setHidden:flag];
+  [self.ans3Button setHidden:flag];
+  [self.ans4Button setHidden:flag];
+  [self.remainingTimeLabel setHidden:flag];
+  [self.scoreLabel setHidden:flag];
 }
 @end

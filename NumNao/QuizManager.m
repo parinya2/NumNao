@@ -8,6 +8,7 @@
 
 #import "QuizManager.h"
 #import "QuizObject.h"
+#import "QuizResultObject.h"
 #import "TBXML.h"
 
 NSString * const QuizManagerDidLoadQuizSuccess = @"QuizManagerDidLoadQuizSuccess";
@@ -24,19 +25,74 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
   return sharedInstance;
 }
 
-- (NSString *)quizResultString:(NSInteger)quizScore {
+- (NSString *)quizResultStringForScore:(NSInteger)quizScore {
+  NSString *resultString = nil;
+  NSMutableArray *quizResults = [[NSMutableArray alloc] init];
+  for (QuizResultObject *quizResultObject in self.quizResultList) {
+    if ([quizResultObject matchForScore:quizScore]) {
+      [quizResults addObject:quizResultObject];
+    }
+  }
   
-  NSString *resultString = [NSString stringWithFormat:@"คุณได้ %ld คะแนน ท่าทางคุณจะติดละครน้ำเน่างอมแงมเลยทีเดียว", quizScore];
+  if (quizResults.count) {
+    NSInteger randomIndex = arc4random() % [quizResults count];
+    QuizResultObject *quizResultObject = (QuizResultObject *)quizResults[randomIndex];
+    resultString = quizResultObject.resultText;
+  }
+
+  if (!resultString) {
+    if (quizScore <= 7) {
+      resultString = @"เอิ่ม ได้น้อยไปหน่อยนะ เธอต้องหมั่นดูละครหลังข่าวให้หนักหน่วงกว่านี้แล้วล่ะ";
+    } else if (quizScore <= 14) {
+      resultString = @"อ๊ะ ใช้ได้ๆ เธอดูละครหลังข่าวมาเยอะพอตัวเลยนะเนี่ย";
+    } else {
+      resultString = @"สุดยอดอ่ะ เธอดูละครหลังข่าวมาอย่างโชกโชนเลยสินะ";
+    }
+  }
   
   return resultString;
 }
 
-- (NSArray *)quizList:(NSInteger)quizMode {
-  NSMutableArray *result = [[NSMutableArray alloc] init];
-  NSLog(@"startExtract");
-  result = [self extractQuizFromXMLTemp:quizMode];
-  NSLog(@"finishExtract result count =%d",result.count);
-  return result;
+- (void)loadQuizResultListFromServer {
+  BOOL cacheAvailable = NO;
+  if (self.xmlDataQuizResult) {
+    cacheAvailable = YES;
+  }
+  
+  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getResultText";
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  if (cacheAvailable) {
+    NSMutableArray *quizResultList = [self extractQuizResultFromXMLdata:self.xmlDataQuizResult];
+    self.quizResultList = [quizResultList copy];
+    
+    [NSURLConnection
+     sendAsynchronousRequest:urlRequest
+     queue:queue
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+       if (!error) {
+         self.xmlDataQuizResult = [data copy];
+       }
+     }];
+  } else {
+    NSLog(@"Start Connecting Async: Quiz Result");
+    [NSURLConnection
+     sendAsynchronousRequest:urlRequest
+     queue:queue
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+       if (error) {
+         NSLog(@"Error SendAsyncRequest Quiz Result %@",error.localizedDescription);
+       } else {
+         NSLog(@"End Connecting Async: Quiz Result");
+         
+         NSMutableArray *quizResultList = [self extractQuizResultFromXMLdata:data];
+         self.quizResultList = [quizResultList copy];
+         self.xmlDataQuizResult = [data copy];
+       }
+     }];
+  }
 }
 
 - (void)loadQuizListFromServer:(NSInteger)quizMode {
@@ -44,25 +100,25 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
   BOOL cacheAvailable = NO;
   switch (quizMode) {
     case NumNaoQuizModeOnAir: {
-      if (self.quizListOnAir.count > 0) {
+      if (self.xmlDataOnAir) {
         cacheAvailable = YES;
       }
     } break;
       
     case NumNaoQuizModeRetroCh3: {
-      if (self.quizListRetroCh3.count > 0) {
+      if (self.xmlDataRetroCh3) {
         cacheAvailable = YES;
       }
     } break;
       
     case NumNaoQuizModeRetroCh5: {
-      if (self.quizListRetroCh5.count > 0) {
+      if (self.xmlDataRetroCh5) {
         cacheAvailable = YES;
       }
     } break;
       
     case NumNaoQuizModeRetroCh7: {
-      if (self.quizListRetroCh7.count > 0) {
+      if (self.xmlDataRetroCh7) {
         cacheAvailable = YES;
       }
     } break;
@@ -71,15 +127,69 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
       break;
   }
   
+  NSString *urlString = [self urlStringFromQuizMode:quizMode];
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
   if (cacheAvailable) {
     NSLog(@"QuizManager Use Cache");
-    [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizSuccess object:nil userInfo:nil];
-  } else {
-    NSString *urlString = [self urlStringFromQuizMode:quizMode];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
+    switch (quizMode) {
+      case NumNaoQuizModeOnAir: {
+        NSMutableArray *quizList = [self extractQuizFromXMLdata:self.xmlDataOnAir];
+        self.quizListOnAir = [quizList copy];
+      } break;
+        
+      case NumNaoQuizModeRetroCh3: {
+        NSMutableArray *quizList = [self extractQuizFromXMLdata:self.xmlDataRetroCh3];
+        self.quizListRetroCh3 = [quizList copy];
+      } break;
+        
+      case NumNaoQuizModeRetroCh5: {
+        NSMutableArray *quizList = [self extractQuizFromXMLdata:self.xmlDataRetroCh5];
+        self.quizListRetroCh5 = [quizList copy];
+      } break;
+        
+      case NumNaoQuizModeRetroCh7: {
+        NSMutableArray *quizList = [self extractQuizFromXMLdata:self.xmlDataRetroCh7];
+        self.quizListRetroCh7 = [quizList copy];
+      } break;
+        
+      default:
+        break;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizSuccess object:nil userInfo:nil];
+    
+    [NSURLConnection
+     sendAsynchronousRequest:urlRequest
+     queue:queue
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+       if (!error) {
+         switch (quizMode) {
+           case NumNaoQuizModeOnAir: {
+             self.xmlDataOnAir = [data copy];
+           } break;
+             
+           case NumNaoQuizModeRetroCh3: {
+             self.xmlDataRetroCh3 = [data copy];
+           } break;
+             
+           case NumNaoQuizModeRetroCh5: {
+             self.xmlDataRetroCh5 = [data copy];
+           } break;
+             
+           case NumNaoQuizModeRetroCh7: {
+             self.xmlDataRetroCh7 = [data copy];
+           } break;
+             
+           default:
+             break;
+         }
+       }
+     }];
+  } else {
     NSLog(@"Start Connecting Async");
     [NSURLConnection
      sendAsynchronousRequest:urlRequest
@@ -95,18 +205,22 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
          
          switch (quizMode) {
            case NumNaoQuizModeOnAir: {
+             self.xmlDataOnAir = [data copy];
              self.quizListOnAir = [quizList copy];
            } break;
              
            case NumNaoQuizModeRetroCh3: {
+             self.xmlDataRetroCh3 = [data copy];
              self.quizListRetroCh3 = [quizList copy];
            } break;
              
            case NumNaoQuizModeRetroCh5: {
+             self.xmlDataRetroCh5 = [data copy];
              self.quizListRetroCh5 = [quizList copy];
            } break;
              
            case NumNaoQuizModeRetroCh7: {
+             self.xmlDataRetroCh7 = [data copy];
              self.quizListRetroCh7 = [quizList copy];
            } break;
              
@@ -118,6 +232,39 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
        }
      }];
   }
+}
+
+- (NSMutableArray *)extractQuizResultFromXMLdata:(NSData *)xmlData {
+  NSMutableArray *result = [[NSMutableArray alloc] init];
+  NSError *error;
+  
+  NSString *xmlString = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+  
+  TBXML *tbxml = [TBXML newTBXMLWithXMLString:xmlString error:&error];
+  
+  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+  
+  if (!rootXMLElement) {
+    return nil;
+  }
+  
+  TBXMLElement *childXMLElement = [TBXML childElementNamed:@"result_text" parentElement:rootXMLElement];
+  while (childXMLElement) {
+    
+    QuizResultObject *quizResultObject = [[QuizResultObject alloc] init];
+    
+    quizResultObject.resultText = [TBXML valueOfAttributeNamed:@"result_text_text" forElement:childXMLElement];
+    
+    NSString *scoreFromStr = [TBXML valueOfAttributeNamed:@"from_score" forElement:childXMLElement];
+    NSString *scoreToStr = [TBXML valueOfAttributeNamed:@"to_score" forElement:childXMLElement];
+    quizResultObject.scoreFrom = [scoreFromStr integerValue];
+    quizResultObject.scoreTo = [scoreToStr integerValue];
+    
+    [result addObject:quizResultObject];
+    childXMLElement = childXMLElement->nextSibling;
+  }
+  
+  return result;
 }
 
 - (NSMutableArray *)extractQuizFromXMLdata:(NSData *)xmlData {
@@ -231,25 +378,6 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
   return urlString;
 }
 
-- (NSMutableArray *)extractQuizFromXMLTemp:(NSInteger)quizMode {
-  
-  NSMutableArray *result = [[NSMutableArray alloc] init];
-  NSString *urlString = [self urlStringFromQuizMode:quizMode];
-  NSURL *url = [NSURL URLWithString:urlString];
-  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-  
-  NSData *urlData;
-  NSURLResponse *urlResponse;
-  NSError *error;
-  NSLog(@"Start Connecting");
-  urlData = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&urlResponse error:&error];
-  NSLog(@"End Connecting");
-
-  result = [self extractQuizFromXMLdata:urlData];
-  
-  return result;
-}
-
 - (NSArray *)mockQuizList {
   NSMutableArray *result = [[NSMutableArray alloc] init];
   
@@ -290,6 +418,26 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
   }
   
   return result;
+}
+
+- (void)sendQuizResultLogToServerWithQuizMode:(NSInteger)quizMode
+                                    quizScore:(NSInteger)quizScore {
+  NSString *UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertLog&device_id=%@&player_name=no_name&category_id=%d&score=%d", UUID, (quizMode + 1),quizScore];
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  [NSURLConnection
+   sendAsynchronousRequest:urlRequest
+   queue:queue
+   completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+     if (error) {
+       NSLog(@"SendResultLogToServer error %@",error.localizedDescription);
+     } else {
+       NSLog(@"SendResultLogToServer success");
+     }
+   }];
 }
 
 @end

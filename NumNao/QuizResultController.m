@@ -43,7 +43,8 @@
 
   [self setUpAudioPlayer];
   
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, 80.0, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  float yPos = self.shareFacebookButton.frame.origin.y - 50;
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
@@ -52,6 +53,8 @@
   
   [self decorateAllButtonsAndLabel];
   [self checkQuizResult];
+  
+  [self.quizScoreStaticLabel setHidden:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -67,9 +70,13 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  
-  NSString *quizResultString = [self.quizManager quizResultString:self.quizScore];
+  [[QuizManager sharedInstance] sendQuizResultLogToServerWithQuizMode:self.quizMode
+                                                            quizScore:self.quizScore];
+  NSString *quizResultString = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
   [self.quizResultLabel setText:quizResultString];
+  self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
+  [self.quizScoreStaticLabel setHidden:NO];
+  
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -93,7 +100,7 @@
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
   __block float yPos = self.shareFacebookButton.frame.origin.y - adView.frame.size.height - 10;
-  [UIView animateWithDuration:1.0 animations:^{
+  [UIView animateWithDuration:0 animations:^{
     adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
@@ -310,42 +317,44 @@
     
   }*/
   
-    NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %ld คะแนน", self.quizScore];
-    [optionDict setObject:scoreStr forKey:@"name"];
-    [optionDict setObject:@" " forKey:@"caption"];
-    [optionDict setObject:@"ท่าทางคุณจะติดละครงอมแงมเลยทีเดียว เอาเวลาไปอ่านหนังสือสอบบ้างนะจ๊ะ" forKey:@"description"];
-    [optionDict setObject:@"https://developersx.facebook.com/docs/ios/share/" forKey:@"link"];
-    [optionDict setObject:@"http://i.imgur.com/g3Qc1HN.png" forKey:@"picture"];
-    
-    // Show the feed dialog
-    [FBWebDialogs presentFeedDialogModallyWithSession:nil
-                                           parameters:optionDict
-                                              handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
-                                                if (error) {
-                                                  // An error occurred, we need to handle the error
-                                                  // See: https://developers.facebook.com/docs/ios/errors
-                                                  NSLog(@"Error publishing story: %@", error.description);
+  NSString *quizResult = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
+  
+  NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
+  NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
+  [optionDict setObject:scoreStr forKey:@"name"];
+  [optionDict setObject:@" " forKey:@"caption"];
+  [optionDict setObject:quizResult forKey:@"description"];
+  [optionDict setObject:@"https://developersx.facebook.com/docs/ios/share/" forKey:@"link"];
+  [optionDict setObject:@"http://i.imgur.com/g3Qc1HN.png" forKey:@"picture"];
+  
+  // Show the feed dialog
+  [FBWebDialogs presentFeedDialogModallyWithSession:nil
+                                         parameters:optionDict
+                                            handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                              if (error) {
+                                                // An error occurred, we need to handle the error
+                                                // See: https://developers.facebook.com/docs/ios/errors
+                                                NSLog(@"Error publishing story: %@", error.description);
+                                              } else {
+                                                if (result == FBWebDialogResultDialogNotCompleted) {
+                                                  // User canceled.
+                                                  NSLog(@"User cancelled.");
                                                 } else {
-                                                  if (result == FBWebDialogResultDialogNotCompleted) {
+                                                  // Handle the publish feed callback
+                                                  NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
+                                                  
+                                                  if (![urlParams valueForKey:@"post_id"]) {
                                                     // User canceled.
                                                     NSLog(@"User cancelled.");
-                                                  } else {
-                                                    // Handle the publish feed callback
-                                                    NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
                                                     
-                                                    if (![urlParams valueForKey:@"post_id"]) {
-                                                      // User canceled.
-                                                      NSLog(@"User cancelled.");
-                                                      
-                                                    } else {
-                                                      // User clicked the Share button
-                                                      NSString *result = [NSString stringWithFormat: @"Posted story, id: %@", [urlParams valueForKey:@"post_id"]];
-                                                      NSLog(@"result %@", result);
-                                                    }
+                                                  } else {
+                                                    // User clicked the Share button
+                                                    NSString *result = [NSString stringWithFormat: @"Posted story, id: %@", [urlParams valueForKey:@"post_id"]];
+                                                    NSLog(@"result %@", result);
                                                   }
                                                 }
-                                              }];
+                                              }
+                                            }];
   
 }
 

@@ -70,8 +70,8 @@
                                               [alert show];
                                             }];
   
-  __block float yPos = self.onAirButton.frame.origin.y + 10;
-  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(400, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
+  __block float yPos = self.onAirButton.frame.origin.y +  self.onAirButton.frame.size.height + 10;
+  self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
 
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
@@ -139,7 +139,7 @@
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
   __block float yPos = self.onAirButton.frame.origin.y + self.onAirButton.frame.size.height + 10;
-  [UIView animateWithDuration:1.0 animations:^{
+  [UIView animateWithDuration:0 animations:^{
     adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
 }
@@ -154,7 +154,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-  
+  NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
   switch (alertView.tag) {
     case 100: {
       [self goToQuizDetail:NumNaoQuizModeOnAir];
@@ -166,6 +166,45 @@
 
     case 102: {
       [self goToQuizDetail:NumNaoQuizModeRetroCh5];
+    } break;
+      
+    case 201 : {
+      if (buttonIndex == 1) {
+        if (IAPInstance.products) {
+          SKProduct *product = IAPInstance.products[0];
+          [self lockAllButtons:YES];
+          [self.view addSubview:self.loadingView];
+          [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+        } else {
+          [self alertSKProductNotReady];
+        }
+      }
+    } break;
+      
+    case 202 : {
+      if (buttonIndex == 1) {
+        if (IAPInstance.products) {
+          SKProduct *product = IAPInstance.products[1];
+          [self lockAllButtons:YES];
+          [self.view addSubview:self.loadingView];
+          [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+        } else {
+          [self alertSKProductNotReady];
+        }
+      }
+    } break;
+      
+    case 203 : {
+      if (buttonIndex == 1) {
+        if (IAPInstance.products) {
+          SKProduct *product = IAPInstance.products[2];
+          [self lockAllButtons:YES];
+          [self.view addSubview:self.loadingView];
+          [[NumNaoIAPHelper sharedInstance] buyProduct:product];
+        } else {
+          [self alertSKProductNotReady];
+        }
+      }
     } break;
       
     default:
@@ -208,15 +247,13 @@
         [alert show];
       }
     } else {
-      if (IAPInstance.products) {
-        SKProduct *product = IAPInstance.products[0];
-        [self lockAllButtons:YES];
-        [self.view addSubview:self.loadingView];
-        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
-      } else {
-        [self alertSKProductNotReady];
-      }
-
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                      message:@"ถ้าไม่อยากจ่ายเงินซื้อ เธอสามารถปลดล๊อคโหมดละครเก่าช่อง 3 ได้ง่ายๆ โดยการเล่นโหมดละครออนแอร์ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ ต้องการซื้อต่อมั้ย"
+                                                     delegate:self
+                                            cancelButtonTitle:@"ไม่ซื้อ"
+                                            otherButtonTitles:@"ซื้อต่อ",nil];
+      alert.tag = 201;
+      [alert show];
     }
     
   } else if (tag == 2){
@@ -235,14 +272,13 @@
         [alert show];
       }
     } else {
-      if (IAPInstance.products) {
-        SKProduct *product = IAPInstance.products[1];
-        [self lockAllButtons:YES];
-        [self.view addSubview:self.loadingView];
-        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
-      } else {
-        [self alertSKProductNotReady];
-      }
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                      message:@"ถ้าไม่อยากจ่ายเงินซื้อ เธอสามารถปลดล๊อคโหมดละครเก่าช่อง 5 ได้ง่ายๆ โดยการเล่นโหมดละครเก่าช่อง 3 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ ต้องการซื้อต่อมั้ย"
+                                                     delegate:self
+                                            cancelButtonTitle:@"ไม่ซื้อ"
+                                            otherButtonTitles:@"ซื้อต่อ",nil];
+      alert.tag = 202;
+      [alert show];
     }
   } else if (tag == 3){
     
@@ -250,14 +286,13 @@
     if (IAPInstance.retroCh7Purchased) {
       [self goToQuizDetail:NumNaoQuizModeRetroCh7];
     } else {
-      if (IAPInstance.products) {
-        SKProduct *product = IAPInstance.products[2];
-        [self lockAllButtons:YES];
-        [self.view addSubview:self.loadingView];
-        [[NumNaoIAPHelper sharedInstance] buyProduct:product];
-      } else {
-        [self alertSKProductNotReady];
-      }
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
+                                                      message:@"ถ้าไม่อยากจ่ายเงินซื้อ เธอสามารถปลดล๊อคโหมดละครเก่าช่อง 7 ได้ง่ายๆ โดยการเล่นโหมดละครเก่าช่อง 5 ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ ต้องการซื้อต่อมั้ย"
+                                                     delegate:self
+                                            cancelButtonTitle:@"ไม่ซื้อ"
+                                            otherButtonTitles:@"ซื้อต่อ",nil];
+      alert.tag = 203;
+      [alert show];
     }
   }
 }

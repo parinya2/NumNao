@@ -17,11 +17,12 @@
 
 @property (assign, nonatomic) NSInteger quizScore;
 @property (assign, nonatomic) NSInteger quizMode;
-@property (strong) IBOutlet UILabel *quizResultLabel;
-@property (strong) IBOutlet UIButton *shareFacebookButton;
-@property (strong) IBOutlet UIButton *backToMenuButton;
-@property (strong) QuizManager *quizManager;
-@property (nonatomic, strong) GADBannerView *bannerView;
+@property (strong, nonatomic) IBOutlet UILabel *quizScoreLabel;
+@property (strong, nonatomic) IBOutlet UILabel *quizScoreStaticLabel;
+@property (strong, nonatomic) IBOutlet UILabel *quizResultLabel;
+@property (strong, nonatomic) IBOutlet UIButton *shareFacebookButton;
+@property (strong, nonatomic) IBOutlet UIButton *backToMenuButton;
+@property (strong, nonatomic) GADBannerView *bannerView;
 
 - (GADRequest *)createRequest;
 - (IBAction)goToMainMenu:(id)sender;
