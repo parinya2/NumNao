@@ -23,7 +23,9 @@
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
 @property (strong, nonatomic) id productDidPurchasedObserver;
 @property (strong, nonatomic) id productDidPurchasedFailedObserver;
+@property (strong, nonatomic) NSTimer *theNewQuizLabelTimer;
 @property (assign, nonatomic) NSInteger quizMode;
+@property (assign, nonatomic) BOOL quizLabelAnimationGoForward;
 
 @end
 
@@ -81,30 +83,30 @@
   
   [self decorateAllButtons];
   [self renderLockIcon];
-  
-  /*NumNaoIAPHelper *IAPInstance = [NumNaoIAPHelper sharedInstance];
-  
-  if (![IAPInstance isRetroCh3Purchased] ||
-      ![IAPInstance isRetroCh5Purchased] ||
-      ![IAPInstance isRetroCh7Purchased]) {
-    
-    if (!IAPInstance.products) {
-      self.loadingView = [[NumNaoLoadingView alloc] init];
-      [self.view addSubview:self.loadingView];
-      
-      [IAPInstance requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
-        if (!success) {
-          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
-                                                          message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์ของ iTune มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
-                                                         delegate:nil
-                                                cancelButtonTitle:@"ตกลงจ้ะ"
-                                                otherButtonTitles:nil];
-          [alert show];
-        }
-        [self.loadingView removeFromSuperview];
-      }];
-    }
-  }*/
+
+}
+
+- (void)refreshNewQuizLabel {
+  float currentSize = self.onAirNewQuizLabel.font.pointSize;
+  float minSize = 7;
+  float maxSize = 22;
+  float newSize;
+  NSInteger fontSizeGap = 1;
+  if (self.quizLabelAnimationGoForward) {
+    newSize = currentSize + fontSizeGap;
+  } else {
+    newSize = currentSize - fontSizeGap;
+  }
+  if (newSize >= maxSize) {
+    self.quizLabelAnimationGoForward = NO;
+  }
+  if (newSize <= minSize) {
+    self.quizLabelAnimationGoForward = YES;
+  }
+  [self.onAirNewQuizLabel setFont:[UIFont systemFontOfSize:newSize]];
+  [self.retroCh3NewQuizLabel setFont:[UIFont systemFontOfSize:newSize]];
+  [self.retroCh5NewQuizLabel setFont:[UIFont systemFontOfSize:newSize]];
+  [self.retroCh7NewQuizLabel setFont:[UIFont systemFontOfSize:newSize]];
 }
 
 - (void)setUpAudioPlayer {
@@ -124,11 +126,25 @@
       [self setUpAudioPlayer];
     }
   }
+  [self renderNewQuizLabel];
+  self.theNewQuizLabelTimer = [NSTimer scheduledTimerWithTimeInterval:0.02
+                                                               target:self
+                                                             selector:@selector(refreshNewQuizLabel)
+                                                             userInfo:nil
+                                                              repeats:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
+  
+  [self.theNewQuizLabelTimer invalidate];
+  self.theNewQuizLabelTimer = nil;
 }
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedObserver];
   [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedFailedObserver];
+  self.bannerView = nil;
 }
 
 - (GADRequest *)createRequest {
@@ -309,10 +325,18 @@
 
 - (void)goToQuizDetail:(NSInteger) mode {
   [self.audioPlayer stop];
+  [[QuizManager sharedInstance] updateVersionNumberForQuizMode:mode];
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
   QuizDetailController *quizDetailController = [storyboard instantiateViewControllerWithIdentifier:@"QuizDetail"];
   quizDetailController.quizMode = mode;
   [self.navigationController pushViewController:quizDetailController animated:YES];
+}
+
+- (void)renderNewQuizLabel {
+  [self.onAirNewQuizLabel setHidden:![QuizManager sharedInstance].isTheNewOnAirAvailable];
+  [self.retroCh3NewQuizLabel setHidden:![QuizManager sharedInstance].isTheNewRetroCh3Available];
+  [self.retroCh5NewQuizLabel setHidden:![QuizManager sharedInstance].isTheNewRetroCh5Available];
+  [self.retroCh7NewQuizLabel setHidden:![QuizManager sharedInstance].isTheNewRetroCh7Available];
 }
 
 - (void)renderLockIcon {
@@ -349,9 +373,9 @@
 }
 
 - (void)decorateAllButtons {
-  NSArray *buttons = [NSArray arrayWithObjects: self.onAirButton, self.retroCh3Button, self.retroCh5Button, self.retroCh7Button,nil];
+  NSArray *gameModeButtons = [NSArray arrayWithObjects: self.onAirButton, self.retroCh3Button, self.retroCh5Button, self.retroCh7Button,nil];
   
-  for(UIButton *btn in buttons)
+  for(UIButton *btn in gameModeButtons)
   {
     // Set the button Text Color
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -375,6 +399,16 @@
     [btnLayer setBorderWidth:1.0f];
     [btnLayer setBorderColor:[[UIColor blackColor] CGColor]];
     
+  }
+  
+  NSArray *allQuizLabels = [NSArray arrayWithObjects: self.onAirNewQuizLabel,
+                            self.retroCh3NewQuizLabel, self.retroCh5NewQuizLabel,
+                            self.retroCh7NewQuizLabel, nil];
+  for (UILabel *label in allQuizLabels) {
+    // Round label corners
+    CALayer *labelLayer = [label layer];
+    [labelLayer setMasksToBounds:YES];
+    [labelLayer setCornerRadius:20.0f];
   }
 }
 

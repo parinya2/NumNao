@@ -32,6 +32,15 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 @property (strong, nonatomic) NSData *xmlDataRetroCh7;
 @property (strong, nonatomic) NSData *xmlDataQuizResult;
 
+@property (assign, nonatomic, getter = isTheNewOnAirAvailable) BOOL theNewOnAirAvailable;
+@property (assign, nonatomic, getter = isTheNewRetroCh3Available) BOOL theNewRetroCh3Available;
+@property (assign, nonatomic, getter = isTheNewRetroCh5Available) BOOL theNewRetroCh5Available;
+@property (assign, nonatomic, getter = isTheNewRetroCh7Available) BOOL theNewRetroCh7Available;
+
+@property (assign, nonatomic) NSInteger serverVersionOnAir;
+@property (assign, nonatomic) NSInteger serverVersionRetroCh3;
+@property (assign, nonatomic) NSInteger serverVersionRetroCh5;
+@property (assign, nonatomic) NSInteger serverVersionRetroCh7;
 
 - (NSArray *)mockQuizList;
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore;
@@ -39,6 +48,8 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 - (void)loadQuizResultListFromServer;
 - (void)sendQuizResultLogToServerWithQuizMode:(NSInteger)quizMode
                                     quizScore:(NSInteger)quizScore;
+- (void)checkQuizUpdateWithServer;
+- (void)updateVersionNumberForQuizMode:(NSInteger)quizMode ;
 
 + (QuizManager *)sharedInstance;
 

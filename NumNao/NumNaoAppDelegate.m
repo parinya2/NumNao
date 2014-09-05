@@ -17,7 +17,7 @@
   // Load the FBLoginView class (needed for login)
   sleep(1);
   [FBLoginView class];
-  [QuizManager sharedInstance];
+  [[QuizManager sharedInstance] checkQuizUpdateWithServer];
   [[NumNaoIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
 
   }];

@@ -51,7 +51,6 @@ const float LoadNextQuizDelayTime = 0.25;
 @property (strong, nonatomic) id quizManagerDidLoadQuizFailObserver;
 
 - (IBAction)chooseAnswer:(id)sender;
-- (IBAction)confirmAnswer:(id)sender;
 - (IBAction)goToNextQuiz:(id)sender;
 
 
@@ -188,6 +187,7 @@ const float LoadNextQuizDelayTime = 0.25;
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizSuccessObserver];
   [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizFailObserver];
+  self.bannerView = nil;
 }
 
 - (void)setUpAudioPlayer {

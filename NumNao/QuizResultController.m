@@ -202,11 +202,14 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)goToMainMenu:(id)sender {
   [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)dealloc {
+  self.bannerView = nil;
 }
 
 - (IBAction)shareOnFacebook:(id)sender {

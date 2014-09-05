@@ -13,6 +13,10 @@
 
 NSString * const QuizManagerDidLoadQuizSuccess = @"QuizManagerDidLoadQuizSuccess";
 NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
+NSString * const VersionKeyOnAir = @"VersionKeyOnAir";
+NSString * const VersionKeyRetroCh3 = @"VersionKeyRetroCh3";
+NSString * const VersionKeyRetroCh5 = @"VersionKeyRetroCh5";
+NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 
 @implementation QuizManager
 
@@ -438,6 +442,129 @@ NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
        NSLog(@"SendResultLogToServer success");
      }
    }];
+}
+
+- (void)checkQuizUpdateWithServer {
+  NSString *urlString = @"";
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  [NSURLConnection
+   sendAsynchronousRequest:urlRequest
+   queue:queue
+   completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+     if (error) {
+       NSLog(@"CheckQuizUpdateWithServer error %@",error.localizedDescription);
+       
+       //ZZZ : set them to zero later
+       self.serverVersionOnAir = 1;
+       self.serverVersionRetroCh3 = 1;
+       self.serverVersionRetroCh5 = 1;
+       self.serverVersionRetroCh7 = 1;
+     } else {
+       NSLog(@"CheckQuizUpdateWithServer success");
+       self.serverVersionOnAir = 9;
+       self.serverVersionRetroCh3 = 9;
+       self.serverVersionRetroCh5 = 9;
+       self.serverVersionRetroCh7 = 9;
+     }
+   }];
+}
+
+- (BOOL)isTheNewOnAirAvailable {
+  BOOL flag = NO;
+  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
+                              integerForKey:VersionKeyOnAir];
+  if (self.serverVersionOnAir <= 0) {
+    flag = NO;
+  } else {
+    flag = (currentVersion != self.serverVersionOnAir);
+  }
+
+  self->_theNewOnAirAvailable = flag;
+  return self->_theNewOnAirAvailable;
+}
+
+- (BOOL)isTheNewRetroCh3Available {
+  BOOL flag = NO;
+  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
+                              integerForKey:VersionKeyRetroCh3];
+  if (self.serverVersionRetroCh3 <= 0) {
+    flag = NO;
+  } else {
+    flag = (currentVersion != self.serverVersionRetroCh3);
+  }
+  self->_theNewRetroCh3Available = flag;
+  return self->_theNewRetroCh3Available;
+}
+
+- (BOOL)isTheNewRetroCh5Available {
+  BOOL flag = NO;
+  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
+                              integerForKey:VersionKeyRetroCh5];
+  if (self.serverVersionRetroCh5 <= 0) {
+    flag = NO;
+  } else {
+    flag = (currentVersion != self.serverVersionRetroCh5);
+  }
+  
+  self->_theNewRetroCh5Available = flag;
+  return self->_theNewRetroCh5Available;
+}
+
+- (BOOL)isTheNewRetroCh7Available {
+  BOOL flag = NO;
+  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
+                              integerForKey:VersionKeyRetroCh7];
+  if (self.serverVersionRetroCh7 <= 0) {
+    flag = NO;
+  } else {
+    flag = (currentVersion != self.serverVersionRetroCh7);
+  }
+  
+  self->_theNewRetroCh7Available = flag;
+  return self->_theNewRetroCh7Available;
+}
+
+- (void)updateVersionNumberForQuizMode:(NSInteger)quizMode {
+  
+  switch (quizMode) {
+    case NumNaoQuizModeOnAir: {
+      if (self.serverVersionOnAir > 0) {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionOnAir
+                                                   forKey:VersionKeyOnAir];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+      }
+    } break;
+
+    case NumNaoQuizModeRetroCh3: {
+      if (self.serverVersionRetroCh3 > 0) {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh3
+                                                   forKey:VersionKeyRetroCh3];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+      }
+    } break;
+
+    case NumNaoQuizModeRetroCh5: {
+      if (self.serverVersionRetroCh5 > 0) {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh5
+                                                   forKey:VersionKeyRetroCh5];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+      }
+    } break;
+      
+    case NumNaoQuizModeRetroCh7: {
+      if (self.serverVersionRetroCh7 > 0) {
+        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh7
+                                                   forKey:VersionKeyRetroCh7];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+      }
+    } break;
+      
+    default:
+      break;
+  }
 }
 
 @end

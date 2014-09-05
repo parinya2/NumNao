@@ -22,6 +22,12 @@
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh3LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh5LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh7LockImageView;
+
+@property (strong, nonatomic) IBOutlet UILabel *onAirNewQuizLabel;
+@property (strong, nonatomic) IBOutlet UILabel *retroCh3NewQuizLabel;
+@property (strong, nonatomic) IBOutlet UILabel *retroCh5NewQuizLabel;
+@property (strong, nonatomic) IBOutlet UILabel *retroCh7NewQuizLabel;
+
 @property (nonatomic, strong) GADBannerView *bannerView;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 

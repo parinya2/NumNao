@@ -85,33 +85,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="bg2" translatesAutoresizingMaskIntoConstraints="NO" id="s14-BN-kH2">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="bg2" translatesAutoresizingMaskIntoConstraints="NO" id="s14-BN-kH2">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IZV-BM-Zna">
-                                <rect key="frame" x="58" y="95" width="205" height="56"/>
+                                <rect key="frame" x="40" y="95" width="240" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="205" id="4oE-Yg-ehd"/>
-                                    <constraint firstAttribute="width" secondItem="IZV-BM-Zna" secondAttribute="height" multiplier="205:56" id="fVR-21-sqA"/>
+                                    <constraint firstAttribute="height" constant="56" id="VN7-ga-QOH"/>
+                                    <constraint firstAttribute="width" constant="240" id="YUB-FN-WiD"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="ละคร On Air"/>
                                 <connections>
                                     <action selector="goToQuiz:" destination="vCd-qs-oWe" eventType="touchUpInside" id="pXw-ix-dp8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWB-IF-G0y">
-                                <rect key="frame" x="58" y="227" width="205" height="56"/>
+                                <rect key="frame" x="40" y="227" width="240" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="MWB-IF-G0y" secondAttribute="height" multiplier="205:56" id="LGI-8P-PBr"/>
-                                    <constraint firstAttribute="width" constant="205" id="ehl-Uj-gAg"/>
+                                    <constraint firstAttribute="height" constant="56" id="GQN-hI-v5U"/>
+                                    <constraint firstAttribute="width" constant="240" id="P1q-v3-WaQ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="ละครเก่าช่อง 3">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -121,14 +121,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7WN-xd-FAD">
-                                <rect key="frame" x="58" y="301" width="205" height="56"/>
+                                <rect key="frame" x="40" y="301" width="240" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="205" id="98W-Oo-7Ox"/>
-                                    <constraint firstAttribute="width" secondItem="7WN-xd-FAD" secondAttribute="height" multiplier="205:56" id="QqX-Q6-Nh7"/>
+                                    <constraint firstAttribute="width" constant="240" id="BPz-BP-DvT"/>
+                                    <constraint firstAttribute="height" constant="56" id="Ddg-cf-CWq"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="ละครเก่าช่อง 5">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -138,14 +138,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KoS-f9-oVa">
-                                <rect key="frame" x="58" y="376" width="205" height="56"/>
+                                <rect key="frame" x="40" y="376" width="240" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="205" id="9JT-Fd-AtX"/>
-                                    <constraint firstAttribute="width" secondItem="KoS-f9-oVa" secondAttribute="height" multiplier="205:56" id="rhE-Ih-swP"/>
+                                    <constraint firstAttribute="height" constant="56" id="E0r-cv-6Gl"/>
+                                    <constraint firstAttribute="width" constant="240" id="Krs-ny-And"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="ละครเก่าช่อง 7">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -155,7 +155,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0m-aL-boN">
-                                <rect key="frame" x="248" y="235" width="35" height="35"/>
+                                <rect key="frame" x="248" y="215" width="35" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="35" id="SKg-2H-rUh"/>
@@ -178,20 +178,76 @@
                                     <constraint firstAttribute="width" constant="35" id="ldi-hc-mXw"/>
                                 </constraints>
                             </imageView>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ใหม่" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fep-RS-yeo">
+                                <rect key="frame" x="45" y="103" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.72156862745098038" green="0.070588235294117646" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="H9v-1t-q87"/>
+                                    <constraint firstAttribute="width" constant="40" id="ZnT-ks-okK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ใหม่" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1vO-U1-3vx">
+                                <rect key="frame" x="45" y="235" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.72156862749999995" green="0.070588235289999995" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="4wd-2H-BZY"/>
+                                    <constraint firstAttribute="width" constant="40" id="AJj-3M-uCJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ใหม่" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qyg-Dl-mVi">
+                                <rect key="frame" x="45" y="309" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.72156862749999995" green="0.070588235289999995" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="6zr-oP-CYa"/>
+                                    <constraint firstAttribute="height" constant="40" id="whI-uR-3wJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ใหม่" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYJ-PJ-AbW">
+                                <rect key="frame" x="45" y="384" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.72156862749999995" green="0.070588235289999995" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="FNQ-28-xXq"/>
+                                    <constraint firstAttribute="width" constant="40" id="Xgi-by-4eR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="KoS-f9-oVa" firstAttribute="centerY" secondItem="dYJ-PJ-AbW" secondAttribute="centerY" id="1KH-PG-BH8"/>
                             <constraint firstItem="IZV-BM-Zna" firstAttribute="top" secondItem="Ivx-ni-WSH" secondAttribute="bottom" constant="75" id="6r6-zw-DAY"/>
                             <constraint firstItem="s14-BN-kH2" firstAttribute="width" secondItem="H3O-Im-Rnk" secondAttribute="width" id="7Mx-aP-hvo"/>
                             <constraint firstItem="MWB-IF-G0y" firstAttribute="top" secondItem="IZV-BM-Zna" secondAttribute="bottom" constant="76" id="8lV-A0-6V6"/>
                             <constraint firstItem="7WN-xd-FAD" firstAttribute="top" secondItem="MWB-IF-G0y" secondAttribute="bottom" constant="18" id="9Af-FN-vni"/>
+                            <constraint firstItem="KoS-f9-oVa" firstAttribute="centerX" secondItem="dYJ-PJ-AbW" secondAttribute="centerX" constant="95" id="ASf-Dj-UGV"/>
                             <constraint firstItem="7WN-xd-FAD" firstAttribute="centerX" secondItem="tP4-J1-f3X" secondAttribute="centerX" constant="-105" id="Du4-BH-4W4"/>
                             <constraint firstItem="X0m-aL-boN" firstAttribute="centerX" secondItem="MWB-IF-G0y" secondAttribute="centerX" constant="105" id="Dxr-eK-OGW"/>
                             <constraint firstItem="X0m-aL-boN" firstAttribute="centerY" secondItem="MWB-IF-G0y" secondAttribute="centerY" constant="-22.5" id="EiP-Pj-5rL"/>
                             <constraint firstItem="KoS-f9-oVa" firstAttribute="top" secondItem="7WN-xd-FAD" secondAttribute="bottom" constant="19" id="LvV-ag-l9O"/>
                             <constraint firstItem="KoS-f9-oVa" firstAttribute="centerX" secondItem="2gw-yE-53f" secondAttribute="centerX" constant="-105" id="OdL-0j-yXi"/>
                             <constraint firstItem="s14-BN-kH2" firstAttribute="height" secondItem="H3O-Im-Rnk" secondAttribute="height" id="V7y-dg-Poc"/>
+                            <constraint firstItem="7WN-xd-FAD" firstAttribute="centerX" secondItem="qyg-Dl-mVi" secondAttribute="centerX" constant="95" id="Yw9-F1-tsf"/>
+                            <constraint firstItem="s14-BN-kH2" firstAttribute="centerX" secondItem="Fep-RS-yeo" secondAttribute="centerX" constant="95" id="a30-zn-Kbu"/>
+                            <constraint firstItem="7WN-xd-FAD" firstAttribute="centerY" secondItem="qyg-Dl-mVi" secondAttribute="centerY" id="b3n-8G-Ca1"/>
                             <constraint firstItem="KoS-f9-oVa" firstAttribute="centerY" secondItem="2gw-yE-53f" secondAttribute="centerY" constant="22.5" id="er9-CV-9E2"/>
+                            <constraint firstItem="MWB-IF-G0y" firstAttribute="centerX" secondItem="1vO-U1-3vx" secondAttribute="centerX" constant="95" id="j7U-bF-BBK"/>
+                            <constraint firstItem="MWB-IF-G0y" firstAttribute="centerY" secondItem="1vO-U1-3vx" secondAttribute="centerY" id="mzH-ez-nEh"/>
+                            <constraint firstItem="IZV-BM-Zna" firstAttribute="centerY" secondItem="Fep-RS-yeo" secondAttribute="centerY" id="pvw-aN-wga"/>
                             <constraint firstItem="7WN-xd-FAD" firstAttribute="centerY" secondItem="tP4-J1-f3X" secondAttribute="centerY" constant="22.5" id="qWG-DB-sZK"/>
                             <constraint firstItem="IPE-FJ-M7L" firstAttribute="top" relation="greaterThanOrEqual" secondItem="KoS-f9-oVa" secondAttribute="bottom" constant="10" id="ycT-Pl-7sE"/>
                         </constraints>
@@ -199,12 +255,16 @@
                     <navigationItem key="navigationItem" id="hZp-FL-7Ly"/>
                     <connections>
                         <outlet property="onAirButton" destination="IZV-BM-Zna" id="PEz-kq-YEV"/>
+                        <outlet property="onAirNewQuizLabel" destination="Fep-RS-yeo" id="7WO-Wj-sgW"/>
                         <outlet property="retroCh3Button" destination="MWB-IF-G0y" id="w1H-ZZ-UTa"/>
                         <outlet property="retroCh3LockImageView" destination="X0m-aL-boN" id="PSs-Iv-tGo"/>
+                        <outlet property="retroCh3NewQuizLabel" destination="1vO-U1-3vx" id="T1b-dP-Egh"/>
                         <outlet property="retroCh5Button" destination="7WN-xd-FAD" id="TXw-cB-0qS"/>
                         <outlet property="retroCh5LockImageView" destination="tP4-J1-f3X" id="5jh-l3-c8m"/>
+                        <outlet property="retroCh5NewQuizLabel" destination="qyg-Dl-mVi" id="mT3-Jp-aqj"/>
                         <outlet property="retroCh7Button" destination="KoS-f9-oVa" id="0Lo-JV-bkb"/>
                         <outlet property="retroCh7LockImageView" destination="2gw-yE-53f" id="gFg-ir-QpS"/>
+                        <outlet property="retroCh7NewQuizLabel" destination="dYJ-PJ-AbW" id="VgN-Io-Ldt"/>
                         <segue destination="JmQ-NW-qLw" kind="push" id="hpL-Yx-lTW"/>
                     </connections>
                 </viewController>
