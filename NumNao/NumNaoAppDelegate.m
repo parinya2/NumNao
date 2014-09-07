@@ -8,12 +8,13 @@
 
 #import "NumNaoAppDelegate.h"
 #import "NumNaoIAPHelper.h"
+#import "GAI.h"
 
 @implementation NumNaoAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+  // Override point for customization after application launch.
   // Load the FBLoginView class (needed for login)
   sleep(1);
   [FBLoginView class];
@@ -21,6 +22,19 @@
   [[NumNaoIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
 
   }];
+  
+  // Optional: automatically send uncaught exceptions to Google Analytics.
+  [GAI sharedInstance].trackUncaughtExceptions = YES;
+  
+  // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+  [GAI sharedInstance].dispatchInterval = 20;
+  
+  // Optional: set Logger to VERBOSE for debug information.
+  [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+  
+  // Initialize tracker. Replace with your tracking ID.
+  [[GAI sharedInstance] trackerWithTrackingId:@"UA-54545219-1"];
+  
   return YES;
 }
 

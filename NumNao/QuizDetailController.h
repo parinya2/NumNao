@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "GADBannerView.h"
+#import "GAITrackedViewController.h"
 
-@interface QuizDetailController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
+@interface QuizDetailController : GAITrackedViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
   GADBannerView *bannerView_;
 }
 

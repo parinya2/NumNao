@@ -16,6 +16,10 @@
 #import "GADRequest.h"
 #import "appID.h"
 #import "AVFoundation/AVAudioPlayer.h"
+#import "GAI.h"
+#import "GAIFields.h"
+#import "GAITracker.h"
+#import "GAIDictionaryBuilder.h"
 
 const NSInteger QuizScoreToPassLevel1 = 8;
 const NSInteger QuizScoreToPassLevel2 = 16;
@@ -153,9 +157,15 @@ const float LoadNextQuizDelayTime = 0.25;
   [self.view addSubview:self.loadingView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  self.screenName = @"Quiz-Playing Screen";
+}
+
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   
+  [self sendGoogleAnalyticsData];
   [self decorateAllButtonsAndLabel];
   
   self.canChooseAnswer = YES;
@@ -188,6 +198,11 @@ const float LoadNextQuizDelayTime = 0.25;
   [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizSuccessObserver];
   [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizFailObserver];
   self.bannerView = nil;
+}
+
+- (void)sendGoogleAnalyticsData{
+  [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:@"Quiz-Playing Screen"];
+  [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createAppView] build]];
 }
 
 - (void)setUpAudioPlayer {
