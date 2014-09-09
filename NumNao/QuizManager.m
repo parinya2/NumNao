@@ -17,6 +17,7 @@ NSString * const VersionKeyOnAir = @"VersionKeyOnAir";
 NSString * const VersionKeyRetroCh3 = @"VersionKeyRetroCh3";
 NSString * const VersionKeyRetroCh5 = @"VersionKeyRetroCh5";
 NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
+NSString * const QuizDefaultVersion = @"QuizDefaultVersion";
 
 @implementation QuizManager
 
@@ -352,6 +353,38 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
   return result;
 }
 
+- (void)extractQuizVersionFromXMLdata:(NSData *)xmlData {
+
+  NSError *error;
+  NSString *xmlString = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+
+  TBXML *tbxml = [TBXML newTBXMLWithXMLString:xmlString error:&error];
+  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+
+  self.serverVersionOnAir = QuizDefaultVersion;
+  self.serverVersionRetroCh3 = QuizDefaultVersion;
+  self.serverVersionRetroCh5 = QuizDefaultVersion;
+  self.serverVersionRetroCh7 = QuizDefaultVersion;
+  
+  if (rootXMLElement) {
+    TBXMLElement *childXMLElement = [TBXML childElementNamed:@"version" parentElement:rootXMLElement];
+    while (childXMLElement) {
+      NSString *quizGroupId = [TBXML valueOfAttributeNamed:@"quiz_group_id" forElement:childXMLElement];
+      NSString *quizVersion = [TBXML valueOfAttributeNamed:@"no" forElement:childXMLElement];
+      if ([quizGroupId isEqualToString:@"1"]) {
+        self.serverVersionOnAir = quizVersion;
+      } else if ([quizGroupId isEqualToString:@"2"]) {
+        self.serverVersionRetroCh3 = quizVersion;
+      } else if ([quizGroupId isEqualToString:@"3"]) {
+        self.serverVersionRetroCh5 = quizVersion;
+      } else if ([quizGroupId isEqualToString:@"4"]) {
+        self.serverVersionRetroCh7 = quizVersion;
+      }
+      childXMLElement = childXMLElement->nextSibling;
+    }
+  }
+}
+
 - (NSString *)urlStringFromQuizMode:(NSInteger)quizMode {
   NSString *urlString = nil;
   
@@ -445,7 +478,7 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 }
 
 - (void)checkQuizUpdateWithServer {
-  NSString *urlString = @"";
+  NSString *urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getVersion";
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
@@ -457,29 +490,25 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
      if (error) {
        NSLog(@"CheckQuizUpdateWithServer error %@",error.localizedDescription);
        
-       //ZZZ : set them to zero later
-       self.serverVersionOnAir = 1;
-       self.serverVersionRetroCh3 = 1;
-       self.serverVersionRetroCh5 = 1;
-       self.serverVersionRetroCh7 = 1;
+       self.serverVersionOnAir = QuizDefaultVersion;
+       self.serverVersionRetroCh3 = QuizDefaultVersion;
+       self.serverVersionRetroCh5 = QuizDefaultVersion;
+       self.serverVersionRetroCh7 = QuizDefaultVersion;
      } else {
+       [self extractQuizVersionFromXMLdata:data];
        NSLog(@"CheckQuizUpdateWithServer success");
-       self.serverVersionOnAir = 9;
-       self.serverVersionRetroCh3 = 9;
-       self.serverVersionRetroCh5 = 9;
-       self.serverVersionRetroCh7 = 9;
      }
    }];
 }
 
 - (BOOL)isTheNewOnAirAvailable {
   BOOL flag = NO;
-  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
-                              integerForKey:VersionKeyOnAir];
-  if (self.serverVersionOnAir <= 0) {
+  NSString *currentVersion = [[NSUserDefaults standardUserDefaults]
+                              stringForKey:VersionKeyOnAir];
+  if ([self.serverVersionOnAir isEqualToString:QuizDefaultVersion]) {
     flag = NO;
   } else {
-    flag = (currentVersion != self.serverVersionOnAir);
+    flag = ![currentVersion isEqualToString:self.serverVersionOnAir];
   }
 
   self->_theNewOnAirAvailable = flag;
@@ -488,12 +517,12 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 
 - (BOOL)isTheNewRetroCh3Available {
   BOOL flag = NO;
-  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
-                              integerForKey:VersionKeyRetroCh3];
-  if (self.serverVersionRetroCh3 <= 0) {
+  NSString *currentVersion = [[NSUserDefaults standardUserDefaults]
+                              stringForKey:VersionKeyRetroCh3];
+  if ([self.serverVersionRetroCh3 isEqualToString:QuizDefaultVersion]) {
     flag = NO;
   } else {
-    flag = (currentVersion != self.serverVersionRetroCh3);
+    flag = ![currentVersion isEqualToString:self.serverVersionRetroCh3];
   }
   self->_theNewRetroCh3Available = flag;
   return self->_theNewRetroCh3Available;
@@ -501,12 +530,12 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 
 - (BOOL)isTheNewRetroCh5Available {
   BOOL flag = NO;
-  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
-                              integerForKey:VersionKeyRetroCh5];
-  if (self.serverVersionRetroCh5 <= 0) {
+  NSString *currentVersion = [[NSUserDefaults standardUserDefaults]
+                              stringForKey:VersionKeyRetroCh5];
+  if ([self.serverVersionRetroCh5 isEqualToString:QuizDefaultVersion]) {
     flag = NO;
   } else {
-    flag = (currentVersion != self.serverVersionRetroCh5);
+    flag = ![currentVersion isEqualToString:self.serverVersionRetroCh5];
   }
   
   self->_theNewRetroCh5Available = flag;
@@ -515,12 +544,12 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 
 - (BOOL)isTheNewRetroCh7Available {
   BOOL flag = NO;
-  NSInteger currentVersion = [[NSUserDefaults standardUserDefaults]
-                              integerForKey:VersionKeyRetroCh7];
-  if (self.serverVersionRetroCh7 <= 0) {
+  NSString *currentVersion = [[NSUserDefaults standardUserDefaults]
+                              stringForKey:VersionKeyRetroCh7];
+  if ([self.serverVersionRetroCh7 isEqualToString:QuizDefaultVersion]) {
     flag = NO;
   } else {
-    flag = (currentVersion != self.serverVersionRetroCh7);
+    flag = ![currentVersion isEqualToString:self.serverVersionRetroCh7];
   }
   
   self->_theNewRetroCh7Available = flag;
@@ -531,32 +560,32 @@ NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
   
   switch (quizMode) {
     case NumNaoQuizModeOnAir: {
-      if (self.serverVersionOnAir > 0) {
-        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionOnAir
+      if (![self.serverVersionOnAir isEqualToString:QuizDefaultVersion]) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.serverVersionOnAir
                                                    forKey:VersionKeyOnAir];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }
     } break;
 
     case NumNaoQuizModeRetroCh3: {
-      if (self.serverVersionRetroCh3 > 0) {
-        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh3
+      if (![self.serverVersionRetroCh3 isEqualToString:QuizDefaultVersion]) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.serverVersionRetroCh3
                                                    forKey:VersionKeyRetroCh3];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }
     } break;
 
     case NumNaoQuizModeRetroCh5: {
-      if (self.serverVersionRetroCh5 > 0) {
-        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh5
+      if (![self.serverVersionRetroCh5 isEqualToString:QuizDefaultVersion]) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.serverVersionRetroCh5
                                                    forKey:VersionKeyRetroCh5];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }
     } break;
       
     case NumNaoQuizModeRetroCh7: {
-      if (self.serverVersionRetroCh7 > 0) {
-        [[NSUserDefaults standardUserDefaults] setInteger:self.serverVersionRetroCh7
+      if (![self.serverVersionRetroCh7 isEqualToString:QuizDefaultVersion]) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.serverVersionRetroCh7
                                                    forKey:VersionKeyRetroCh7];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }

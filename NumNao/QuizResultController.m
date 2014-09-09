@@ -19,9 +19,10 @@
 @interface QuizResultController ()
 
 @property (strong, nonatomic) NSDictionary *backLinkInfo;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) NSString *quizResultText;;
 @property (weak, nonatomic) UIView *backLinkView;
 @property (weak, nonatomic) UILabel *backLinkLabel;
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 
 @end
 
@@ -72,8 +73,8 @@
   [super viewDidAppear:animated];
   [[QuizManager sharedInstance] sendQuizResultLogToServerWithQuizMode:self.quizMode
                                                             quizScore:self.quizScore];
-  NSString *quizResultString = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
-  [self.quizResultLabel setText:quizResultString];
+  self.quizResultText = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
+  [self.quizResultLabel setText:self.quizResultText];
   self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
   [self.quizScoreStaticLabel setHidden:NO];
   
@@ -320,13 +321,11 @@
     
   }*/
   
-  NSString *quizResult = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
-  
   NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
   NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
   [optionDict setObject:scoreStr forKey:@"name"];
   [optionDict setObject:@" " forKey:@"caption"];
-  [optionDict setObject:quizResult forKey:@"description"];
+  [optionDict setObject:self.quizResultText forKey:@"description"];
   [optionDict setObject:@"https://developersx.facebook.com/docs/ios/share/" forKey:@"link"];
   [optionDict setObject:@"http://i.imgur.com/g3Qc1HN.png" forKey:@"picture"];
   

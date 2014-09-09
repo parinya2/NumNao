@@ -37,10 +37,10 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 @property (assign, nonatomic, getter = isTheNewRetroCh5Available) BOOL theNewRetroCh5Available;
 @property (assign, nonatomic, getter = isTheNewRetroCh7Available) BOOL theNewRetroCh7Available;
 
-@property (assign, nonatomic) NSInteger serverVersionOnAir;
-@property (assign, nonatomic) NSInteger serverVersionRetroCh3;
-@property (assign, nonatomic) NSInteger serverVersionRetroCh5;
-@property (assign, nonatomic) NSInteger serverVersionRetroCh7;
+@property (strong, nonatomic) NSString *serverVersionOnAir;
+@property (strong, nonatomic) NSString *serverVersionRetroCh3;
+@property (strong, nonatomic) NSString *serverVersionRetroCh5;
+@property (strong, nonatomic) NSString *serverVersionRetroCh7;
 
 - (NSArray *)mockQuizList;
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore;
