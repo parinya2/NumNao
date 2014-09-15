@@ -10,6 +10,7 @@
 		0A2E15C618F931F8002670A1 /* QuizDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2E15C518F931F8002670A1 /* QuizDetailController.m */; };
 		0A2E15CA18F94104002670A1 /* QuizManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2E15C918F94104002670A1 /* QuizManager.m */; };
 		0A2E15CD18F94302002670A1 /* QuizObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A2E15CC18F94302002670A1 /* QuizObject.m */; };
+		0A4EE79E19C2DA6000980A4E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4EE79D19C2DA6000980A4E /* Social.framework */; };
 		0A5426FF18F923BC0041EE60 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A5426FE18F923BC0041EE60 /* Foundation.framework */; };
 		0A54270318F923BC0041EE60 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A54270218F923BC0041EE60 /* UIKit.framework */; };
 		0A54270918F923BC0041EE60 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0A54270718F923BC0041EE60 /* InfoPlist.strings */; };
@@ -70,6 +71,7 @@
 		0A2E15C918F94104002670A1 /* QuizManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizManager.m; sourceTree = "<group>"; };
 		0A2E15CB18F94302002670A1 /* QuizObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizObject.h; sourceTree = "<group>"; };
 		0A2E15CC18F94302002670A1 /* QuizObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizObject.m; sourceTree = "<group>"; };
+		0A4EE79D19C2DA6000980A4E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		0A5426FB18F923BC0041EE60 /* NumNao.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumNao.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A5426FE18F923BC0041EE60 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0A54270018F923BC0041EE60 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -159,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A4EE79E19C2DA6000980A4E /* Social.framework in Frameworks */,
 				0AA3560E19BC52FD0091D123 /* libz.dylib in Frameworks */,
 				0AA3560D19BC4CC00091D123 /* libsqlite3.0.dylib in Frameworks */,
 				0AD8046819A43D4F007C1857 /* AVFoundation.framework in Frameworks */,
@@ -231,6 +234,7 @@
 		0A5426FD18F923BC0041EE60 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A4EE79D19C2DA6000980A4E /* Social.framework */,
 				0AA3560C19BC4CC00091D123 /* libsqlite3.0.dylib */,
 				0AD8046719A43D4F007C1857 /* AVFoundation.framework */,
 				0AC7159A197A028D00ED4ACC /* AudioToolbox.framework */,

@@ -15,6 +15,11 @@
 #import "GADRequest.h"
 #import "appID.h"
 #import "AVFoundation/AVAudioPlayer.h"
+#import <Social/Social.h>
+
+NSString * const PlayCountKey = @"PlayCountKey";
+NSString * const RateAppisVisitedKey = @"RateAppIsVisited";
+NSInteger const PlayCountForAlert = 5;
 
 @interface QuizResultController ()
 
@@ -44,7 +49,7 @@
 
   [self setUpAudioPlayer];
   
-  float yPos = self.shareFacebookButton.frame.origin.y - 50;
+  float yPos = self.backToMenuButton.frame.origin.y + self.backToMenuButton.frame.size.height + 5;
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
   self.bannerView.adUnitID = MyAdUnitID;
   self.bannerView.delegate = self;
@@ -78,6 +83,27 @@
   self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
   [self.quizScoreStaticLabel setHidden:NO];
   
+  NSInteger currentPlayCount = [self getPlayCount];
+  currentPlayCount++;
+  [self savePlayCount:currentPlayCount];
+  if (currentPlayCount % PlayCountForAlert == 0 && ![self getRateAppisVisited]) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"สวัสดีจ้ะ"
+                                                    message:@"ขอโทษที่ขัดจังหวะนะจ๊ะ แต่ว่ารบกวนเธอช่วยเข้าไปให้คะแนนแอพน้ำเน่าบน AppStore หน่อยได้มั้ยอ่า แบบว่าเค้าอยากได้ 5 ดาวอ่ะ >_<'  ขอบคุณมากเลยนะจ๊ะ "
+                                                   delegate:self
+                                          cancelButtonTitle:@"ไม่ล่ะฮะ"
+                                          otherButtonTitles:@"ตกลงจ้ะ",nil];
+    alert.tag = 2;
+    [alert show];
+  }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+  if (alertView.tag == 2) {
+    if (buttonIndex == 1) {
+      [self saveRateAppisVisited:YES];
+      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
+    }
+  }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -100,7 +126,7 @@
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
-  __block float yPos = self.shareFacebookButton.frame.origin.y - adView.frame.size.height - 10;
+  __block float yPos = self.backToMenuButton.frame.origin.y + self.backToMenuButton.frame.size.height + 5;
   [UIView animateWithDuration:0 animations:^{
     adView.frame = CGRectMake(0.0, yPos, adView.frame.size.width, adView.frame.size.height);
   }];
@@ -167,35 +193,26 @@
   // Set the button Text Color
   [self.backToMenuButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
   [self.backToMenuButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-  
-  // Draw a custom gradient
-  /*CAGradientLayer *backToMenuBtnGradient = [CAGradientLayer layer];
-  backToMenuBtnGradient.frame = self.backToMenuButton.bounds;
-  backToMenuBtnGradient.colors = [NSArray arrayWithObjects:
-                                  (id)[[UIColor colorWithRed:200.0f / 255.0f green:200.0f / 255.0f blue:200.0f / 255.0f alpha:1.0f] CGColor],
-                                  (id)[[UIColor colorWithRed:130.0f / 255.0f green:130.0f / 255.0f blue:130.0f / 255.0f alpha:1.0f] CGColor],
-                                  nil];
-  [self.backToMenuButton.layer insertSublayer:backToMenuBtnGradient atIndex:0];*/
+
+  [self.playAgainButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+  [self.playAgainButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
   
   // Round button corners
   CALayer *backToMenuBtnLayer = [self.backToMenuButton layer];
   [backToMenuBtnLayer setMasksToBounds:YES];
   [backToMenuBtnLayer setCornerRadius:5.0f];
+
+  CALayer *playAgainBtnLayer = [self.playAgainButton layer];
+  [playAgainBtnLayer setMasksToBounds:YES];
+  [playAgainBtnLayer setCornerRadius:5.0f];
   
   // Apply a 1 pixel, black border around Buy Button
   [backToMenuBtnLayer setBorderWidth:1.0f];
   [backToMenuBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
+
+  [playAgainBtnLayer setBorderWidth:1.0f];
+  [playAgainBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
   
-  
-  // Draw a custom gradient for quizLabel
-  /*CAGradientLayer *quizResultGradient = [CAGradientLayer layer];
-  quizResultGradient.frame = self.quizResultLabel.bounds;
-  quizResultGradient.colors = [NSArray arrayWithObjects:
-                               (id)[[UIColor colorWithRed:150.0f / 255.0f green:150.0f / 255.0f blue:150.0f / 255.0f alpha:0.3f] CGColor],
-                               (id)[[UIColor colorWithRed:1.0f / 255.0f green:1.0f / 255.0f blue:1.0f / 255.0f alpha:0.3f] CGColor],
-                               nil];
-  [self.quizResultLabel.layer insertSublayer:quizResultGradient atIndex:0];
-  [[self.quizResultLabel layer] setCornerRadius:5.0];*/
   [[self.shareFacebookButton layer] setCornerRadius:5.0];
   
 }
@@ -203,6 +220,10 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (IBAction)playAgain:(id)sender {
+  [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)goToMainMenu:(id)sender {
@@ -213,11 +234,26 @@
   self.bannerView = nil;
 }
 
+- (void)savePlayCount:(NSInteger)playCount {
+  [[NSUserDefaults standardUserDefaults] setInteger:playCount forKey:PlayCountKey];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSInteger)getPlayCount {
+  return [[NSUserDefaults standardUserDefaults] integerForKey:PlayCountKey];
+}
+
+- (void)saveRateAppisVisited:(BOOL)flag {
+  [[NSUserDefaults standardUserDefaults] setBool:flag forKey:RateAppisVisitedKey];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (BOOL)getRateAppisVisited {
+  return [[NSUserDefaults standardUserDefaults] boolForKey:RateAppisVisitedKey];
+}
+
 - (IBAction)shareOnFacebook:(id)sender {
-  
-//  [self postStatusUpdateWithShareDialog];
   [self shareLinkWithShareDialog];
-//  [self StatusUpdateWithAPICalls];
 }
 
 - (void)postStatusUpdateWithShareDialog
@@ -249,8 +285,8 @@
     // FALLBACK: publish just a link using the Feed dialog
     // Show the feed dialog
     NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
-    [optionDict setObject:@"my text zzz" forKey:@"description"];
-    [optionDict setObject:@"my text zzz" forKey:@"name"];
+    [optionDict setObject:@"Test" forKey:@"description"];
+    [optionDict setObject:@"Test" forKey:@"name"];
     
     
     [FBWebDialogs presentFeedDialogModallyWithSession:nil
@@ -298,66 +334,63 @@
 
 - (IBAction)shareLinkWithShareDialog
 {
+ 
+  NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
+  NSString *pictureURL = @"http://i.imgur.com/g3Qc1HN.png";
+  NSString *link = @"http://www.google.co.th";
   
   // Check if the Facebook app is installed and we can present the share dialog
   FBLinkShareParams *params = [[FBLinkShareParams alloc] init];
-  params.link = [NSURL URLWithString:@"https://developers.facebook.com/docs/ios/share/"];
+  params.link = [NSURL URLWithString:link];
   
   // If the Facebook app is installed and we can present the share dialog
- /* if ([FBDialogs canPresentShareDialogWithParams:params]) {
+  if ([FBDialogs canPresentShareDialogWithParams:params]) {
     
     // Present share dialog
     [FBDialogs presentShareDialogWithLink:params.link
+                                     name:scoreStr
+                                  caption:@" "
+                              description:self.quizResultText
+                                  picture:[NSURL URLWithString:pictureURL]
+                              clientState:nil
                                   handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
                                     if(error) {
-                                      // An error occurred, we need to handle the error
-                                      // See: https://developers.facebook.com/docs/ios/errors
                                       NSLog(@"Error publishing story: %@", error.description);
                                     } else {
-                                      // Success
                                       NSLog(@"result %@", results);
                                     }
                                   }];
     
-  }*/
-  
-  NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
-  NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
-  [optionDict setObject:scoreStr forKey:@"name"];
-  [optionDict setObject:@" " forKey:@"caption"];
-  [optionDict setObject:self.quizResultText forKey:@"description"];
-  [optionDict setObject:@"https://developersx.facebook.com/docs/ios/share/" forKey:@"link"];
-  [optionDict setObject:@"http://i.imgur.com/g3Qc1HN.png" forKey:@"picture"];
-  
-  // Show the feed dialog
-  [FBWebDialogs presentFeedDialogModallyWithSession:nil
-                                         parameters:optionDict
-                                            handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
-                                              if (error) {
-                                                // An error occurred, we need to handle the error
-                                                // See: https://developers.facebook.com/docs/ios/errors
-                                                NSLog(@"Error publishing story: %@", error.description);
-                                              } else {
-                                                if (result == FBWebDialogResultDialogNotCompleted) {
-                                                  // User canceled.
-                                                  NSLog(@"User cancelled.");
+  } else {
+    NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
+    [optionDict setObject:scoreStr forKey:@"name"];
+    [optionDict setObject:@" " forKey:@"caption"];
+    [optionDict setObject:self.quizResultText forKey:@"description"];
+    [optionDict setObject:link forKey:@"link"];
+    [optionDict setObject:pictureURL forKey:@"picture"];
+    
+    // Show the feed dialog
+    [FBWebDialogs presentFeedDialogModallyWithSession:nil
+                                           parameters:optionDict
+                                              handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                if (error) {
+                                                  NSLog(@"Error publishing story: %@", error.description);
                                                 } else {
-                                                  // Handle the publish feed callback
-                                                  NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
-                                                  
-                                                  if (![urlParams valueForKey:@"post_id"]) {
-                                                    // User canceled.
+                                                  if (result == FBWebDialogResultDialogNotCompleted) {
                                                     NSLog(@"User cancelled.");
-                                                    
                                                   } else {
-                                                    // User clicked the Share button
-                                                    NSString *result = [NSString stringWithFormat: @"Posted story, id: %@", [urlParams valueForKey:@"post_id"]];
-                                                    NSLog(@"result %@", result);
+                                                    NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
+                                                    
+                                                    if (![urlParams valueForKey:@"post_id"]) {
+                                                      NSLog(@"User cancelled.");
+                                                    } else {
+                                                      NSString *result = [NSString stringWithFormat: @"Posted story, id: %@", [urlParams valueForKey:@"post_id"]];
+                                                      NSLog(@"result %@", result);
+                                                    }
                                                   }
                                                 }
-                                              }
-                                            }];
-  
+                                              }];
+  }
 }
 
 - (IBAction)StatusUpdateWithAPICalls {

@@ -10,6 +10,8 @@
 
 extern NSString * const QuizManagerDidLoadQuizSuccess;
 extern NSString * const QuizManagerDidLoadQuizFail;
+extern NSString * const URLNumNaoAppStore;
+extern NSString * const URLNumNaoFacebookPage;
 
 typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
   NumNaoQuizModeOnAir = 0,

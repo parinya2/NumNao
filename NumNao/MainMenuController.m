@@ -12,6 +12,8 @@
 #import "appID.h"
 #import "AVFoundation/AVAudioPlayer.h"
 #import "QuizSetSelectorController.h"
+#import <Social/Social.h>
+#import "QuizManager.h"
 
 @interface MainMenuController ()
 
@@ -92,6 +94,27 @@
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)contactUs:(id)sender {
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoFacebookPage]];
+}
+
+- (IBAction)rateThisApp:(id)sender {
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
+}
+
+- (IBAction)recommendToFriend:(id)sender {
+  SLComposeViewController *fbVC = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+   [fbVC setInitialText:@"นี่ๆ เธอลองเล่นแอพนี้สิ 'น้ำเน่า' ควิซแอพสุดมันส์บน AppStore ที่รวมคำถามจากละครน้ำเน่าหลังข่าวมาให้ทดสอบฝีมือกัน ถ้าเธอคิดว่าเชี่ยวชาญเรื่องละครหลังข่าวดีแล้ว เราขอท้าให้เธอเล่น 'น้ำเน่า' นะจ๊ะ คิกคิก"];
+   [fbVC addURL:[NSURL URLWithString:URLNumNaoAppStore]];
+   [fbVC addImage:[UIImage imageNamed:@"bg1"]];
+   [self presentViewController:fbVC animated:YES completion:nil];
+  
+  /*NSString *a = @"test";
+   NSArray *postItems = @[a];
+   UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:postItems applicationActivities:nil];
+   [self presentViewController:activityVC animated:YES completion:nil];*/
+}
+
 - (void)decorateAllButtons {
   NSArray *buttons = [NSArray arrayWithObjects: self.startButton, nil];
   
@@ -117,8 +140,8 @@
     [btnLayer setCornerRadius:5.0f];
     
     // Apply a 1 pixel, black border around Buy Button
-    [btnLayer setBorderWidth:1.0f];
-    [btnLayer setBorderColor:[[UIColor blackColor] CGColor]];
+    [btnLayer setBorderWidth:2.0f];
+    [btnLayer setBorderColor:[[UIColor whiteColor] CGColor]];
     
   }
 }

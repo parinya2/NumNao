@@ -18,6 +18,10 @@
 @property (nonatomic, strong) IBOutlet UIButton *startButton;
 @property (nonatomic, strong) IBOutlet UIImageView *bgImageView;
 @property (nonatomic, strong) GADBannerView *bannerView;
+
+- (IBAction)contactUs:(id)sender;
+- (IBAction)rateThisApp:(id)sender;
+- (IBAction)recommendToFriend:(id)sender;
 - (GADRequest *)createRequest;
 
 @end

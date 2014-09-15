@@ -10,7 +10,7 @@
 #import "QuizManager.h"
 #import "GADBannerView.h"
 
-@interface QuizResultController : UIViewController <GADBannerViewDelegate> {
+@interface QuizResultController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
   GADBannerView *bannerView_;
 }
 
@@ -21,10 +21,12 @@
 @property (strong, nonatomic) IBOutlet UILabel *quizScoreStaticLabel;
 @property (strong, nonatomic) IBOutlet UILabel *quizResultLabel;
 @property (strong, nonatomic) IBOutlet UIButton *shareFacebookButton;
+@property (strong, nonatomic) IBOutlet UIButton *playAgainButton;
 @property (strong, nonatomic) IBOutlet UIButton *backToMenuButton;
 @property (strong, nonatomic) GADBannerView *bannerView;
 
 - (GADRequest *)createRequest;
+- (IBAction)playAgain:(id)sender;
 - (IBAction)goToMainMenu:(id)sender;
 - (IBAction)shareOnFacebook:(id)sender;
 

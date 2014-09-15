@@ -108,7 +108,7 @@ const float LoadNextQuizDelayTime = 0.25;
          break;
      }
      [weakSelf.loadingView removeFromSuperview];
-     [weakSelf hideAllButtons:NO];
+     [weakSelf hideEverything:NO];
      if (weakSelf.quizList) {
        [weakSelf extractQuizByLevel];
        QuizObject *quizObject = [weakSelf randomQuiz];
@@ -132,7 +132,7 @@ const float LoadNextQuizDelayTime = 0.25;
    queue:[NSOperationQueue mainQueue]
    usingBlock:^(NSNotification *note) {
      [weakSelf.loadingView removeFromSuperview];
-     [weakSelf hideAllButtons:NO];
+     [weakSelf hideEverything:NO];
      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
                                                      message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
                                                     delegate:self
@@ -152,7 +152,7 @@ const float LoadNextQuizDelayTime = 0.25;
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
 
-  [self hideAllButtons:YES];
+  [self hideEverything:YES];
   self.loadingView = [[NumNaoLoadingView alloc] init];
   [self.view addSubview:self.loadingView];
 }
@@ -312,7 +312,7 @@ const float LoadNextQuizDelayTime = 0.25;
 
 - (NSString *)stringForRemainingTimeLabel:(NSInteger) remainingTime {
   NSInteger time = remainingTime < 0 ? 0 : remainingTime;
-  return [NSString stringWithFormat:@"คุณเหลือ %ld วินาที",time];
+  return [NSString stringWithFormat:@"เหลือ %ld วินาที",time];
 }
 
 - (NSString *)stringForScoreLabel:(NSInteger) score {
@@ -417,6 +417,7 @@ const float LoadNextQuizDelayTime = 0.25;
 }
 
 - (void)goToSummaryPage {
+  [self hideEverything:YES];
   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
   QuizResultController *quizResultController = [storyboard instantiateViewControllerWithIdentifier:@"QuizResult"];
   quizResultController.quizScore = self.quizScore;
@@ -443,12 +444,15 @@ const float LoadNextQuizDelayTime = 0.25;
   }
 }
 
-- (void)hideAllButtons:(BOOL)flag {
+- (void)hideEverything:(BOOL)flag {
   [self.ans1Button setHidden:flag];
   [self.ans2Button setHidden:flag];
   [self.ans3Button setHidden:flag];
   [self.ans4Button setHidden:flag];
   [self.remainingTimeLabel setHidden:flag];
   [self.scoreLabel setHidden:flag];
+  [self.quizLabel setHidden:flag];
+  [self.quizCounterLabel setHidden:flag];
+  [self.correctionImageView setHidden:flag];
 }
 @end

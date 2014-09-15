@@ -266,8 +266,8 @@
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"โปรดทราบ"
                                                       message:@"ถ้าไม่อยากจ่ายเงินซื้อ เธอสามารถปลดล๊อคโหมดละครเก่าช่อง 3 ได้ง่ายๆ โดยการเล่นโหมดละครออนแอร์ให้ได้ 30 คะแนนเท่านั้นนะจ๊ะ ต้องการซื้อต่อมั้ย"
                                                      delegate:self
-                                            cancelButtonTitle:@"ไม่ซื้อ"
-                                            otherButtonTitles:@"ซื้อต่อ",nil];
+                                            cancelButtonTitle:@"ไม่ล่ะฮะ"
+                                            otherButtonTitles:@"ซื้อจ้ะ",nil];
       alert.tag = 201;
       [alert show];
     }
