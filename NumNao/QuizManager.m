@@ -18,8 +18,10 @@ NSString * const VersionKeyRetroCh3 = @"VersionKeyRetroCh3";
 NSString * const VersionKeyRetroCh5 = @"VersionKeyRetroCh5";
 NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 NSString * const QuizDefaultVersion = @"QuizDefaultVersion";
-NSString * const URLNumNaoAppStore = @"http://bit.ly/numnao";
-NSString * const URLNumNaoFacebookPage = @"http://bit.ly/thechappters";
+NSString * const URLNumNaoAppStore = @"https://itunes.apple.com/th/app/id903714798?mt=8";
+NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
+//NSString * const URLNumNaoAppStore = @"http://bit.ly/numnao";
+//NSString * const URLNumNaoFacebookPage = @"http://bit.ly/thechappters";
 
 
 @implementation QuizManager

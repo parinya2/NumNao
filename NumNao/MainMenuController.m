@@ -94,12 +94,24 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+  if (alertView.tag == 3) {
+      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
+  }
+}
+
 - (IBAction)contactUs:(id)sender {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoFacebookPage]];
 }
 
 - (IBAction)rateThisApp:(id)sender {
-  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                  message:@"ขอ 5 ดาวเลยนะค๊าาา งุงิ งุงิ "
+                                                 delegate:self
+                                        cancelButtonTitle:@"ตกลงจ้ะ"
+                                        otherButtonTitles:nil];
+  alert.tag = 3;
+  [alert show];
 }
 
 - (IBAction)recommendToFriend:(id)sender {

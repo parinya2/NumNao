@@ -11,7 +11,7 @@
 
 @class GADBannerView, GADRequest;
 
-@interface MainMenuController : UIViewController <GADBannerViewDelegate> {
+@interface MainMenuController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
   GADBannerView *bannerView_;
 }
 
