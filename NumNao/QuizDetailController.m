@@ -168,6 +168,15 @@ const float LoadNextQuizDelayTime = 0.25;
   [self sendGoogleAnalyticsData];
   [self decorateAllButtonsAndLabel];
   
+  if (!self.audioPlayer.isPlaying) {
+    if (self.audioPlayer) {
+      self.audioPlayer.currentTime = 0;
+      [self.audioPlayer play];
+    } else {
+      [self setUpAudioPlayer];
+    }
+  }
+  
   self.canChooseAnswer = YES;
   self.remainingTime = StartCountDounTime;
   self.quizCounter = 0;

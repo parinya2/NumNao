@@ -46,6 +46,7 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 
 - (NSArray *)mockQuizList;
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore;
+- (NSInteger)quizResultLevelForScore:(NSInteger)quizScore;
 - (void)loadQuizListFromServer:(NSInteger)quizMode;
 - (void)loadQuizResultListFromServer;
 - (void)sendQuizResultLogToServerWithQuizMode:(NSInteger)quizMode

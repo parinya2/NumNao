@@ -35,6 +35,33 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
   return sharedInstance;
 }
 
+- (NSInteger)quizResultLevelForScore:(NSInteger)quizScore {
+  if (quizScore == 0) {
+    return 0;
+  }
+  
+  NSArray *sortedQuizResultList = [self.quizResultList sortedArrayUsingDescriptors:[NSArray arrayWithObjects:[NSSortDescriptor sortDescriptorWithKey:@"scoreFrom" ascending:YES], nil]];
+  
+  NSInteger quizResultLevel = 1;
+  QuizResultObject *prevQuizResultObject = nil;
+  for (QuizResultObject *quizResultObject in sortedQuizResultList) {
+    if (prevQuizResultObject) {
+     if (quizResultObject.scoreFrom > prevQuizResultObject.scoreFrom &&
+         quizResultObject.scoreTo > prevQuizResultObject.scoreTo) {
+       quizResultLevel++;
+     }
+    }
+    
+    if ([quizResultObject matchForScore:quizScore]) {
+      return quizResultLevel;
+    }
+    
+    prevQuizResultObject = quizResultObject;
+  }
+  
+  return 0;
+}
+
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore {
   NSString *resultString = nil;
   NSMutableArray *quizResults = [[NSMutableArray alloc] init];

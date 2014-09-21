@@ -28,6 +28,7 @@ NSInteger const PlayCountForAlert = 5;
 @property (strong, nonatomic) NSString *quizResultText;;
 @property (weak, nonatomic) UIView *backLinkView;
 @property (weak, nonatomic) UILabel *backLinkLabel;
+@property (assign, nonatomic) NSInteger quizResultLevel;
 
 @end
 
@@ -79,6 +80,7 @@ NSInteger const PlayCountForAlert = 5;
   [[QuizManager sharedInstance] sendQuizResultLogToServerWithQuizMode:self.quizMode
                                                             quizScore:self.quizScore];
   self.quizResultText = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
+  self.quizResultLevel = [[QuizManager sharedInstance] quizResultLevelForScore:self.quizScore];
   [self.quizResultLabel setText:self.quizResultText];
   self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
   [self.quizScoreStaticLabel setHidden:NO];
@@ -335,23 +337,22 @@ NSInteger const PlayCountForAlert = 5;
 - (IBAction)shareLinkWithShareDialog
 {
  
-  NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน", self.quizScore];
-  NSString *pictureURL = @"http://i.imgur.com/g3Qc1HN.png";
-  NSString *link = @"http://www.google.co.th";
+  NSString *scoreStr = [NSString stringWithFormat:@"คุณได้ %d คะแนน (ความน้ำเน่าระดับ %d)", self.quizScore, self.quizResultLevel];
+  NSString *pictureURL = [NSString stringWithFormat:@"http://quiz.thechappters.com/images/namnao/result_images/result_%d.jpg",self.quizResultLevel];
+  NSString *link = URLNumNaoAppStore;
   
   // Check if the Facebook app is installed and we can present the share dialog
   FBLinkShareParams *params = [[FBLinkShareParams alloc] init];
   params.link = [NSURL URLWithString:link];
+  params.description = self.quizResultText;
+  params.caption = nil;
+  params.name = scoreStr;
+  params.picture = [NSURL URLWithString:pictureURL];
   
   // If the Facebook app is installed and we can present the share dialog
-  if ([FBDialogs canPresentShareDialogWithParams:params]) {
+  if ([FBDialogs canPresentShareDialogWithParams:params] && NO) {
     
-    // Present share dialog
-    [FBDialogs presentShareDialogWithLink:params.link
-                                     name:scoreStr
-                                  caption:@" "
-                              description:self.quizResultText
-                                  picture:[NSURL URLWithString:pictureURL]
+    [FBDialogs presentShareDialogWithParams:params
                               clientState:nil
                                   handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
                                     if(error) {
@@ -361,10 +362,11 @@ NSInteger const PlayCountForAlert = 5;
                                     }
                                   }];
     
+    
   } else {
     NSMutableDictionary *optionDict = [[NSMutableDictionary alloc] init];
     [optionDict setObject:scoreStr forKey:@"name"];
-    [optionDict setObject:@" " forKey:@"caption"];
+    [optionDict setObject:@"" forKey:@"caption"];
     [optionDict setObject:self.quizResultText forKey:@"description"];
     [optionDict setObject:link forKey:@"link"];
     [optionDict setObject:pictureURL forKey:@"picture"];
