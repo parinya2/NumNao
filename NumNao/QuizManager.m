@@ -59,7 +59,7 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
     prevQuizResultObject = quizResultObject;
   }
   
-  return 0;
+  return quizResultLevel;
 }
 
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore {
@@ -422,8 +422,7 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
   
   switch (quizMode) {
     case NumNaoQuizModeOnAir: {
-      // ZZZ: To be continued
-      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=2";
+      urlString = @"http://quiz.thechappters.com/webservice.php?app_id=1&method=getQuiz&category_id=1";
     } break;
       
     case NumNaoQuizModeRetroCh3: {
