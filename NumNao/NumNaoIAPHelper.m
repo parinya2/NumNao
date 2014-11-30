@@ -31,7 +31,7 @@
 
 - (void)setRetroCh3Purchased:(BOOL)flag {
   if (flag) {
-    [self provideContentForProductIdentifier:self.productIdentifiers[0]];
+    [self provideContentForProductIdentifier:self.productIdentifiers[0] fireNotification:YES];
   }
   self->_retroCh3Purchased = flag;
 }
@@ -44,7 +44,7 @@
 
 - (void)setRetroCh5Purchased:(BOOL)flag {
   if (flag) {
-    [self provideContentForProductIdentifier:self.productIdentifiers[1]];
+    [self provideContentForProductIdentifier:self.productIdentifiers[1] fireNotification:YES];
   }
   self->_retroCh5Purchased = flag;
 }
@@ -57,7 +57,7 @@
 
 - (void)setRetroCh7Purchased:(BOOL)flag {
   if (flag) {
-    [self provideContentForProductIdentifier:self.productIdentifiers[2]];
+    [self provideContentForProductIdentifier:self.productIdentifiers[2] fireNotification:YES];
   }
   self->_retroCh7Purchased = flag;
 }

@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *retroCh3Button;
 @property (strong, nonatomic) IBOutlet UIButton *retroCh5Button;
 @property (strong, nonatomic) IBOutlet UIButton *retroCh7Button;
+@property (strong, nonatomic) IBOutlet UIButton *restorePurchaseButton;
 
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh3LockImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *retroCh5LockImageView;
@@ -33,5 +34,6 @@
 
 - (GADRequest *)createRequest;
 - (IBAction)goToQuiz:(id)sender;
+- (IBAction)restorePurchase:(id)sender;
 
 @end

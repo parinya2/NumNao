@@ -40,7 +40,8 @@ const float LoadNextQuizDelayTime = 0.25;
 @property (strong, nonatomic) NSMutableArray *quizListLevel2;
 @property (strong, nonatomic) NSMutableArray *quizListLevel3;
 @property (strong, nonatomic) UIColor *neutralButtonColor;
-@property (strong, nonatomic) UIColor *selectedButtonColor;
+@property (strong, nonatomic) UIColor *rightButtonColor;
+@property (strong, nonatomic) UIColor *wrongButtonColor;
 @property (strong, nonatomic) QuizManager *quizManager;
 @property (strong, nonatomic) NSTimer *countDownTimer;
 @property (strong, nonatomic) NSTimer *changeQuizTimer;
@@ -185,7 +186,8 @@ const float LoadNextQuizDelayTime = 0.25;
   self.remainingTimeLabel.text = [self stringForRemainingTimeLabel:self.remainingTime];
   
   self.neutralButtonColor = [UIColor colorWithRed:227.0/255.0 green:214.0/255.0 blue:97.0/255.0 alpha:1.0];
-  self.selectedButtonColor = [UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
+  self.rightButtonColor = [UIColor greenColor];//[UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
+  self.wrongButtonColor = [UIColor redColor];
   
   [[QuizManager sharedInstance] loadQuizListFromServer:self.quizMode];
   [[QuizManager sharedInstance] loadQuizResultListFromServer];
@@ -357,23 +359,6 @@ const float LoadNextQuizDelayTime = 0.25;
     self.ans3Button.backgroundColor = self.neutralButtonColor;
     self.ans4Button.backgroundColor = self.neutralButtonColor;
     
-    switch (self.selectedAnswerIndex) {
-      case 1:
-        self.ans1Button.backgroundColor = self.selectedButtonColor;
-        break;
-      case 2:
-        self.ans2Button.backgroundColor = self.selectedButtonColor;
-        break;
-      case 3:
-        self.ans3Button.backgroundColor = self.selectedButtonColor;
-        break;
-      case 4:
-        self.ans4Button.backgroundColor = self.selectedButtonColor;
-        break;
-      default:
-        break;
-    }
-    
     [self checkAnswer];
   }
 }
@@ -381,15 +366,36 @@ const float LoadNextQuizDelayTime = 0.25;
 - (void)checkAnswer {
   // Check whether users selected the correct answer
   self.canChooseAnswer = NO;
+  UIColor *buttonColor = nil;
+  
   if (self.selectedAnswerIndex != 0) {
     if (self.selectedAnswerIndex == self.correctAnswerIndex) {
-      self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
+      //self.correctionImageView.image = [UIImage imageNamed:@"right_icon"];
       self.quizScore++;
       self.scoreLabel.text = [self stringForScoreLabel:self.quizScore];
       self.remainingTime = self.remainingTime + bonusTime;
+      buttonColor = self.rightButtonColor;
     } else {
-      self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];
+      //self.correctionImageView.image = [UIImage imageNamed:@"wrong_icon"];
       self.remainingTime = (self.remainingTime - penaltyTime) < 0 ? 0 : (self.remainingTime - penaltyTime);
+      buttonColor = self.wrongButtonColor;
+    }
+    
+    switch (self.selectedAnswerIndex) {
+      case 1:
+        self.ans1Button.backgroundColor = buttonColor;
+        break;
+      case 2:
+        self.ans2Button.backgroundColor = buttonColor;
+        break;
+      case 3:
+        self.ans3Button.backgroundColor = buttonColor;
+        break;
+      case 4:
+        self.ans4Button.backgroundColor = buttonColor;
+        break;
+      default:
+        break;
     }
     
     if (self.changeQuizTimer && [self.changeQuizTimer isValid]) {

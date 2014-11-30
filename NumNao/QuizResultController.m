@@ -8,6 +8,7 @@
 
 #import "QuizResultController.h"
 #import "QuizSetSelectorController.h"
+#import "QuizRankController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "NumNaoAppDelegate.h"
 #import "NumNaoIAPHelper.h"
@@ -224,6 +225,10 @@ NSInteger const PlayCountForAlert = 5;
     [super didReceiveMemoryWarning];
 }
 
+- (void)dealloc {
+  self.bannerView = nil;
+}
+
 - (IBAction)playAgain:(id)sender {
   [self.navigationController popViewControllerAnimated:YES];
 }
@@ -232,8 +237,11 @@ NSInteger const PlayCountForAlert = 5;
   [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)dealloc {
-  self.bannerView = nil;
+- (IBAction)goToQuizRank:(id)sender {
+  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+  QuizRankController *quizRankController = [storyboard instantiateViewControllerWithIdentifier:@"QuizRank"];
+
+  [self.navigationController pushViewController:quizRankController animated:YES];
 }
 
 - (void)savePlayCount:(NSInteger)playCount {

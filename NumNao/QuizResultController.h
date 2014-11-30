@@ -28,6 +28,7 @@
 - (GADRequest *)createRequest;
 - (IBAction)playAgain:(id)sender;
 - (IBAction)goToMainMenu:(id)sender;
+- (IBAction)goToQuizRank:(id)sender;
 - (IBAction)shareOnFacebook:(id)sender;
 
 @end

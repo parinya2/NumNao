@@ -52,6 +52,7 @@
 		0AD8046B19A43F09007C1857 /* alert_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8046A19A43F09007C1857 /* alert_tone.mp3 */; };
 		0AD8047119A4460D007C1857 /* ominous_sounds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */; };
 		0AD8047319A44A34007C1857 /* bold_valor.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047219A44A34007C1857 /* bold_valor.mp3 */; };
+		0ADA25191A2ACB6F00D4E575 /* QuizRankController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,8 @@
 		0AD8046A19A43F09007C1857 /* alert_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alert_tone.mp3; sourceTree = "<group>"; };
 		0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ominous_sounds.mp3; sourceTree = "<group>"; };
 		0AD8047219A44A34007C1857 /* bold_valor.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bold_valor.mp3; sourceTree = "<group>"; };
+		0ADA25171A2ACB6F00D4E575 /* QuizRankController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizRankController.h; sourceTree = "<group>"; };
+		0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizRankController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,6 +316,8 @@
 				0A2E15C518F931F8002670A1 /* QuizDetailController.m */,
 				0A6EA87F18F97D6500003A3C /* QuizResultController.h */,
 				0A6EA88018F97D6500003A3C /* QuizResultController.m */,
+				0ADA25171A2ACB6F00D4E575 /* QuizRankController.h */,
+				0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */,
 				0A54271318F923BC0041EE60 /* NumNaoViewController.h */,
 				0A54271418F923BC0041EE60 /* NumNaoViewController.m */,
 				0A9B95451950336C00B41B24 /* FBLoginController.h */,
@@ -529,6 +534,7 @@
 				0AAFEE7F19B40EA7002E59C6 /* QuizResultObject.m in Sources */,
 				0A8DEF92199858C00083A4AF /* NumNaoLoadingView.m in Sources */,
 				0A54270B18F923BC0041EE60 /* main.m in Sources */,
+				0ADA25191A2ACB6F00D4E575 /* QuizRankController.m in Sources */,
 				0A2E15CD18F94302002670A1 /* QuizObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,7 +10,9 @@
 #import <StoreKit/StoreKit.h>
 
 NSString * const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
+NSString * const IAPHelperProductRestoredNotification = @"IAPHelperProductRestoredNotification";
 NSString * const IAPHelperProductPurchasedFailedNotification = @"IAPHelperProductPurchasedFailedNotification";
+NSString * const IAPHelperProductRestoredFailedNotification = @"IAPHelperProductRestoredFailedNotification";
 NSString * const RetroCh3ProductPurchasedKey = @"QPRKJFJ";
 NSString * const RetroCh5ProductPurchasedKey = @"MDJVKEO";
 NSString * const RetroCh7ProductPurchasedKey = @"PPVIDUS";
@@ -97,6 +99,33 @@ NSString * const RetroCh7ProductPurchasedKey = @"PPVIDUS";
   [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
 
+- (void)restorePurchasedProducts {
+  [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+}
+
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
+  NSMutableArray *purchasedItemIDs = [[NSMutableArray alloc] init];
+  
+  NSLog(@"received restored transactions: %d", queue.transactions.count);
+  for (SKPaymentTransaction *transaction in queue.transactions)
+  {
+    NSString *productID = transaction.payment.productIdentifier;
+    [purchasedItemIDs addObject:productID];
+  }
+  
+  for (NSString *productID in purchasedItemIDs) {
+    NSLog(@"restored product : %@", productID);
+    [self provideContentForProductIdentifier:productID fireNotification:NO];
+  }
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductRestoredNotification object:nil userInfo:nil];
+}
+
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
+    NSLog(@"restored transactions failed");
+    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductRestoredFailedNotification object:nil userInfo:nil];
+}
+
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
   for (SKPaymentTransaction *transaction in transactions) {
     switch (transaction.transactionState) {
@@ -122,14 +151,14 @@ NSString * const RetroCh7ProductPurchasedKey = @"PPVIDUS";
 - (void)completeTransaction:(SKPaymentTransaction *)transaction {
   NSLog(@"completeTransaction...");
   
-  [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+  [self provideContentForProductIdentifier:transaction.payment.productIdentifier fireNotification:YES];
   [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
 - (void)restoreTransaction:(SKPaymentTransaction *)transaction {
   NSLog(@"restoreTransaction...");
   
-  [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+  [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier fireNotification:YES];
   [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
@@ -144,7 +173,7 @@ NSString * const RetroCh7ProductPurchasedKey = @"PPVIDUS";
   [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 }
 
-- (void)provideContentForProductIdentifier:(NSString *)productIdentifier {
+- (void)provideContentForProductIdentifier:(NSString *)productIdentifier fireNotification:(BOOL)flag {
 
   NSString *productPurchasedKey = @"";
   if ([productIdentifier rangeOfString:@"retroch3"].location != NSNotFound) {

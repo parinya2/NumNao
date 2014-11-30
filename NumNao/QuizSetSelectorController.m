@@ -22,7 +22,9 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinnerView;
 @property (strong, nonatomic) NumNaoLoadingView *loadingView;
 @property (strong, nonatomic) id productDidPurchasedObserver;
+@property (strong, nonatomic) id productDidRestoredObserver;
 @property (strong, nonatomic) id productDidPurchasedFailedObserver;
+@property (strong, nonatomic) id productDidRestoredFailedObserver;
 @property (strong, nonatomic) NSTimer *theNewQuizLabelTimer;
 @property (assign, nonatomic) NSInteger quizMode;
 @property (assign, nonatomic) BOOL quizLabelAnimationGoForward;
@@ -56,6 +58,22 @@
                                   [weakSelf.loadingView removeFromSuperview];
                                 }];
  
+  self.productDidRestoredObserver = [[NSNotificationCenter defaultCenter]
+                                      addObserverForName:IAPHelperProductRestoredNotification
+                                      object:nil
+                                      queue:[NSOperationQueue mainQueue]
+                                      usingBlock:^(NSNotification *note) {
+                                        [weakSelf lockAllButtons:NO];
+                                        [weakSelf renderLockIcon];
+                                        [weakSelf.loadingView removeFromSuperview];
+                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention"
+                                                  message:@"Products restoration completed"
+                                                 delegate:nil
+                                        cancelButtonTitle:@"OK"
+                                        otherButtonTitles: nil];
+                                        [alert show];
+                                      }];
+  
   self.productDidPurchasedFailedObserver = [[NSNotificationCenter defaultCenter]
                                             addObserverForName:IAPHelperProductPurchasedFailedNotification
                                             object:nil
@@ -69,6 +87,22 @@
                                                   delegate:nil
                                                   cancelButtonTitle:@"ตกลงจ้ะ"
                                                   otherButtonTitles: nil];
+                                              [alert show];
+                                            }];
+  
+  self.productDidRestoredFailedObserver = [[NSNotificationCenter defaultCenter]
+                                            addObserverForName:IAPHelperProductRestoredFailedNotification
+                                            object:nil
+                                            queue:[NSOperationQueue mainQueue]
+                                            usingBlock:^(NSNotification *note) {
+                                              [weakSelf lockAllButtons:NO];
+                                              [weakSelf renderLockIcon];
+                                              [weakSelf.loadingView removeFromSuperview];
+                                              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention"
+                                                        message:@"Purchase restoration was cancelled"
+                                                      delegate:nil
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles: nil];
                                               [alert show];
                                             }];
   
@@ -143,7 +177,9 @@
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedObserver];
+  [[NSNotificationCenter defaultCenter] removeObserver:self.productDidRestoredObserver];
   [[NSNotificationCenter defaultCenter] removeObserver:self.productDidPurchasedFailedObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.productDidRestoredFailedObserver];
   self.bannerView = nil;
 }
 
@@ -189,6 +225,7 @@
         if (IAPInstance.products) {
           SKProduct *product = IAPInstance.products[0];
           [self lockAllButtons:YES];
+          self.loadingView = [[NumNaoLoadingView alloc] init];
           [self.view addSubview:self.loadingView];
           [[NumNaoIAPHelper sharedInstance] buyProduct:product];
         } else {
@@ -202,6 +239,7 @@
         if (IAPInstance.products) {
           SKProduct *product = IAPInstance.products[1];
           [self lockAllButtons:YES];
+          self.loadingView = [[NumNaoLoadingView alloc] init];
           [self.view addSubview:self.loadingView];
           [[NumNaoIAPHelper sharedInstance] buyProduct:product];
         } else {
@@ -215,6 +253,7 @@
         if (IAPInstance.products) {
           SKProduct *product = IAPInstance.products[2];
           [self lockAllButtons:YES];
+          self.loadingView = [[NumNaoLoadingView alloc] init];
           [self.view addSubview:self.loadingView];
           [[NumNaoIAPHelper sharedInstance] buyProduct:product];
         } else {
@@ -313,6 +352,13 @@
   }
 }
 
+- (IBAction)restorePurchase:(id)sender {
+  [self lockAllButtons:YES];
+   self.loadingView = [[NumNaoLoadingView alloc] init];
+  [self.view addSubview:self.loadingView];
+  [[NumNaoIAPHelper sharedInstance] restorePurchasedProducts];
+}
+
 - (void)alertSKProductNotReady {
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"ขออภัยนะจ๊ะ"
                                                   message:@"ตอนนี้ระบบกำลังดำเนินการเชื่อมต่อกับ iTune อยู่ รอสัก 2-3 นาทีแล้วลองอีกทีนะจ๊ะ!!"
@@ -373,7 +419,7 @@
 }
 
 - (void)decorateAllButtons {
-  NSArray *gameModeButtons = [NSArray arrayWithObjects: self.onAirButton, self.retroCh3Button, self.retroCh5Button, self.retroCh7Button,nil];
+  NSArray *gameModeButtons = [NSArray arrayWithObjects: self.onAirButton, self.retroCh3Button, self.retroCh5Button, self.retroCh7Button, self.restorePurchaseButton, nil];
   
   for(UIButton *btn in gameModeButtons)
   {
@@ -388,6 +434,15 @@
                           (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                           (id)[[UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f] CGColor],
                           nil];
+    
+    if ([btn isEqual:self.restorePurchaseButton]) {
+      UIColor *grayColor = [UIColor colorWithWhite:150.0f / 255.0f alpha:1.0f];
+      btnGradient.colors = [NSArray arrayWithObjects:
+                            (id)[grayColor CGColor],
+                            (id)[grayColor CGColor],
+                            nil];
+    }
+    
     [btn.layer insertSublayer:btnGradient atIndex:0];
     
     // Round button corners
