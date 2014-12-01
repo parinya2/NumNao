@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -614,10 +615,10 @@
             </objects>
             <point key="canvasLocation" x="1804" y="-287"/>
         </scene>
-        <!--Quiz Rank View Controller-->
+        <!--Quiz Rank Controller-->
         <scene sceneID="hSv-zR-wlr">
             <objects>
-                <viewController storyboardIdentifier="QuizRank" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lLY-3Y-XmY" customClass="QuizRankViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuizRank" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lLY-3Y-XmY" customClass="QuizRankController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bVj-14-Nmo"/>
                         <viewControllerLayoutGuide type="bottom" id="Dpj-bQ-jBc"/>
@@ -626,16 +627,95 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bg2" translatesAutoresizingMaskIntoConstraints="NO" id="qL4-A2-Es7">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="bg2" translatesAutoresizingMaskIntoConstraints="NO" id="ybZ-r6-t94">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="CA9-0w-KO0">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="CA9-0w-KO0">
+                                <rect key="frame" x="0.0" y="86" width="320" height="414"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="QuizRankCell" id="irt-7B-BKB" customClass="QuizRankTableViewCell">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="irt-7B-BKB" id="4a9-41-5GU">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="อันดับ 10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YjL-9i-yhs">
+                                                    <rect key="frame" x="17" y="12" width="69" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="102 คะแนน" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bDh-cc-Aq3">
+                                                    <rect key="frame" x="226" y="13" width="81" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="สมชาย แซ่โง้ว" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vzk-9M-vGt">
+                                                    <rect key="frame" x="94" y="12" width="120" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="bDh-cc-Aq3" firstAttribute="leading" secondItem="vzk-9M-vGt" secondAttribute="trailing" constant="12" id="A9P-f3-JBq"/>
+                                                <constraint firstItem="vzk-9M-vGt" firstAttribute="leading" secondItem="YjL-9i-yhs" secondAttribute="trailing" constant="8" id="BOW-CD-rw6"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="bDh-cc-Aq3" secondAttribute="trailing" constant="5" id="U9l-uP-W0A"/>
+                                                <constraint firstItem="YjL-9i-yhs" firstAttribute="leading" secondItem="4a9-41-5GU" secondAttribute="leadingMargin" constant="9" id="cGN-oE-CRB"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="playerNameLabel" destination="vzk-9M-vGt" id="Gkt-ik-cwP"/>
+                                            <outlet property="rankNoLabel" destination="YjL-9i-yhs" id="cj3-MJ-fEF"/>
+                                            <outlet property="scoreLabel" destination="bDh-cc-Aq3" id="tDn-S3-WPK"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ละครเก่าช่อง 3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l7r-8Q-fEy">
+                                <rect key="frame" x="63" y="45" width="194" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" red="0.8901960784313725" green="0.83921568627450982" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSx-Tx-1lN">
+                                <rect key="frame" x="108" y="513" width="105" height="35"/>
+                                <color key="backgroundColor" red="0.89019607840000003" green="0.83921568629999999" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="HNZ-xQ-B6e"/>
+                                    <constraint firstAttribute="width" constant="105" id="MV3-ge-Z3Z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="ย้อนกลับ">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="goBack:" destination="lLY-3Y-XmY" eventType="touchUpInside" id="13Y-Wq-mIL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BSx-Tx-1lN" firstAttribute="top" secondItem="CA9-0w-KO0" secondAttribute="bottom" constant="13" id="2C6-tR-Eyg"/>
+                            <constraint firstAttribute="height" secondItem="ybZ-r6-t94" secondAttribute="height" id="3al-h9-hjN"/>
+                            <constraint firstAttribute="centerX" secondItem="BSx-Tx-1lN" secondAttribute="centerX" constant="-0.5" id="Hhd-Lu-oz3"/>
+                            <constraint firstAttribute="width" secondItem="ybZ-r6-t94" secondAttribute="width" id="LUR-VG-h1i"/>
+                            <constraint firstAttribute="centerX" secondItem="l7r-8Q-fEy" secondAttribute="centerX" id="dDZ-lc-Nx8"/>
+                            <constraint firstItem="Dpj-bQ-jBc" firstAttribute="top" secondItem="BSx-Tx-1lN" secondAttribute="bottom" constant="20" id="jZM-Es-BSb"/>
+                            <constraint firstAttribute="width" secondItem="CA9-0w-KO0" secondAttribute="width" id="oyO-5D-KPB"/>
+                            <constraint firstItem="CA9-0w-KO0" firstAttribute="top" secondItem="l7r-8Q-fEy" secondAttribute="bottom" constant="14" id="rKI-W1-hau"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zNU-GF-UmX"/>
+                    <connections>
+                        <outlet property="backButton" destination="BSx-Tx-1lN" id="G7y-ya-hJH"/>
+                        <outlet property="quizModeLabel" destination="l7r-8Q-fEy" id="6oQ-5e-YFJ"/>
+                        <outlet property="quizRankTable" destination="CA9-0w-KO0" id="bvc-68-Xpk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E5l-cN-6qG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

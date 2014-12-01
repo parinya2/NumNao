@@ -29,8 +29,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *retroCh5NewQuizLabel;
 @property (strong, nonatomic) IBOutlet UILabel *retroCh7NewQuizLabel;
 
-@property (nonatomic, strong) GADBannerView *bannerView;
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) GADBannerView *bannerView;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
 - (GADRequest *)createRequest;
 - (IBAction)goToQuiz:(id)sender;

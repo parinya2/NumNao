@@ -9,15 +9,19 @@
 #import "QuizManager.h"
 #import "QuizObject.h"
 #import "QuizResultObject.h"
+#import "QuizRankObject.h"
 #import "TBXML.h"
 
 NSString * const QuizManagerDidLoadQuizSuccess = @"QuizManagerDidLoadQuizSuccess";
 NSString * const QuizManagerDidLoadQuizFail = @"QuizManagerDidLoadQuizFail";
+NSString * const QuizManagerDidLoadQuizRankSuccess = @"QuizManagerDidLoadQuizRankSuccess";
+NSString * const QuizManagerDidLoadQuizRankFail = @"QuizManagerDidLoadQuizRankFail";
 NSString * const VersionKeyOnAir = @"VersionKeyOnAir";
 NSString * const VersionKeyRetroCh3 = @"VersionKeyRetroCh3";
 NSString * const VersionKeyRetroCh5 = @"VersionKeyRetroCh5";
 NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
 NSString * const QuizDefaultVersion = @"QuizDefaultVersion";
+NSString * const PlaynerDummyName = @"NumNaoPlayerDummyName";
 NSString * const URLNumNaoAppStore = @"https://itunes.apple.com/th/app/id903714798?mt=8";
 NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
 //NSString * const URLNumNaoAppStore = @"http://bit.ly/numnao";
@@ -88,6 +92,32 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
   }
   
   return resultString;
+}
+
+- (void)loadQuizRankFromServer:(NSInteger)quizMode quizScore:(NSInteger)quizScore {
+  
+  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=%d&score=%d", (quizMode + 1), quizScore];
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  NSLog(@"Start Connecting Async: Quiz Rank");
+  [NSURLConnection
+   sendAsynchronousRequest:urlRequest
+   queue:queue
+   completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+     if (error) {
+       NSLog(@"Error SendAsyncRequest Quiz Rank %@",error.localizedDescription);
+       [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankFail object:nil userInfo:nil];
+     } else {
+       NSLog(@"End Connecting Async: Quiz Rank");
+       
+       NSMutableArray *quizRankList = [self extractQuizRankFromXMLdata:data];
+       self.quizRankList = [quizRankList copy];
+       
+       [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankSuccess object:nil userInfo:nil];
+     }
+   }];
 }
 
 - (void)loadQuizResultListFromServer {
@@ -269,6 +299,57 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
        }
      }];
   }
+}
+
+- (NSMutableArray *)extractQuizRankFromXMLdata:(NSData *)xmlData {
+  NSMutableArray *result = [[NSMutableArray alloc] init];
+  NSError *error;
+  
+  NSString *xmlString = [[NSString alloc] initWithData:xmlData encoding:NSUTF8StringEncoding];
+  
+  TBXML *tbxml = [TBXML newTBXMLWithXMLString:xmlString error:&error];
+  
+  TBXMLElement *rootXMLElement = tbxml.rootXMLElement;
+  
+  if (!rootXMLElement) {
+    return nil;
+  }
+  
+  QuizRankObject *playerRankObject = [[QuizRankObject alloc] init];
+  NSString *playerRankNoStr = [TBXML valueOfAttributeNamed:@"rank_number_of_score" forElement:rootXMLElement];
+  NSString *scoreStr = [TBXML valueOfAttributeNamed:@"score" forElement:rootXMLElement];
+  playerRankObject.rankNo = [playerRankNoStr integerValue];
+  playerRankObject.score = [scoreStr integerValue];
+  playerRankObject.playerName = PlaynerDummyName;
+  playerRankObject.deviceOS = @"ios";
+  playerRankObject.isActivePlayer = YES;
+  
+  TBXMLElement *childXMLElement = [TBXML childElementNamed:@"rank" parentElement:rootXMLElement];
+  while (childXMLElement) {
+    
+    QuizRankObject *quizRankObject = [[QuizRankObject alloc] init];
+    
+    quizRankObject.playerName = [TBXML valueOfAttributeNamed:@"player_name" forElement:childXMLElement];
+    quizRankObject.deviceOS = [TBXML valueOfAttributeNamed:@"device_os" forElement:childXMLElement];
+    
+    NSString *scoreStr = [TBXML valueOfAttributeNamed:@"score" forElement:childXMLElement];
+    NSString *quizModeStr = [TBXML valueOfAttributeNamed:@"category_id" forElement:childXMLElement];
+    NSString *rankNoStr = [TBXML valueOfAttributeNamed:@"no" forElement:childXMLElement];
+    quizRankObject.score = [scoreStr integerValue];
+    quizRankObject.quizMode = [quizModeStr integerValue];
+    quizRankObject.rankNo = [rankNoStr integerValue];
+    quizRankObject.isActivePlayer = NO;
+    
+    playerRankObject.quizMode = [quizModeStr integerValue];
+    
+    [result addObject:quizRankObject];
+    childXMLElement = childXMLElement->nextSibling;
+  }
+  
+  [result addObject:playerRankObject];
+  
+  return result;
+
 }
 
 - (NSMutableArray *)extractQuizResultFromXMLdata:(NSData *)xmlData {

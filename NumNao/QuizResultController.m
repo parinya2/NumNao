@@ -20,16 +20,17 @@
 
 NSString * const PlayCountKey = @"PlayCountKey";
 NSString * const RateAppisVisitedKey = @"RateAppIsVisited";
-NSInteger const PlayCountForAlert = 5;
+NSInteger const PlayCountForAlert = 10;
 
 @interface QuizResultController ()
 
 @property (strong, nonatomic) NSDictionary *backLinkInfo;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
-@property (strong, nonatomic) NSString *quizResultText;;
+@property (strong, nonatomic) NSString *quizResultText;
 @property (weak, nonatomic) UIView *backLinkView;
 @property (weak, nonatomic) UILabel *backLinkLabel;
 @property (assign, nonatomic) NSInteger quizResultLevel;
+@property (strong, nonatomic) NSString *playerName;
 
 @end
 
@@ -63,6 +64,7 @@ NSInteger const PlayCountForAlert = 5;
   [self checkQuizResult];
   
   [self.quizScoreStaticLabel setHidden:YES];
+  self.quizResultText = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,7 +82,9 @@ NSInteger const PlayCountForAlert = 5;
   [super viewDidAppear:animated];
   [[QuizManager sharedInstance] sendQuizResultLogToServerWithQuizMode:self.quizMode
                                                             quizScore:self.quizScore];
-  self.quizResultText = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
+  if (!self.quizResultText) {
+    self.quizResultText = [[QuizManager sharedInstance] quizResultStringForScore:self.quizScore];
+  }
   self.quizResultLevel = [[QuizManager sharedInstance] quizResultLevelForScore:self.quizScore];
   [self.quizResultLabel setText:self.quizResultText];
   self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
@@ -106,12 +110,10 @@ NSInteger const PlayCountForAlert = 5;
       [self saveRateAppisVisited:YES];
       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
     }
+  } else if (alertView.tag == 3) {
+    self.playerName = [[alertView textFieldAtIndex:0] text];
+    [self performSegueWithIdentifier:@"QuizResultToQuizRankSegue" sender:self];
   }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-  [super viewWillDisappear:animated];
-  [self.audioPlayer stop];
 }
 
 - (void)setUpAudioPlayer {
@@ -120,6 +122,18 @@ NSInteger const PlayCountForAlert = 5;
   self.audioPlayer.volume = 1.0;
   self.audioPlayer.numberOfLoops = -1;
   [self.audioPlayer play];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"QuizResultToQuizRankSegue"]) {
+    QuizRankController *quizRankController = [segue destinationViewController];
+    quizRankController.audioPlayer = self.audioPlayer;
+    quizRankController.quizMode = self.quizMode;
+    quizRankController.playerScore = self.quizScore;
+    quizRankController.playerName = self.playerName;
+  } else {
+    [self.audioPlayer stop];
+  }
 }
 
 - (GADRequest *)createRequest {
@@ -230,18 +244,24 @@ NSInteger const PlayCountForAlert = 5;
 }
 
 - (IBAction)playAgain:(id)sender {
+  [self.audioPlayer stop];
   [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)goToMainMenu:(id)sender {
+  [self.audioPlayer stop];
   [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)goToQuizRank:(id)sender {
-  UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-  QuizRankController *quizRankController = [storyboard instantiateViewControllerWithIdentifier:@"QuizRank"];
-
-  [self.navigationController pushViewController:quizRankController animated:YES];
+  
+  UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ช้าก่อน" message:@"รบกวนเธอช่วยพิมพ์ชื่อตัวเองด้วยนะจ๊ะ" delegate:self cancelButtonTitle:@"ตกลงจ้ะ" otherButtonTitles:nil];
+  alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+  UITextField * alertTextField = [alert textFieldAtIndex:0];
+  alertTextField.keyboardType = UIKeyboardTypeDefault;
+  alertTextField.placeholder = @"กรอกชื่อเธอในนี้นะ";
+  alert.tag = 3;
+  [alert show];
 }
 
 - (void)savePlayCount:(NSInteger)playCount {

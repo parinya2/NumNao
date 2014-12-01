@@ -10,8 +10,11 @@
 
 extern NSString * const QuizManagerDidLoadQuizSuccess;
 extern NSString * const QuizManagerDidLoadQuizFail;
+extern NSString * const QuizManagerDidLoadQuizRankSuccess;
+extern NSString * const QuizManagerDidLoadQuizRankFail;
 extern NSString * const URLNumNaoAppStore;
 extern NSString * const URLNumNaoFacebookPage;
+extern NSString * const PlayerDummyName;
 
 typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
   NumNaoQuizModeOnAir = 0,
@@ -27,6 +30,7 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 @property (strong, nonatomic) NSArray *quizListRetroCh5;
 @property (strong, nonatomic) NSArray *quizListRetroCh7;
 @property (strong, nonatomic) NSArray *quizResultList;
+@property (strong, nonatomic) NSArray *quizRankList;
 
 @property (strong, nonatomic) NSData *xmlDataOnAir;
 @property (strong, nonatomic) NSData *xmlDataRetroCh3;
@@ -48,6 +52,7 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 - (NSString *)quizResultStringForScore:(NSInteger)quizScore;
 - (NSInteger)quizResultLevelForScore:(NSInteger)quizScore;
 - (void)loadQuizListFromServer:(NSInteger)quizMode;
+- (void)loadQuizRankFromServer:(NSInteger)quizMode quizScore:(NSInteger)quizScore;
 - (void)loadQuizResultListFromServer;
 - (void)sendQuizResultLogToServerWithQuizMode:(NSInteger)quizMode
                                     quizScore:(NSInteger)quizScore;

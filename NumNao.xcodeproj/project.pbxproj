@@ -53,6 +53,8 @@
 		0AD8047119A4460D007C1857 /* ominous_sounds.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047019A4460D007C1857 /* ominous_sounds.mp3 */; };
 		0AD8047319A44A34007C1857 /* bold_valor.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0AD8047219A44A34007C1857 /* bold_valor.mp3 */; };
 		0ADA25191A2ACB6F00D4E575 /* QuizRankController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */; };
+		0ADA251C1A2AE2A000D4E575 /* QuizRankTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADA251B1A2AE2A000D4E575 /* QuizRankTableViewCell.m */; };
+		0ADA25271A2B110300D4E575 /* QuizRankObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ADA25261A2B110300D4E575 /* QuizRankObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +159,10 @@
 		0AD8047219A44A34007C1857 /* bold_valor.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bold_valor.mp3; sourceTree = "<group>"; };
 		0ADA25171A2ACB6F00D4E575 /* QuizRankController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizRankController.h; sourceTree = "<group>"; };
 		0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizRankController.m; sourceTree = "<group>"; };
+		0ADA251A1A2AE2A000D4E575 /* QuizRankTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizRankTableViewCell.h; sourceTree = "<group>"; };
+		0ADA251B1A2AE2A000D4E575 /* QuizRankTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizRankTableViewCell.m; sourceTree = "<group>"; };
+		0ADA25251A2B110300D4E575 /* QuizRankObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuizRankObject.h; sourceTree = "<group>"; };
+		0ADA25261A2B110300D4E575 /* QuizRankObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuizRankObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +211,8 @@
 				0A2E15CC18F94302002670A1 /* QuizObject.m */,
 				0AAFEE7D19B40EA7002E59C6 /* QuizResultObject.h */,
 				0AAFEE7E19B40EA7002E59C6 /* QuizResultObject.m */,
+				0ADA25251A2B110300D4E575 /* QuizRankObject.h */,
+				0ADA25261A2B110300D4E575 /* QuizRankObject.m */,
 				0AAD5A091991D01600880E93 /* IAPHelper.h */,
 				0AAD5A0A1991D01600880E93 /* IAPHelper.m */,
 				0AA1F9441993135C003336D2 /* NumNaoIAPHelper.h */,
@@ -318,6 +326,8 @@
 				0A6EA88018F97D6500003A3C /* QuizResultController.m */,
 				0ADA25171A2ACB6F00D4E575 /* QuizRankController.h */,
 				0ADA25181A2ACB6F00D4E575 /* QuizRankController.m */,
+				0ADA251A1A2AE2A000D4E575 /* QuizRankTableViewCell.h */,
+				0ADA251B1A2AE2A000D4E575 /* QuizRankTableViewCell.m */,
 				0A54271318F923BC0041EE60 /* NumNaoViewController.h */,
 				0A54271418F923BC0041EE60 /* NumNaoViewController.m */,
 				0A9B95451950336C00B41B24 /* FBLoginController.h */,
@@ -529,6 +539,8 @@
 				0A2E15C618F931F8002670A1 /* QuizDetailController.m in Sources */,
 				0A9B95471950336C00B41B24 /* FBLoginController.m in Sources */,
 				0A54270F18F923BC0041EE60 /* NumNaoAppDelegate.m in Sources */,
+				0ADA25271A2B110300D4E575 /* QuizRankObject.m in Sources */,
+				0ADA251C1A2AE2A000D4E575 /* QuizRankTableViewCell.m in Sources */,
 				0AA1F9461993135C003336D2 /* NumNaoIAPHelper.m in Sources */,
 				0A6EA88118F97D6500003A3C /* QuizResultController.m in Sources */,
 				0AAFEE7F19B40EA7002E59C6 /* QuizResultObject.m in Sources */,

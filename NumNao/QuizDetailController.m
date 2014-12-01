@@ -79,70 +79,6 @@ const float LoadNextQuizDelayTime = 0.25;
 
   [self enableNextButton:NO];
   
-  __typeof(self) __weak weakSelf = self;
-  
-  self.quizManagerDidLoadQuizSuccessObserver =
-  [[NSNotificationCenter defaultCenter]
-   addObserverForName:QuizManagerDidLoadQuizSuccess
-   object:nil
-   queue:[NSOperationQueue mainQueue]
-   usingBlock:^(NSNotification *note) {
-     QuizManager *quizManager = [QuizManager sharedInstance];
-     switch (weakSelf.quizMode) {
-       case NumNaoQuizModeOnAir: {
-         weakSelf.quizList = quizManager.quizListOnAir;
-       } break;
-
-       case NumNaoQuizModeRetroCh3: {
-         weakSelf.quizList = quizManager.quizListRetroCh3;
-       } break;
-
-       case NumNaoQuizModeRetroCh5: {
-         weakSelf.quizList = quizManager.quizListRetroCh5;
-       } break;
-         
-       case NumNaoQuizModeRetroCh7: {
-         weakSelf.quizList = quizManager.quizListRetroCh7;
-       } break;
-         
-       default:
-         break;
-     }
-     [weakSelf.loadingView removeFromSuperview];
-     [weakSelf hideEverything:NO];
-     if (weakSelf.quizList) {
-       [weakSelf extractQuizByLevel];
-       QuizObject *quizObject = [weakSelf randomQuiz];
-       [weakSelf renderPageWithQuizObject:quizObject quizNo:weakSelf.quizCounter+1];
-       [weakSelf enableNextButton:NO];
-       
-       if (!weakSelf.countDownTimer) {
-         weakSelf.countDownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
-                                                       target:self
-                                                     selector:@selector(decreaseRemainingTime)
-                                                     userInfo:nil
-                                                      repeats:YES];
-       }
-     }
-   }];
-  
-  self.quizManagerDidLoadQuizFailObserver =
-  [[NSNotificationCenter defaultCenter]
-   addObserverForName:QuizManagerDidLoadQuizFail
-   object:nil
-   queue:[NSOperationQueue mainQueue]
-   usingBlock:^(NSNotification *note) {
-     [weakSelf.loadingView removeFromSuperview];
-     [weakSelf hideEverything:NO];
-     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
-                                                     message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
-                                                    delegate:self
-                                           cancelButtonTitle:@"ตกลงจ้ะ"
-                                           otherButtonTitles:nil];
-     alert.tag = 100;
-     [alert show];
-   }];
-  
   [self setUpAudioPlayer];
   
   float yPos = self.ans2Button.frame.origin.y + self.ans2Button.frame.size.height - 5;
@@ -189,6 +125,71 @@ const float LoadNextQuizDelayTime = 0.25;
   self.rightButtonColor = [UIColor greenColor];//[UIColor colorWithRed:180.0/255.0 green:223.0/255.0 blue:69.0/255.0 alpha:1.0];
   self.wrongButtonColor = [UIColor redColor];
   
+  __typeof(self) __weak weakSelf = self;
+  
+  self.quizManagerDidLoadQuizSuccessObserver =
+  [[NSNotificationCenter defaultCenter]
+   addObserverForName:QuizManagerDidLoadQuizSuccess
+   object:nil
+   queue:[NSOperationQueue mainQueue]
+   usingBlock:^(NSNotification *note) {
+     QuizManager *quizManager = [QuizManager sharedInstance];
+     switch (weakSelf.quizMode) {
+       case NumNaoQuizModeOnAir: {
+         weakSelf.quizList = quizManager.quizListOnAir;
+       } break;
+         
+       case NumNaoQuizModeRetroCh3: {
+         weakSelf.quizList = quizManager.quizListRetroCh3;
+       } break;
+         
+       case NumNaoQuizModeRetroCh5: {
+         weakSelf.quizList = quizManager.quizListRetroCh5;
+       } break;
+         
+       case NumNaoQuizModeRetroCh7: {
+         weakSelf.quizList = quizManager.quizListRetroCh7;
+       } break;
+         
+       default:
+         break;
+     }
+     [weakSelf.loadingView removeFromSuperview];
+     [weakSelf hideEverything:NO];
+     if (weakSelf.quizList) {
+       [weakSelf extractQuizByLevel];
+       QuizObject *quizObject = [weakSelf randomQuiz];
+       [weakSelf renderPageWithQuizObject:quizObject quizNo:weakSelf.quizCounter+1];
+       [weakSelf enableNextButton:NO];
+       
+       if (!weakSelf.countDownTimer) {
+         weakSelf.countDownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                                    target:self
+                                                                  selector:@selector(decreaseRemainingTime)
+                                                                  userInfo:nil
+                                                                   repeats:YES];
+       }
+     }
+   }];
+  
+  self.quizManagerDidLoadQuizFailObserver =
+  [[NSNotificationCenter defaultCenter]
+   addObserverForName:QuizManagerDidLoadQuizFail
+   object:nil
+   queue:[NSOperationQueue mainQueue]
+   usingBlock:^(NSNotification *note) {
+     [weakSelf.loadingView removeFromSuperview];
+     [weakSelf hideEverything:NO];
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"เกิดข้อผิดพลาด"
+                                                     message:@"เธอต้องต่อ internet ก่อนนะถึงจะเล่นได้น่ะ แต่ถ้ายังเล่นไม่ได้อีก แสดงว่าเซิร์ฟเวอร์มีปัญหาน่ะ รอสักพักแล้วลองใหม่นะ"
+                                                    delegate:self
+                                           cancelButtonTitle:@"ตกลงจ้ะ"
+                                           otherButtonTitles:nil];
+     alert.tag = 100;
+     [alert show];
+   }];
+
+  
   [[QuizManager sharedInstance] loadQuizListFromServer:self.quizMode];
   [[QuizManager sharedInstance] loadQuizResultListFromServer];
 }
@@ -203,6 +204,9 @@ const float LoadNextQuizDelayTime = 0.25;
   
   [self.changeQuizTimer invalidate];
   self.changeQuizTimer = nil;
+  
+  [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizSuccessObserver];
+  [[NSNotificationCenter defaultCenter] removeObserver:self.quizManagerDidLoadQuizFailObserver];
 }
 
 - (void)dealloc {
