@@ -65,6 +65,11 @@ const NSInteger QuizRankDisplayCount = 10;
      [weakSelf hideEverything:NO];
      
      [weakSelf.quizRankTable reloadData];
+     [weakSelf scrollToPlayerRank];
+     
+     if (weakSelf.needSubmitScore) {
+       [[QuizManager sharedInstance] sendQuizRankToServerWithQuizMode:weakSelf.quizMode quizScore:weakSelf.playerScore playerName:weakSelf.playerName];
+     }
    }];
   
   self.quizManagerDidLoadQuizRankFailObserver =
@@ -85,8 +90,6 @@ const NSInteger QuizRankDisplayCount = 10;
    }];
   
   [[QuizManager sharedInstance] loadQuizRankFromServer:self.quizMode quizScore:self.playerScore];
-  
-//   [self.quizRankTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:10 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)dealloc {
@@ -112,6 +115,20 @@ const NSInteger QuizRankDisplayCount = 10;
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 
+}
+
+- (void)scrollToPlayerRank {
+  if ([self.quizRankTable numberOfRowsInSection:0] > self.quizRankList.count) {
+    return;
+  }
+  
+  __block NSInteger playerRankIndex = 0;
+  [self.quizRankList enumerateObjectsUsingBlock:^(QuizRankObject *obj, NSUInteger idx, BOOL *stop) {
+    if (obj.isActivePlayer) {
+      playerRankIndex = idx;
+    }
+  }];
+  [self.quizRankTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:playerRankIndex inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -144,12 +161,14 @@ const NSInteger QuizRankDisplayCount = 10;
 }
 
 - (void)rearrangeQuizRankList {
-
-  NSArray *scoreList = [self.quizRankList valueForKey:@"score"];
+  NSString *targetPlayerName = nil;
+  NSInteger targetPlayerScore = -1;
   
   for (QuizRankObject *quizRankObj in self.quizRankList) {
     if (quizRankObj.isActivePlayer) {
       quizRankObj.playerName = self.playerName;
+      targetPlayerName = self.playerName;
+      targetPlayerScore = self.playerScore;
     }
 
     NSPredicate *scorePredicate = [NSPredicate predicateWithFormat:@"score > %d", quizRankObj.score];
@@ -159,6 +178,20 @@ const NSInteger QuizRankDisplayCount = 10;
     }
   }
   
+  // Remove duplicated quiz rank
+  NSIndexSet *passingIndex = [self.quizRankList indexesOfObjectsPassingTest:^BOOL(QuizRankObject *obj, NSUInteger idx, BOOL *stop) {
+    if ([targetPlayerName isEqualToString:obj.playerName] &&
+        targetPlayerScore == obj.score && !obj.isActivePlayer) {
+      return NO;
+    } else {
+      return YES;
+    }
+  }];
+  
+  NSArray *noDuplicateQuizRankList = [self.quizRankList objectsAtIndexes:passingIndex];
+  self.quizRankList = [noDuplicateQuizRankList copy];
+  
+  // Sort by score
   NSArray *sortedQuizRankList = [self.quizRankList sortedArrayUsingComparator:^NSComparisonResult(QuizRankObject *obj1, QuizRankObject *obj2) {
     if (obj1.score > obj2.score) {
       return NSOrderedAscending;

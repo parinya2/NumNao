@@ -18,6 +18,7 @@
 @property (assign, nonatomic) NSInteger quizMode;
 @property (assign, nonatomic) NSInteger playerScore;
 @property (strong, nonatomic) NSString *playerName;
+@property (assign, nonatomic) BOOL needSubmitScore;
 
 - (IBAction)goBack:(id)sender;
 @end

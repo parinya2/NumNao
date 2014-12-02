@@ -96,7 +96,7 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
 
 - (void)loadQuizRankFromServer:(NSInteger)quizMode quizScore:(NSInteger)quizScore {
   
-  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=%d&score=%d", (quizMode + 1), quizScore];
+  NSString *urlString = [self urlStringQuizRankFromQuizMode:quizMode quizScore:quizScore];
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
@@ -527,6 +527,35 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
   return urlString;
 }
 
+- (NSString *)urlStringQuizRankFromQuizMode:(NSInteger)quizMode quizScore:(NSInteger) quizScore{
+  NSString *urlString = nil;
+  
+  switch (quizMode) {
+    case NumNaoQuizModeOnAir: {
+      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=1&score=%d", quizScore];
+    } break;
+      
+    case NumNaoQuizModeRetroCh3: {
+      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=2&score=%d", quizScore];
+    } break;
+      
+    case NumNaoQuizModeRetroCh5: {
+      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=3&score=%d", quizScore];
+    } break;
+      
+    case NumNaoQuizModeRetroCh7: {
+      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=4&score=%d", quizScore];
+    } break;
+      
+    default: {
+      NSLog(@"Unknown quizRank");
+      return nil;
+    } break;
+  }
+  
+  return urlString;
+}
+
 - (NSArray *)mockQuizList {
   NSMutableArray *result = [[NSMutableArray alloc] init];
   
@@ -572,7 +601,7 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
 - (void)sendQuizResultLogToServerWithQuizMode:(NSInteger)quizMode
                                     quizScore:(NSInteger)quizScore {
   NSString *UUID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertLog&device_id=%@&player_name=no_name&category_id=%d&score=%d", UUID, (quizMode + 1),quizScore];
+  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertLog&device_id=%@&player_name=no_name&category_id=%d&score=%d&device_os=ios", UUID, (quizMode + 1),quizScore];
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
@@ -585,6 +614,26 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
        NSLog(@"SendResultLogToServer error %@",error.localizedDescription);
      } else {
        NSLog(@"SendResultLogToServer success");
+     }
+   }];
+}
+
+- (void)sendQuizRankToServerWithQuizMode:(NSInteger)quizMode
+                                    quizScore:(NSInteger)quizScore
+                              playerName:(NSString *)playerName {
+  NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertRank&player_name=%@&category_id=%d&score=%d&device_os=ios", playerName, (quizMode + 1),quizScore];
+  NSURL *url = [NSURL URLWithString:urlString];
+  NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  [NSURLConnection
+   sendAsynchronousRequest:urlRequest
+   queue:queue
+   completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+     if (error) {
+       NSLog(@"SendQuizRankToServer error %@",error.localizedDescription);
+     } else {
+       NSLog(@"SendQuizRankToServer success");
      }
    }];
 }

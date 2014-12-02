@@ -31,6 +31,7 @@ NSInteger const PlayCountForAlert = 10;
 @property (weak, nonatomic) UILabel *backLinkLabel;
 @property (assign, nonatomic) NSInteger quizResultLevel;
 @property (strong, nonatomic) NSString *playerName;
+@property (assign, nonatomic) BOOL needSubmitScore;
 
 @end
 
@@ -65,6 +66,7 @@ NSInteger const PlayCountForAlert = 10;
   
   [self.quizScoreStaticLabel setHidden:YES];
   self.quizResultText = nil;
+  self.needSubmitScore = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -112,6 +114,7 @@ NSInteger const PlayCountForAlert = 10;
     }
   } else if (alertView.tag == 3) {
     self.playerName = [[alertView textFieldAtIndex:0] text];
+    self.needSubmitScore = YES;
     [self performSegueWithIdentifier:@"QuizResultToQuizRankSegue" sender:self];
   }
 }
@@ -131,6 +134,7 @@ NSInteger const PlayCountForAlert = 10;
     quizRankController.quizMode = self.quizMode;
     quizRankController.playerScore = self.quizScore;
     quizRankController.playerName = self.playerName;
+    quizRankController.needSubmitScore = self.needSubmitScore;
   } else {
     [self.audioPlayer stop];
   }
@@ -255,13 +259,18 @@ NSInteger const PlayCountForAlert = 10;
 
 - (IBAction)goToQuizRank:(id)sender {
   
-  UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ช้าก่อน" message:@"รบกวนเธอช่วยพิมพ์ชื่อตัวเองด้วยนะจ๊ะ" delegate:self cancelButtonTitle:@"ตกลงจ้ะ" otherButtonTitles:nil];
-  alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-  UITextField * alertTextField = [alert textFieldAtIndex:0];
-  alertTextField.keyboardType = UIKeyboardTypeDefault;
-  alertTextField.placeholder = @"กรอกชื่อเธอในนี้นะ";
-  alert.tag = 3;
-  [alert show];
+  if (self.playerName) {
+    self.needSubmitScore = NO;
+    [self performSegueWithIdentifier:@"QuizResultToQuizRankSegue" sender:self];
+  } else {
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ช้าก่อน" message:@"รบกวนเธอช่วยพิมพ์ชื่อตัวเองด้วยนะจ๊ะ" delegate:self cancelButtonTitle:@"ตกลงจ้ะ" otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField * alertTextField = [alert textFieldAtIndex:0];
+    alertTextField.keyboardType = UIKeyboardTypeDefault;
+    alertTextField.placeholder = @"กรอกชื่อเธอในนี้นะ";
+    alert.tag = 3;
+    [alert show];
+  }
 }
 
 - (void)savePlayCount:(NSInteger)playCount {
