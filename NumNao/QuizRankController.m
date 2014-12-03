@@ -144,15 +144,27 @@ const NSInteger QuizRankDisplayCount = 10;
   NSInteger idx = indexPath.row;
   if (idx < self.quizRankList.count) {
     QuizRankObject *quizRankObject = self.quizRankList[idx];
-    cell.rankNoLabel.text = [NSString stringWithFormat:@"อันดับ %zd", quizRankObject.rankNo];
+    cell.rankNoLabel.text = [NSString stringWithFormat:@"%zd", quizRankObject.rankNo];
     cell.playerNameLabel.text = quizRankObject.playerName;
-    cell.scoreLabel.text = [NSString stringWithFormat:@"%zd คะแนน", quizRankObject.score];
+    cell.scoreLabel.text = [NSString stringWithFormat:@"%zd", quizRankObject.score];
+    
+    if ([quizRankObject.deviceOS isEqualToString:@"android"]) {
+      cell.deviceOSImageView.image = [UIImage imageNamed:@"android_logo"];
+    } else if ([quizRankObject.deviceOS isEqualToString:@"ios"]) {
+      cell.deviceOSImageView.image = [UIImage imageNamed:@"apple_logo"];
+    } else {
+      cell.deviceOSImageView.image = nil;
+    }
     
     if (quizRankObject.isActivePlayer) {
       UIColor *yellowColor = [UIColor colorWithRed:227.0f / 255.0f green:214.0f / 255.0f blue:97.0f / 255.0f alpha:1.0f];
       cell.rankNoLabel.textColor = yellowColor;
       cell.playerNameLabel.textColor = yellowColor;
       cell.scoreLabel.textColor = yellowColor;
+    } else {
+      cell.rankNoLabel.textColor = [UIColor whiteColor];
+      cell.playerNameLabel.textColor = [UIColor whiteColor];
+      cell.scoreLabel.textColor = [UIColor whiteColor];
     }
   }
 
@@ -177,19 +189,6 @@ const NSInteger QuizRankDisplayCount = 10;
       quizRankObj.rankNo = greaterScoreList.count + 1;
     }
   }
-  
-  // Remove duplicated quiz rank
-  NSIndexSet *passingIndex = [self.quizRankList indexesOfObjectsPassingTest:^BOOL(QuizRankObject *obj, NSUInteger idx, BOOL *stop) {
-    if ([targetPlayerName isEqualToString:obj.playerName] &&
-        targetPlayerScore == obj.score && !obj.isActivePlayer) {
-      return NO;
-    } else {
-      return YES;
-    }
-  }];
-  
-  NSArray *noDuplicateQuizRankList = [self.quizRankList objectsAtIndexes:passingIndex];
-  self.quizRankList = [noDuplicateQuizRankList copy];
   
   // Sort by score
   NSArray *sortedQuizRankList = [self.quizRankList sortedArrayUsingComparator:^NSComparisonResult(QuizRankObject *obj1, QuizRankObject *obj2) {
@@ -223,12 +222,26 @@ const NSInteger QuizRankDisplayCount = 10;
   // Apply a 1 pixel, black border around Buy Button
   [backBtnLayer setBorderWidth:1.0f];
   [backBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
+  
+  switch (self.quizMode) {
+    case NumNaoQuizModeOnAir: self.quizModeLabel.text = @"ละครออนแอร์"; break;
+    case NumNaoQuizModeRetroCh3: self.quizModeLabel.text = @"ละครเก่าช่อง 3"; break;
+    case NumNaoQuizModeRetroCh5: self.quizModeLabel.text = @"ละครเก่าช่อง 5"; break;
+    case NumNaoQuizModeRetroCh7: self.quizModeLabel.text = @"ละครเก่าช่อง 7"; break;
+    default:
+      break;
+  }
+
 }
 
 - (void)hideEverything:(BOOL)flag {
   [self.quizRankTable setHidden:flag];
   [self.backButton setHidden:flag];
   [self.quizModeLabel setHidden:flag];
+  [self.quizRankLabel setHidden:flag];
+  [self.playerNameLabel setHidden:flag];
+  [self.playerScoreLabel setHidden:flag];
+  [self.deviceOSLabel setHidden:flag];
 }
 
 @end

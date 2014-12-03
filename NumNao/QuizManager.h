@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 @property (strong, nonatomic) NSData *xmlDataRetroCh5;
 @property (strong, nonatomic) NSData *xmlDataRetroCh7;
 @property (strong, nonatomic) NSData *xmlDataQuizResult;
+@property (strong, nonatomic) NSData *xmlDataQuizRank;
 
 @property (assign, nonatomic, getter = isTheNewOnAirAvailable) BOOL theNewOnAirAvailable;
 @property (assign, nonatomic, getter = isTheNewRetroCh3Available) BOOL theNewRetroCh3Available;

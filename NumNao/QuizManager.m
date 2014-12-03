@@ -96,28 +96,41 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
 
 - (void)loadQuizRankFromServer:(NSInteger)quizMode quizScore:(NSInteger)quizScore {
   
+  BOOL cacheAvailable = NO;
+  if (self.xmlDataQuizRank) {
+    cacheAvailable = YES;
+  }
+  
   NSString *urlString = [self urlStringQuizRankFromQuizMode:quizMode quizScore:quizScore];
   NSURL *url = [NSURL URLWithString:urlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
   
-  NSLog(@"Start Connecting Async: Quiz Rank");
-  [NSURLConnection
-   sendAsynchronousRequest:urlRequest
-   queue:queue
-   completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-     if (error) {
-       NSLog(@"Error SendAsyncRequest Quiz Rank %@",error.localizedDescription);
-       [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankFail object:nil userInfo:nil];
-     } else {
-       NSLog(@"End Connecting Async: Quiz Rank");
-       
-       NSMutableArray *quizRankList = [self extractQuizRankFromXMLdata:data];
-       self.quizRankList = [quizRankList copy];
-       
-       [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankSuccess object:nil userInfo:nil];
-     }
-   }];
+  if (cacheAvailable) {
+    NSMutableArray *quizRankList = [self extractQuizRankFromXMLdata:self.xmlDataQuizRank];
+    self.quizRankList = [quizRankList copy];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankSuccess object:nil userInfo:nil];
+  } else {
+    NSLog(@"Start Connecting Async: Quiz Rank");
+    [NSURLConnection
+     sendAsynchronousRequest:urlRequest
+     queue:queue
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+       if (error) {
+         NSLog(@"Error SendAsyncRequest Quiz Rank %@",error.localizedDescription);
+         [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankFail object:nil userInfo:nil];
+       } else {
+         NSLog(@"End Connecting Async: Quiz Rank");
+         
+         NSMutableArray *quizRankList = [self extractQuizRankFromXMLdata:data];
+         self.quizRankList = [quizRankList copy];
+         self.xmlDataQuizRank = [data copy];
+         
+         [[NSNotificationCenter defaultCenter] postNotificationName:QuizManagerDidLoadQuizRankSuccess object:nil userInfo:nil];
+       }
+     }];
+  }
 }
 
 - (void)loadQuizResultListFromServer {
@@ -622,7 +635,8 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
                                     quizScore:(NSInteger)quizScore
                               playerName:(NSString *)playerName {
   NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertRank&player_name=%@&category_id=%d&score=%d&device_os=ios", playerName, (quizMode + 1),quizScore];
-  NSURL *url = [NSURL URLWithString:urlString];
+  NSString *properUrlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  NSURL *url = [NSURL URLWithString:properUrlString];
   NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
   

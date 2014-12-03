@@ -21,6 +21,7 @@
 NSString * const PlayCountKey = @"PlayCountKey";
 NSString * const RateAppisVisitedKey = @"RateAppIsVisited";
 NSInteger const PlayCountForAlert = 10;
+NSInteger const PlayerNameMaxLength = 40;
 
 @interface QuizResultController ()
 
@@ -113,7 +114,11 @@ NSInteger const PlayCountForAlert = 10;
       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
     }
   } else if (alertView.tag == 3) {
-    self.playerName = [[alertView textFieldAtIndex:0] text];
+    NSString *nameText = [[alertView textFieldAtIndex:0] text];
+    if (nameText.length > PlayerNameMaxLength) {
+      nameText = [nameText substringToIndex:PlayerNameMaxLength];
+    }
+    self.playerName = nameText;
     self.needSubmitScore = YES;
     [self performSegueWithIdentifier:@"QuizResultToQuizRankSegue" sender:self];
   }
@@ -249,11 +254,15 @@ NSInteger const PlayCountForAlert = 10;
 
 - (IBAction)playAgain:(id)sender {
   [self.audioPlayer stop];
+  [QuizManager sharedInstance].xmlDataQuizRank = nil;
+  [QuizManager sharedInstance].quizRankList = nil;
   [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)goToMainMenu:(id)sender {
   [self.audioPlayer stop];
+  [QuizManager sharedInstance].xmlDataQuizRank = nil;
+  [QuizManager sharedInstance].quizRankList = nil;
   [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -266,6 +275,7 @@ NSInteger const PlayCountForAlert = 10;
     UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ช้าก่อน" message:@"รบกวนเธอช่วยพิมพ์ชื่อตัวเองด้วยนะจ๊ะ" delegate:self cancelButtonTitle:@"ตกลงจ้ะ" otherButtonTitles:nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     UITextField * alertTextField = [alert textFieldAtIndex:0];
+
     alertTextField.keyboardType = UIKeyboardTypeDefault;
     alertTextField.placeholder = @"กรอกชื่อเธอในนี้นะ";
     alert.tag = 3;

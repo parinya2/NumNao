@@ -13,5 +13,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *rankNoLabel;
 @property (strong, nonatomic) IBOutlet UILabel *playerNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *deviceOSImageView;
 
 @end

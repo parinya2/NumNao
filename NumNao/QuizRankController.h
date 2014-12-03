@@ -14,6 +14,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *quizRankTable;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UILabel *quizModeLabel;
+@property (strong, nonatomic) IBOutlet UILabel *quizRankLabel;
+@property (strong, nonatomic) IBOutlet UILabel *playerNameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *playerScoreLabel;
+@property (strong, nonatomic) IBOutlet UILabel *deviceOSLabel;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (assign, nonatomic) NSInteger quizMode;
 @property (assign, nonatomic) NSInteger playerScore;
