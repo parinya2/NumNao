@@ -608,6 +608,7 @@
                         <outlet property="quizScoreLabel" destination="DON-qT-IXl" id="EW0-jo-kk4"/>
                         <outlet property="quizScoreStaticLabel" destination="bhu-UZ-ynJ" id="CSq-ZZ-ffl"/>
                         <outlet property="shareFacebookButton" destination="Sd8-OX-nJd" id="3OI-6N-OX5"/>
+                        <outlet property="submitScoreButton" destination="yJs-1p-htD" id="KU8-yg-dh4"/>
                         <segue destination="lLY-3Y-XmY" kind="push" identifier="QuizResultToQuizRankSegue" id="Xfv-H8-Pf7"/>
                     </connections>
                 </viewController>

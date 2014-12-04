@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "QuizManager.h"
 #import "GADBannerView.h"
+#import "GADInterstitial.h"
 
-@interface QuizResultController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate> {
+@interface QuizResultController : UIViewController <UIAlertViewDelegate, GADBannerViewDelegate, GADInterstitialDelegate> {
   GADBannerView *bannerView_;
 }
 
@@ -23,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *shareFacebookButton;
 @property (strong, nonatomic) IBOutlet UIButton *playAgainButton;
 @property (strong, nonatomic) IBOutlet UIButton *backToMenuButton;
+@property (strong, nonatomic) IBOutlet UIButton *submitScoreButton;
 @property (strong, nonatomic) GADBannerView *bannerView;
 
 - (GADRequest *)createRequest;

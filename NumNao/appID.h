@@ -9,6 +9,6 @@
 #ifndef NumNao_appID_h
 #define NumNao_appID_h
 
-#define MyAdUnitID @"ca-app-pub-6644069677213041/5698146413";
-
+#define MyAdUnitID_Banner @"ca-app-pub-6644069677213041/5698146413";
+#define MyAdUnitID_Interstitial @"ca-app-pub-6644069677213041/5940842816";
 #endif

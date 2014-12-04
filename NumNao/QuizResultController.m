@@ -13,6 +13,7 @@
 #import "NumNaoAppDelegate.h"
 #import "NumNaoIAPHelper.h"
 #import "GADBannerView.h"
+#import "GADInterstitial.h"
 #import "GADRequest.h"
 #import "appID.h"
 #import "AVFoundation/AVAudioPlayer.h"
@@ -21,6 +22,7 @@
 NSString * const PlayCountKey = @"PlayCountKey";
 NSString * const RateAppisVisitedKey = @"RateAppIsVisited";
 NSInteger const PlayCountForAlert = 10;
+NSInteger const PlayCountForInterstitial = 7;
 NSInteger const PlayerNameMaxLength = 40;
 
 @interface QuizResultController ()
@@ -33,6 +35,7 @@ NSInteger const PlayerNameMaxLength = 40;
 @property (assign, nonatomic) NSInteger quizResultLevel;
 @property (strong, nonatomic) NSString *playerName;
 @property (assign, nonatomic) BOOL needSubmitScore;
+@property (strong, nonatomic) GADInterstitial *interstitial;
 
 @end
 
@@ -54,13 +57,17 @@ NSInteger const PlayerNameMaxLength = 40;
 
   [self setUpAudioPlayer];
   
+  // Banner Ads
   float yPos = self.backToMenuButton.frame.origin.y + self.backToMenuButton.frame.size.height + 5;
   self.bannerView = [[GADBannerView alloc] initWithFrame:CGRectMake(0.0, yPos, GAD_SIZE_320x50.width, GAD_SIZE_320x50.height)];
-  self.bannerView.adUnitID = MyAdUnitID;
+  self.bannerView.adUnitID = MyAdUnitID_Banner;
   self.bannerView.delegate = self;
   [self.bannerView setRootViewController:self];
   [self.view addSubview:self.bannerView];
   [self.bannerView loadRequest:[self createRequest]];
+  
+  // Interstitial Ads
+  self.interstitial = [self createAndLoadInterstitial];
   
   [self decorateAllButtonsAndLabel];
   [self checkQuizResult];
@@ -68,6 +75,10 @@ NSInteger const PlayerNameMaxLength = 40;
   [self.quizScoreStaticLabel setHidden:YES];
   self.quizResultText = nil;
   self.needSubmitScore = NO;
+  
+  NSInteger currentPlayCount = [self getPlayCount];
+  currentPlayCount++;
+  [self savePlayCount:currentPlayCount];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -94,8 +105,6 @@ NSInteger const PlayerNameMaxLength = 40;
   [self.quizScoreStaticLabel setHidden:NO];
   
   NSInteger currentPlayCount = [self getPlayCount];
-  currentPlayCount++;
-  [self savePlayCount:currentPlayCount];
   if (currentPlayCount % PlayCountForAlert == 0 && ![self getRateAppisVisited]) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"สวัสดีจ้ะ"
                                                     message:@"ขอโทษที่ขัดจังหวะนะจ๊ะ แต่ว่ารบกวนเธอช่วยเข้าไปให้คะแนนแอพน้ำเน่าบน AppStore หน่อยได้มั้ยอ่า แบบว่าเค้าอยากได้ 5 ดาวอ่ะ >_<'  ขอบคุณมากเลยนะจ๊ะ "
@@ -121,6 +130,10 @@ NSInteger const PlayerNameMaxLength = 40;
     self.playerName = nameText;
     self.needSubmitScore = YES;
     [self performSegueWithIdentifier:@"QuizResultToQuizRankSegue" sender:self];
+  } else if (alertView.tag == 4) {
+    if ([self.interstitial isReady]) {
+      [self.interstitial presentFromRootViewController:self];
+    }
   }
 }
 
@@ -160,6 +173,18 @@ NSInteger const PlayerNameMaxLength = 40;
 
 - (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
   NSLog(@"Failed to receive ad due to: %@", [error localizedFailureReason]);
+}
+
+- (GADInterstitial *)createAndLoadInterstitial {
+  GADInterstitial *interstitial = [[GADInterstitial alloc] init];
+  interstitial.adUnitID = MyAdUnitID_Interstitial;
+  interstitial.delegate = self;
+  [interstitial loadRequest:[GADRequest request]];
+  return interstitial;
+}
+
+- (void)interstitialDidDismissScreen:(GADInterstitial *)interstitial {
+  [self playQuizAgain];
 }
 
 - (void)checkQuizResult {
@@ -222,6 +247,9 @@ NSInteger const PlayerNameMaxLength = 40;
 
   [self.playAgainButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
   [self.playAgainButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+
+  [self.submitScoreButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+  [self.submitScoreButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
   
   // Round button corners
   CALayer *backToMenuBtnLayer = [self.backToMenuButton layer];
@@ -231,6 +259,10 @@ NSInteger const PlayerNameMaxLength = 40;
   CALayer *playAgainBtnLayer = [self.playAgainButton layer];
   [playAgainBtnLayer setMasksToBounds:YES];
   [playAgainBtnLayer setCornerRadius:5.0f];
+
+  CALayer *submitScoreBtnLayer = [self.submitScoreButton layer];
+  [submitScoreBtnLayer setMasksToBounds:YES];
+  [submitScoreBtnLayer setCornerRadius:5.0f];
   
   // Apply a 1 pixel, black border around Buy Button
   [backToMenuBtnLayer setBorderWidth:1.0f];
@@ -238,6 +270,9 @@ NSInteger const PlayerNameMaxLength = 40;
 
   [playAgainBtnLayer setBorderWidth:1.0f];
   [playAgainBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
+
+  [submitScoreBtnLayer setBorderWidth:1.0f];
+  [submitScoreBtnLayer setBorderColor:[[UIColor blackColor] CGColor]];
   
   [[self.shareFacebookButton layer] setCornerRadius:5.0];
   
@@ -253,6 +288,22 @@ NSInteger const PlayerNameMaxLength = 40;
 }
 
 - (IBAction)playAgain:(id)sender {
+  
+  NSInteger currentPlayCount = [self getPlayCount];
+  if (currentPlayCount % PlayCountForInterstitial == 0 && [self.interstitial isReady]) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"สวัสดีจ้ะ"
+                                                    message:@"คือว่า เราขออนุญาตโชว์โฆษณานิดนึงนะจ๊ะ อย่าโกรธเราน้าาา >_<"
+                                                   delegate:self
+                                          cancelButtonTitle:@"ตกลงจ้ะ"
+                                          otherButtonTitles:nil];
+    alert.tag = 4;
+    [alert show];
+  } else {
+    [self playQuizAgain];
+  }
+}
+
+- (void)playQuizAgain {
   [self.audioPlayer stop];
   [QuizManager sharedInstance].xmlDataQuizRank = nil;
   [QuizManager sharedInstance].quizRankList = nil;
