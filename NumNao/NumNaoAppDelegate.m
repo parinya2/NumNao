@@ -8,6 +8,7 @@
 
 #import "NumNaoAppDelegate.h"
 #import "NumNaoIAPHelper.h"
+#import "QuizManager.h"
 #import "GAI.h"
 
 @implementation NumNaoAppDelegate
@@ -35,7 +36,26 @@
   // Initialize tracker. Replace with your tracking ID.
   [[GAI sharedInstance] trackerWithTrackingId:@"UA-54545219-1"];
   
+  // Let the device know we want to receive push notifications
+  [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+   (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+  
   return YES;
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+  NSString *tokenOriginal = [[deviceToken description] stringByTrimmingCharactersInSet: [NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+
+  NSString *tokenString = [tokenOriginal stringByReplacingOccurrencesOfString:@" " withString:@""];
+  NSLog(@"My test string is: %@", tokenString);
+  
+  [[QuizManager sharedInstance] sendDeviceTokenToServerWithToken:tokenString];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+  NSLog(@"Failed to get token, error: %@", error);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

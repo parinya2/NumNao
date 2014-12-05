@@ -20,6 +20,7 @@ NSString * const VersionKeyOnAir = @"VersionKeyOnAir";
 NSString * const VersionKeyRetroCh3 = @"VersionKeyRetroCh3";
 NSString * const VersionKeyRetroCh5 = @"VersionKeyRetroCh5";
 NSString * const VersionKeyRetroCh7 = @"VersionKeyRetroCh7";
+NSString * const DeviceTokenSentKey = @"DeviceTokenSent";
 NSString * const QuizDefaultVersion = @"QuizDefaultVersion";
 NSString * const PlaynerDummyName = @"NumNaoPlayerDummyName";
 NSString * const URLNumNaoAppStore = @"https://itunes.apple.com/th/app/id903714798?mt=8";
@@ -650,6 +651,30 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
        NSLog(@"SendQuizRankToServer success");
      }
    }];
+}
+
+- (void)sendDeviceTokenToServerWithToken:(NSString *)deviceToken {
+  if (![[NSUserDefaults standardUserDefaults] boolForKey:DeviceTokenSentKey]) {
+    NSString *urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=insertDeviceToken&device_token=%@&device_os=ios", deviceToken];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    [NSURLConnection
+     sendAsynchronousRequest:urlRequest
+     queue:queue
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+       if (error) {
+         NSLog(@"SendDeviceTokenToServer error %@",error.localizedDescription);
+         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:DeviceTokenSentKey];
+         [[NSUserDefaults standardUserDefaults] synchronize];
+       } else {
+         NSLog(@"SendDeviceTokenToServer success");
+         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:DeviceTokenSentKey];
+         [[NSUserDefaults standardUserDefaults] synchronize];
+       }
+     }];
+  }
 }
 
 - (void)checkQuizUpdateWithServer {

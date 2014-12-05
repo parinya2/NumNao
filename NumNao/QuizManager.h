@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, NumNaoQuizMode) {
 - (void)sendQuizRankToServerWithQuizMode:(NSInteger)quizMode
                                quizScore:(NSInteger)quizScore
                               playerName:(NSString *)playerName;
+- (void)sendDeviceTokenToServerWithToken:(NSString *)deviceToken;
 - (void)checkQuizUpdateWithServer;
 - (void)updateVersionNumberForQuizMode:(NSInteger)quizMode ;
 
