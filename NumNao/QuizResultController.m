@@ -22,7 +22,7 @@
 NSString * const PlayCountKey = @"PlayCountKey";
 NSString * const RateAppisVisitedKey = @"RateAppIsVisited";
 NSInteger const PlayCountForAlert = 10;
-NSInteger const PlayCountForInterstitial = 7;
+NSInteger const PlayCountForInterstitial = 5;
 NSInteger const PlayerNameMaxLength = 40;
 
 @interface QuizResultController ()
@@ -35,6 +35,7 @@ NSInteger const PlayerNameMaxLength = 40;
 @property (assign, nonatomic) NSInteger quizResultLevel;
 @property (strong, nonatomic) NSString *playerName;
 @property (assign, nonatomic) BOOL needSubmitScore;
+@property (assign, nonatomic) BOOL allowShowRateAppAlert;
 @property (strong, nonatomic) GADInterstitial *interstitial;
 
 @end
@@ -79,6 +80,8 @@ NSInteger const PlayerNameMaxLength = 40;
   NSInteger currentPlayCount = [self getPlayCount];
   currentPlayCount++;
   [self savePlayCount:currentPlayCount];
+  
+  self.allowShowRateAppAlert = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -105,13 +108,14 @@ NSInteger const PlayerNameMaxLength = 40;
   [self.quizScoreStaticLabel setHidden:NO];
   
   NSInteger currentPlayCount = [self getPlayCount];
-  if (currentPlayCount % PlayCountForAlert == 0 && ![self getRateAppisVisited]) {
+  if (currentPlayCount % PlayCountForAlert == 0 && ![self getRateAppisVisited] && self.allowShowRateAppAlert) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"สวัสดีจ้ะ"
                                                     message:@"ขอโทษที่ขัดจังหวะนะจ๊ะ แต่ว่ารบกวนเธอช่วยเข้าไปให้คะแนนแอพน้ำเน่าบน AppStore หน่อยได้มั้ยอ่า แบบว่าเค้าอยากได้ 5 ดาวอ่ะ >_<'  ขอบคุณมากเลยนะจ๊ะ "
                                                    delegate:self
                                           cancelButtonTitle:@"ไม่ล่ะฮะ"
                                           otherButtonTitles:@"ตกลงจ้ะ",nil];
     alert.tag = 2;
+    self.allowShowRateAppAlert = NO;
     [alert show];
   }
 }
