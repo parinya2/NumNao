@@ -14,10 +14,12 @@
 #import "QuizSetSelectorController.h"
 #import <Social/Social.h>
 #import "QuizManager.h"
+#import "QuizRankController.h"
 
 @interface MainMenuController ()
 
-@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@property (assign, nonatomic) NSInteger quizRankMode;
 
 @end
 
@@ -68,8 +70,22 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  QuizSetSelectorController *quizSetSelectorController = [segue destinationViewController];
-  quizSetSelectorController.audioPlayer = self.audioPlayer;
+  
+  [QuizManager sharedInstance].xmlDataQuizRank = nil;
+  [QuizManager sharedInstance].quizRankList = nil;
+  
+  if ([segue.identifier isEqualToString:@"MainMenuToQuizSetSelectorSegue"]) {
+    QuizSetSelectorController *quizSetSelectorController = [segue destinationViewController];
+    quizSetSelectorController.audioPlayer = self.audioPlayer;
+  } else if ([segue.identifier isEqualToString:@"MainMenuToQuizRankSegue"]) {
+    QuizRankController *quizRankController = [segue destinationViewController];
+    quizRankController.quizMode = self.quizRankMode;
+    quizRankController.playerScore = -1;
+    quizRankController.needSubmitScore = NO;
+    quizRankController.navigatedFromMainMenu = YES;
+    [self.audioPlayer stop];
+  }
+
 }
 
 - (GADRequest *)createRequest {
@@ -97,6 +113,16 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
   if (alertView.tag == 3) {
       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:URLNumNaoAppStore]];
+  } else if (alertView.tag == 4) {
+    switch (buttonIndex) {
+      case 1: self.quizRankMode = NumNaoQuizModeOnAir; break;
+      case 2: self.quizRankMode = NumNaoQuizModeRetroCh3; break;
+      case 3: self.quizRankMode = NumNaoQuizModeRetroCh5; break;
+      case 4: self.quizRankMode = NumNaoQuizModeRetroCh7; break;
+      default: break;
+    }
+    
+    [self performSegueWithIdentifier:@"MainMenuToQuizRankSegue" sender:self];
   }
 }
 
@@ -125,6 +151,13 @@
    NSArray *postItems = @[a];
    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:postItems applicationActivities:nil];
    [self presentViewController:activityVC animated:YES completion:nil];*/
+}
+
+- (IBAction)goToQuizRank:(id)sender {
+  UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ช้าก่อน" message:@"เธออยากดูคะแนนหมวดไหนจ้ะ" delegate:self cancelButtonTitle:@"ไม่ดูละ" otherButtonTitles:@"ละครออนแอร์", @"ละครเก่าช่อง 3", @"ละครเก่าช่อง 5", @"ละครเก่าช่อง 7", nil];
+
+  alert.tag = 4;
+  [alert show];
 }
 
 - (void)decorateAllButtons {

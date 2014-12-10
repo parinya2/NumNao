@@ -128,7 +128,10 @@ const NSInteger QuizRankDisplayCount = 10;
       playerRankIndex = idx;
     }
   }];
-  [self.quizRankTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:playerRankIndex inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+  
+  if (playerRankIndex < self.quizRankList.count) {
+    [self.quizRankTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:playerRankIndex inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+  }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -173,38 +176,43 @@ const NSInteger QuizRankDisplayCount = 10;
 }
 
 - (void)rearrangeQuizRankList {
-  NSString *targetPlayerName = nil;
-  NSInteger targetPlayerScore = -1;
   
-  for (QuizRankObject *quizRankObj in self.quizRankList) {
+  NSMutableArray *quizRankList = [self.quizRankList mutableCopy];
+  __block NSInteger oldTargetPlayerIndex = -1;
+  __block NSInteger newTargetPlayerIndex = -1;
+  [quizRankList enumerateObjectsUsingBlock:^(QuizRankObject *quizRankObj, NSUInteger idx, BOOL *stop) {
     if (quizRankObj.isActivePlayer) {
+      oldTargetPlayerIndex = idx;
+      newTargetPlayerIndex = quizRankObj.rankNo - 1;
       quizRankObj.playerName = self.playerName;
-      targetPlayerName = self.playerName;
-      targetPlayerScore = self.playerScore;
-    }
-
-    NSPredicate *scorePredicate = [NSPredicate predicateWithFormat:@"score > %d", quizRankObj.score];
-    NSArray *greaterScoreList = [self.quizRankList filteredArrayUsingPredicate:scorePredicate];
-    if (!quizRankObj.isActivePlayer) {
-      quizRankObj.rankNo = greaterScoreList.count + 1;
-    }
-  }
-  
-  // Sort by score
-  NSArray *sortedQuizRankList = [self.quizRankList sortedArrayUsingComparator:^NSComparisonResult(QuizRankObject *obj1, QuizRankObject *obj2) {
-    if (obj1.score > obj2.score) {
-      return NSOrderedAscending;
-    } else if (obj1.score < obj2.score) {
-      return NSOrderedDescending;
-    } else {
-      return NSOrderedSame;
     }
   }];
   
-  self.quizRankList = [sortedQuizRankList copy];
+  if (oldTargetPlayerIndex < 0 || newTargetPlayerIndex < 0) {
+    return;
+  }
+
+  QuizRankObject *targetPlayerObject = quizRankList[oldTargetPlayerIndex];
+  [quizRankList removeObjectAtIndex:oldTargetPlayerIndex];
+  
+  if (newTargetPlayerIndex > quizRankList.count) {
+    [quizRankList insertObject:targetPlayerObject atIndex:quizRankList.count];
+  } else {
+    [quizRankList insertObject:targetPlayerObject atIndex:newTargetPlayerIndex];
+    [quizRankList enumerateObjectsUsingBlock:^(QuizRankObject *quizRankObj, NSUInteger idx, BOOL *stop) {
+      if (!quizRankObj.isActivePlayer && idx > newTargetPlayerIndex) {
+        quizRankObj.rankNo++;
+      }
+    }];
+  }
+  
+  self.quizRankList = [quizRankList copy];
 }
 
 - (IBAction)goBack:(id)sender {
+  if (self.navigatedFromMainMenu) {
+    [self.audioPlayer stop];
+  }
   [self.navigationController popViewControllerAnimated:YES];
 }
 

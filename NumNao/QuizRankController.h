@@ -23,6 +23,7 @@
 @property (assign, nonatomic) NSInteger playerScore;
 @property (strong, nonatomic) NSString *playerName;
 @property (assign, nonatomic) BOOL needSubmitScore;
+@property (assign, nonatomic) BOOL navigatedFromMainMenu;
 
 - (IBAction)goBack:(id)sender;
 @end

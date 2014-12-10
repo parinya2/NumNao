@@ -331,12 +331,15 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
   
   QuizRankObject *playerRankObject = [[QuizRankObject alloc] init];
   NSString *playerRankNoStr = [TBXML valueOfAttributeNamed:@"rank_number_of_score" forElement:rootXMLElement];
-  NSString *scoreStr = [TBXML valueOfAttributeNamed:@"score" forElement:rootXMLElement];
-  playerRankObject.rankNo = [playerRankNoStr integerValue];
-  playerRankObject.score = [scoreStr integerValue];
-  playerRankObject.playerName = PlaynerDummyName;
-  playerRankObject.deviceOS = @"ios";
-  playerRankObject.isActivePlayer = YES;
+  if (playerRankNoStr) {
+    NSString *scoreStr = [TBXML valueOfAttributeNamed:@"score" forElement:rootXMLElement];
+    playerRankObject.rankNo = [playerRankNoStr integerValue];
+    playerRankObject.score = [scoreStr integerValue];
+    playerRankObject.playerName = PlaynerDummyName;
+    playerRankObject.deviceOS = @"ios";
+    playerRankObject.isActivePlayer = YES;
+  }
+
   
   TBXMLElement *childXMLElement = [TBXML childElementNamed:@"rank" parentElement:rootXMLElement];
   while (childXMLElement) {
@@ -354,13 +357,18 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
     quizRankObject.rankNo = [rankNoStr integerValue];
     quizRankObject.isActivePlayer = NO;
     
-    playerRankObject.quizMode = [quizModeStr integerValue];
-    
+    if (playerRankNoStr) {
+      playerRankObject.quizMode = [quizModeStr integerValue];
+    }
+
     [result addObject:quizRankObject];
     childXMLElement = childXMLElement->nextSibling;
   }
   
-  [result addObject:playerRankObject];
+  if (playerRankNoStr) {
+    [result addObject:playerRankObject];
+  }
+
   
   return result;
 
@@ -543,22 +551,39 @@ NSString * const URLNumNaoFacebookPage = @"https://m.facebook.com/thechappters";
 
 - (NSString *)urlStringQuizRankFromQuizMode:(NSInteger)quizMode quizScore:(NSInteger) quizScore{
   NSString *urlString = nil;
+  BOOL quizScoreAvailable = quizScore >= 0;
   
   switch (quizMode) {
     case NumNaoQuizModeOnAir: {
-      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=1&score=%d", quizScore];
+      if (quizScoreAvailable) {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=1&score=%d", quizScore];
+      } else {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=1"];
+      }
     } break;
       
     case NumNaoQuizModeRetroCh3: {
-      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=2&score=%d", quizScore];
+      if (quizScoreAvailable) {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=2&score=%d", quizScore];
+      } else {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=2"];
+      }
     } break;
       
     case NumNaoQuizModeRetroCh5: {
-      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=3&score=%d", quizScore];
+      if (quizScoreAvailable) {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=3&score=%d", quizScore];
+      } else {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=3"];
+      }
     } break;
       
     case NumNaoQuizModeRetroCh7: {
-      urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=4&score=%d", quizScore];
+      if (quizScoreAvailable) {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=4&score=%d", quizScore];
+      } else {
+        urlString = [NSString stringWithFormat:@"http://quiz.thechappters.com/webservice.php?app_id=1&method=getRank&category_id=4"];
+      }
     } break;
       
     default: {

@@ -157,6 +157,7 @@ NSInteger const PlayerNameMaxLength = 40;
     quizRankController.playerScore = self.quizScore;
     quizRankController.playerName = self.playerName;
     quizRankController.needSubmitScore = self.needSubmitScore;
+    quizRankController.navigatedFromMainMenu = NO;
   } else {
     [self.audioPlayer stop];
   }

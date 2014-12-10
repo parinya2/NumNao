@@ -39,7 +39,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-f2-iBG">
-                                <rect key="frame" x="54" y="334" width="207" height="65"/>
+                                <rect key="frame" x="54" y="320" width="207" height="65"/>
                                 <color key="backgroundColor" red="0.2131696428571429" green="0.2131696428571429" blue="0.2131696428571429" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="207" id="N4V-9r-Exy"/>
@@ -51,7 +51,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="vCd-qs-oWe" kind="push" id="lFX-hC-xvW"/>
+                                    <segue destination="vCd-qs-oWe" kind="push" identifier="MainMenuToQuizSetSelectorSegue" id="lFX-hC-xvW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6y-Lo-ITY">
@@ -98,14 +98,32 @@
                                     <action selector="rateThisApp:" destination="nAT-fI-Usw" eventType="touchUpInside" id="L9m-b1-a1k"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AY9-lh-WxN">
+                                <rect key="frame" x="18" y="474" width="124" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="124" id="3V8-Qx-VEu"/>
+                                    <constraint firstAttribute="height" constant="30" id="jbV-oP-qhm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                <state key="normal" title="อันดับคะแนน">
+                                    <color key="titleColor" red="0.89019607840000003" green="0.83921568629999999" blue="0.3803921569" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="goToQuizRank:" destination="nAT-fI-Usw" eventType="touchUpInside" id="PJO-Xd-HtL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="AY9-lh-WxN" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OmL-f2-iBG" secondAttribute="bottom" constant="20" id="4tH-wo-HiR"/>
                             <constraint firstAttribute="height" secondItem="TQa-5z-ZSx" secondAttribute="height" id="8Dy-Gu-D4U"/>
                             <constraint firstAttribute="width" secondItem="TQa-5z-ZSx" secondAttribute="width" id="8bQ-ni-7ef"/>
                             <constraint firstItem="OmL-f2-iBG" firstAttribute="top" relation="greaterThanOrEqual" secondItem="htP-xO-OwL" secondAttribute="bottom" constant="285" id="BP9-vh-jSi"/>
+                            <constraint firstItem="6bc-KG-FRC" firstAttribute="top" secondItem="AY9-lh-WxN" secondAttribute="bottom" constant="14" id="EEF-So-kBv"/>
                             <constraint firstItem="QvT-Kn-TM8" firstAttribute="top" secondItem="6bc-KG-FRC" secondAttribute="bottom" constant="20" id="IES-D4-VrE"/>
-                            <constraint firstItem="V6y-Lo-ITY" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OmL-f2-iBG" secondAttribute="bottom" constant="10" id="Izu-lT-2wJ"/>
+                            <constraint firstItem="V6y-Lo-ITY" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OmL-f2-iBG" secondAttribute="bottom" constant="20" id="Izu-lT-2wJ"/>
+                            <constraint firstItem="V6y-Lo-ITY" firstAttribute="leading" secondItem="AY9-lh-WxN" secondAttribute="trailing" constant="36" id="NdD-li-lmJ"/>
                             <constraint firstItem="QvT-Kn-TM8" firstAttribute="top" secondItem="Xor-sr-SUb" secondAttribute="bottom" constant="20" id="Q3N-1W-BJ5"/>
                             <constraint firstItem="Xor-sr-SUb" firstAttribute="leading" secondItem="6bc-KG-FRC" secondAttribute="trailing" constant="29" id="Uwk-Se-aq3"/>
                             <constraint firstItem="Xor-sr-SUb" firstAttribute="top" secondItem="V6y-Lo-ITY" secondAttribute="bottom" constant="14" id="wnl-Kh-Hk8"/>
@@ -115,6 +133,7 @@
                     <connections>
                         <outlet property="bgImageView" destination="TQa-5z-ZSx" id="KZ0-fX-m9C"/>
                         <outlet property="startButton" destination="OmL-f2-iBG" id="foO-ED-e23"/>
+                        <segue destination="lLY-3Y-XmY" kind="push" identifier="MainMenuToQuizRankSegue" id="AQV-1T-xXG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lLc-kE-CVY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -796,7 +815,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E5l-cN-6qG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2255" y="-294"/>
+            <point key="canvasLocation" x="2243" y="-441"/>
         </scene>
     </scenes>
     <resources>
@@ -810,4 +829,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="AQV-1T-xXG"/>
+    </inferredMetricsTieBreakers>
 </document>

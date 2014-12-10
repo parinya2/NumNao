@@ -22,6 +22,7 @@
 - (IBAction)contactUs:(id)sender;
 - (IBAction)rateThisApp:(id)sender;
 - (IBAction)recommendToFriend:(id)sender;
+- (IBAction)goToQuizRank:(id)sender;
 - (GADRequest *)createRequest;
 
 @end
