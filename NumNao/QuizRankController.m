@@ -147,7 +147,23 @@ const NSInteger QuizRankDisplayCount = 10;
   NSInteger idx = indexPath.row;
   if (idx < self.quizRankList.count) {
     QuizRankObject *quizRankObject = self.quizRankList[idx];
-    cell.rankNoLabel.text = [NSString stringWithFormat:@"%zd", quizRankObject.rankNo];
+    
+    if (idx <= 2) {
+      [cell.medalImageView setHidden:NO];
+      [cell.rankNoLabel setHidden:YES];
+      switch (idx) {
+        case 0: cell.medalImageView.image = [UIImage imageNamed:@"ic_gold"]; break;
+        case 1: cell.medalImageView.image = [UIImage imageNamed:@"ic_silver"]; break;
+        case 2: cell.medalImageView.image = [UIImage imageNamed:@"ic_bronze"]; break;
+        default:
+          break;
+      }
+    } else {
+      [cell.medalImageView setHidden:YES];
+      [cell.rankNoLabel setHidden:NO];
+      cell.rankNoLabel.text = [NSString stringWithFormat:@"%zd", quizRankObject.rankNo];
+    }
+
     cell.playerNameLabel.text = quizRankObject.playerName;
     cell.scoreLabel.text = [NSString stringWithFormat:@"%zd", quizRankObject.score];
     

@@ -37,6 +37,9 @@ NSInteger const PlayerNameMaxLength = 40;
 @property (assign, nonatomic) BOOL needSubmitScore;
 @property (assign, nonatomic) BOOL allowShowRateAppAlert;
 @property (strong, nonatomic) GADInterstitial *interstitial;
+@property (strong, nonatomic) NSTimer *quizRankButtonTimer;
+@property (assign, nonatomic) float quizRankButtonGreenValue;
+@property (assign, nonatomic) BOOL quizRankAnimationGoForward;
 
 @end
 
@@ -107,6 +110,13 @@ NSInteger const PlayerNameMaxLength = 40;
   self.quizScoreLabel.text = [NSString stringWithFormat:@"%d", self.quizScore];
   [self.quizScoreStaticLabel setHidden:NO];
   
+  self.quizRankButtonTimer = [NSTimer scheduledTimerWithTimeInterval:0.03
+                                                               target:self
+                                                             selector:@selector(refreshQuizRankButton)
+                                                             userInfo:nil
+                                                              repeats:YES];
+  self.quizRankButtonGreenValue = 214.0f;
+  
   NSInteger currentPlayCount = [self getPlayCount];
   if (currentPlayCount % PlayCountForAlert == 0 && ![self getRateAppisVisited] && self.allowShowRateAppAlert) {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"สวัสดีจ้ะ"
@@ -118,6 +128,34 @@ NSInteger const PlayerNameMaxLength = 40;
     self.allowShowRateAppAlert = NO;
     [alert show];
   }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
+  
+  [self.quizRankButtonTimer invalidate];
+  self.quizRankButtonTimer = nil;
+}
+
+- (void)refreshQuizRankButton {
+  float currentGreenValue = self.quizRankButtonGreenValue;
+  float minGreenValue = 10.0f;
+  float maxGreenValue = 227.0f;
+  float newGreenValue;
+  float GreenValueGap = 10.0f;
+  if (self.quizRankAnimationGoForward) {
+    newGreenValue = currentGreenValue + GreenValueGap;
+  } else {
+    newGreenValue = currentGreenValue - GreenValueGap;
+  }
+  if (newGreenValue >= maxGreenValue) {
+    self.quizRankAnimationGoForward = NO;
+  }
+  if (newGreenValue <= minGreenValue) {
+    self.quizRankAnimationGoForward = YES;
+  }
+  self.quizRankButtonGreenValue = newGreenValue;
+  [self.submitScoreButton setBackgroundColor:[UIColor colorWithRed:227.0f / 255.0f green:newGreenValue / 255.0f blue:97.0f / 255.0f alpha:1.0f]];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {

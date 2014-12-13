@@ -697,20 +697,30 @@
                                                         <constraint firstAttribute="height" constant="20" id="cLi-Bx-n9P"/>
                                                     </constraints>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZIR-kU-mxe">
+                                                    <rect key="frame" x="23" y="8" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="ZRT-Le-WPt"/>
+                                                        <constraint firstAttribute="width" constant="30" id="uyL-5t-myv"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="bDh-cc-Aq3" firstAttribute="leading" secondItem="vzk-9M-vGt" secondAttribute="trailing" constant="6" id="66X-R6-4F4"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="aHw-lp-MGk" secondAttribute="trailing" constant="8" id="KIO-wD-fZu"/>
                                                 <constraint firstItem="aHw-lp-MGk" firstAttribute="leading" secondItem="bDh-cc-Aq3" secondAttribute="trailing" constant="28" id="M5U-QQ-Oou"/>
                                                 <constraint firstItem="vzk-9M-vGt" firstAttribute="baseline" secondItem="YjL-9i-yhs" secondAttribute="baseline" id="UAW-CU-tN9"/>
+                                                <constraint firstItem="ZIR-kU-mxe" firstAttribute="centerX" secondItem="YjL-9i-yhs" secondAttribute="centerX" constant="0.5" id="dKx-ea-QQo"/>
                                                 <constraint firstItem="vzk-9M-vGt" firstAttribute="baseline" secondItem="bDh-cc-Aq3" secondAttribute="baseline" constant="-1" id="qld-5b-DDc"/>
                                                 <constraint firstItem="bDh-cc-Aq3" firstAttribute="bottom" secondItem="aHw-lp-MGk" secondAttribute="bottom" constant="1" id="r2y-dP-yif"/>
                                                 <constraint firstItem="vzk-9M-vGt" firstAttribute="leading" secondItem="YjL-9i-yhs" secondAttribute="trailing" constant="17" id="tj1-ZI-mRq"/>
+                                                <constraint firstItem="ZIR-kU-mxe" firstAttribute="centerY" secondItem="YjL-9i-yhs" secondAttribute="centerY" constant="-0.5" id="yZj-KK-wds"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="deviceOSImageView" destination="aHw-lp-MGk" id="Ivi-R1-CK2"/>
+                                            <outlet property="medalImageView" destination="ZIR-kU-mxe" id="SjQ-yf-hf9"/>
                                             <outlet property="playerNameLabel" destination="vzk-9M-vGt" id="Gkt-ik-cwP"/>
                                             <outlet property="rankNoLabel" destination="YjL-9i-yhs" id="cj3-MJ-fEF"/>
                                             <outlet property="scoreLabel" destination="bDh-cc-Aq3" id="tDn-S3-WPK"/>
