@@ -449,13 +449,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="เวลาที่เหลือ" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RRe-CX-wWY">
-                                <rect key="frame" x="101" y="53" width="118" height="21"/>
+                                <rect key="frame" x="107" y="53" width="118" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" red="0.8901960784313725" green="0.83921568627450982" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="คะแนน" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fs7-ID-7ji">
-                                <rect key="frame" x="101" y="82" width="118" height="21"/>
+                                <rect key="frame" x="107" y="82" width="118" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" red="0.8901960784313725" green="0.83921568627450982" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -472,6 +472,8 @@
                             <constraint firstItem="84k-th-pEy" firstAttribute="top" secondItem="H6F-H4-Z9Z" secondAttribute="bottom" constant="16" id="Vs9-Cq-ahx"/>
                             <constraint firstItem="LVz-QL-16J" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ga7-2R-9AK" secondAttribute="bottom" constant="10" id="VvH-ig-Qaz"/>
                             <constraint firstAttribute="height" secondItem="ieq-ui-FuE" secondAttribute="height" id="cOG-7h-iEF"/>
+                            <constraint firstItem="RRe-CX-wWY" firstAttribute="leading" secondItem="H6F-H4-Z9Z" secondAttribute="trailing" constant="14" id="gz6-Rt-qSY"/>
+                            <constraint firstItem="fs7-ID-7ji" firstAttribute="leading" secondItem="H6F-H4-Z9Z" secondAttribute="trailing" constant="14" id="hWB-qS-Y2D"/>
                             <constraint firstItem="cWJ-Vf-a3B" firstAttribute="top" relation="greaterThanOrEqual" secondItem="84k-th-pEy" secondAttribute="bottom" constant="10" id="jfQ-7r-c2P"/>
                             <constraint firstAttribute="width" secondItem="ieq-ui-FuE" secondAttribute="width" id="nsC-2B-W3n"/>
                             <constraint firstItem="GVU-OU-Dg3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LVz-QL-16J" secondAttribute="bottom" constant="15" id="rX1-u2-NLa"/>
