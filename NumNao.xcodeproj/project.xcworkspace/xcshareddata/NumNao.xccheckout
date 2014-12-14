@@ -14,7 +14,7 @@
 		<string>https://github.com/parinya2/NumNao.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>NumNao.xcodeproj/project.xcworkspace</string>
+	<string>NumNao.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>B82E45C8089D237F2C87CC8D64BDC9899AF44DB2</key>
